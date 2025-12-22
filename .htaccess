@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^(.*)$ /APLX0/$1 [R=302,L]
