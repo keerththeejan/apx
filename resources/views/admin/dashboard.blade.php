@@ -98,6 +98,7 @@
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
           <a href="{{ route('admin.navlinks.index') }}">Nav Links</a>
+          <a href="{{ route('admin.footerlinks.index') }}">Footer Links</a>
           <a href="{{ route('admin.gallery.index') }}">Gallery</a>
           <a href="{{ route('admin.helpitems.index') }}">Help Items</a>
           <a href="{{ route('admin.quotes.index') }}">Quotes</a>
@@ -115,6 +116,7 @@
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.index') }}">Manage Services</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.create') }}">Add Service</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.navlinks.index') }}">Manage Nav Links</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.footerlinks.index') }}">Manage Footer Links</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.gallery.index') }}">Manage Gallery</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.helpitems.index') }}">Manage Help Items</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.sociallinks.index') }}">Manage Social Links</a>

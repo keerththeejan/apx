@@ -38,6 +38,8 @@
     .error{background: rgba(239,68,68,.15); color:#fecaca; border:1px solid rgba(239,68,68,.35); padding:10px 12px; border-radius:8px; font-size:14px; margin-bottom:10px}
     .backdrop{display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:40}
     .sidebar{transition: transform .2s ease}
+    .navsec{margin-top:12px; padding-top:10px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase}
+    .navsub a{padding-left:28px; font-size:14px}
     @media (max-width: 980px){ .grid{grid-template-columns: 1fr} nav{position:static} }
     @media (max-width: 520px){ .menu{display:inline-block} .wrap{padding:10px} .sidebar{position:fixed; left:0; top:0; height:100%; width:82%; max-width:300px; z-index:45; transform: translateX(-102%)} .sidebar.open{transform: translateX(0)} .backdrop.show{display:block} }
   </style>
@@ -73,6 +75,12 @@
           <a href="#">Orders</a>
           <a href="#">Shipments</a>
           <a href="{{ route('admin.settings.index') }}">Settings</a>
+          <div class="navsec">Footer</div>
+          <div class="navsub">
+            <a href="{{ route('admin.settings.footer') }}">Footer Settings</a>
+            <a href="{{ route('admin.footerlinks.index') }}">Footer Links</a>
+            <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
+          </div>
           <a href="{{ route('admin.features.index') }}">Features</a>
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>

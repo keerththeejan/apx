@@ -14,8 +14,10 @@ use App\Http\Controllers\Admin\NavLinkController;
 use App\Http\Controllers\Admin\GalleryItemController;
 use App\Http\Controllers\Admin\HelpItemController;
 use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\FooterLinkController;
 use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\NewsletterController;
 use App\Models\Feature;
 use App\Models\HomeBanner;
 use App\Models\Service;
@@ -62,6 +64,8 @@ Route::get('/site', function () {
 
 // Public quote submissions
 Route::post('/quotes', [QuoteController::class, 'store'])->name('quote.store');
+// Newsletter subscribe
+Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
 
 Route::middleware('guest')->group(function() {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -80,10 +84,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('services/upload', [ServiceUploadController::class, 'store'])->name('admin.services.upload');
     Route::patch('services/{service}/toggle-visibility', [ServiceVisibilityController::class, 'toggle'])->name('admin.services.toggle');
     Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');
+    Route::get('footer', [SettingController::class, 'footer'])->name('admin.settings.footer');
     Route::post('settings', [SettingController::class, 'update'])->name('admin.settings.update');
     Route::resource('nav-links', NavLinkController::class)->names('admin.navlinks');
     Route::resource('gallery', GalleryItemController::class)->names('admin.gallery');
     Route::resource('help-items', HelpItemController::class)->names('admin.helpitems');
     Route::resource('social-links', SocialLinkController::class)->names('admin.sociallinks');
+    Route::resource('footer-links', FooterLinkController::class)->names('admin.footerlinks');
     Route::resource('quotes', AdminQuoteController::class)->names('admin.quotes');
 });

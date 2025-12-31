@@ -40,7 +40,7 @@
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
     .btn { padding:10px 16px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); backdrop-filter: blur(4px); color:#fff; text-decoration:none; font-weight:600 }
     .btn.primary { background: var(--blue); border-color: transparent }
-    .section { max-width:1200px; margin: 0 auto; padding: 28px 24px }
+    .section { width: 80%; max-width: none; margin: 0 auto; padding: 28px 0 }
     .features { display:grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 22px }
     .feature-card { background: rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.12); border-radius:14px; padding:18px; text-align:left }
     .feature-card .ic { width:40px; height:40px; border-radius:10px; display:grid; place-items:center; background: rgba(30,64,175,.25); color:#93c5fd; margin-bottom:10px }
@@ -58,13 +58,14 @@
     .check-card { position:absolute; right:14px; top:14px; background: rgba(239,68,68,.95); color:#fff; padding:12px 14px; border-radius:12px; width: 210px; box-shadow: 0 10px 30px rgba(239,68,68,.35) }
     .check-card li { list-style:none; margin:6px 0 }
     .check-card li::before { content:"✓ "; margin-right:6px }
-    .footer { max-width:1200px; margin: 32px auto; padding: 0 24px; color: var(--muted); font-size:14px }
+    .footer { width: 80%; max-width: none; margin: 32px auto; padding: 0; color: var(--muted); font-size:14px }
+    .footer form, .footer input { display:none }
     @media (max-width: 1100px) { .features { grid-template-columns: repeat(2, 1fr) } .services { grid-template-columns: 1fr } }
     @media (max-width: 620px) { .features { grid-template-columns: 1fr } }
 
     /* Why section */
-    .why { position:relative; padding: 42px 24px; }
-    .why .wrap { max-width:1200px; margin:0 auto; position:relative }
+    .why { position:relative; padding: 42px 0; }
+    .why .wrap { width: 80%; max-width: none; margin:0 auto; position:relative }
     .why::before{ content:""; position:absolute; inset:0; background: url('https://images.unsplash.com/photo-1567446537708-ac4aa75c9c28?q=80&w=1800&auto=format&fit=crop') center/cover no-repeat; filter: brightness(.45); }
     .why::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(2,6,23,.3), rgba(2,6,23,.6)); }
     .why h2 { position:relative; text-align:center; font-size:22px; font-weight:800; margin: 6px 0 8px }
@@ -80,7 +81,7 @@
     @media (max-width: 1100px) { .why-grid { grid-template-columns: 1fr } }
 
     /* Quote section */
-    .quote-wrap { max-width:1200px; margin: 0 auto 18px; padding: 0 24px }
+    .quote-wrap { width: 80%; max-width: none; margin: 0 auto 18px; padding: 0 }
     .quote { display:grid; grid-template-columns: 1fr 1fr; gap:0; border-radius:16px; overflow:hidden; border:1px solid rgba(148,163,184,.12) }
     .best { background: #0f2530; padding:24px }
     .best small { color:#ef4444; font-weight:800 }
@@ -102,7 +103,7 @@
     .submit { margin-top:10px; width:100%; padding:10px 14px; border-radius:10px; background:#0b1220; color:#fff; border:1px solid rgba(255,255,255,.2); font-weight:700 }
     @media (max-width: 1000px) { .quote { grid-template-columns: 1fr } .row { grid-template-columns: 1fr } }
     /* Gallery */
-    .gallery { max-width:1200px; margin: 12px auto 0; padding: 0 24px 8px; overflow-x:hidden }
+    .gallery { width: 80%; max-width: none; margin: 12px auto 0; padding: 0 0 8px; overflow-x:hidden }
     .gallery-track { display:flex; gap:16px; flex-wrap: wrap }
     .gcard { position:relative; width:240px; height:140px; border-radius:14px; overflow:hidden; border:1px solid rgba(148,163,184,.12); background:#0b1220 }
     .gcard img { width:100%; height:100%; object-fit:cover; display:block }
@@ -111,7 +112,8 @@
     .gcard .meta .t { font-size:12px; color:#e5e7eb; display:flex; flex-direction:column; line-height:1.1 }
 
     /* Help + Quote section */
-    .helpwrap { max-width:1200px; margin: 18px auto; padding: 0 24px }
+    .helpwrap { width: 80%; max-width: none; margin: 18px auto; padding: 0 }
+    @media (max-width: 980px){ .section, .footer, .why .wrap, .quote-wrap, .gallery, .helpwrap { width: 100%; padding-left:24px; padding-right:24px } .why { padding-left:24px; padding-right:24px } }
     .helpgrid { display:grid; grid-template-columns: 1fr 1fr; gap:0; border:1px solid rgba(148,163,184,.12); border-radius:16px; overflow:hidden }
     .help { background:#0f172a; padding:22px }
     .help h3 { margin:0 0 6px; font-size:22px }
@@ -343,18 +345,93 @@
   </div>
 
   <footer class="footer">
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap">
-      <div>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. {{ $cfgFooter ?? 'All rights reserved.' }}</div>
-      <div class="social" style="display:flex; gap:12px">
-        @php($social = collect())
-        @if(\Illuminate\Support\Facades\Schema::hasTable('social_links'))
-          @php($social = \App\Models\SocialLink::where('is_visible',true)->orderBy('sort_order')->orderBy('id')->get())
-        @endif
-        @forelse($social as $s)
-          <a href="{{ $s->url }}" target="_blank" rel="noopener" title="{{ $s->label }}" style="color:#cbd5e1; text-decoration:none; border:1px solid rgba(148,163,184,.25); padding:6px 8px; border-radius:10px">{{ $s->icon ?? '🔗' }}</a>
-        @empty
-          
-        @endforelse
+    @php
+      $aboutText = $cfgFooter ?? 'All rights reserved.'; // legacy footer text
+      $contactEmail = optional(\App\Models\Setting::where('key','contact_email')->first())->value;
+      $contactPhone = optional(\App\Models\Setting::where('key','contact_phone')->first())->value;
+      $contactAddr  = optional(\App\Models\Setting::where('key','address')->first())->value;
+      $footerLogo = optional(\App\Models\Setting::where('key','footer_logo_url')->first())->value;
+      $footerNews = optional(\App\Models\Setting::where('key','footer_newsletter')->first())->value;
+      $footerHours = optional(\App\Models\Setting::where('key','footer_hours')->first())->value;
+      $aboutTitle = optional(\App\Models\Setting::where('key','footer_about_title')->first())->value ?? 'About';
+      $aboutBody  = optional(\App\Models\Setting::where('key','footer_about_text')->first())->value;
+      $aboutLinkLabel = optional(\App\Models\Setting::where('key','footer_about_link_label')->first())->value;
+      $aboutLinkUrl   = optional(\App\Models\Setting::where('key','footer_about_link_url')->first())->value;
+      $showSocial = (bool) (optional(\App\Models\Setting::where('key','footer_show_social')->first())->value ?? true);
+      $ftBg = optional(\App\Models\Setting::where('key','footer_bg_color')->first())->value ?? '#0b1220';
+      $ftText = optional(\App\Models\Setting::where('key','footer_text_color')->first())->value ?? '#94a3b8';
+      $ftLink = optional(\App\Models\Setting::where('key','footer_link_color')->first())->value ?? '#cbd5e1';
+      $footerLinks = collect();
+      if (\Illuminate\Support\Facades\Schema::hasTable('footer_links')) {
+        $footerLinks = \App\Models\FooterLink::where('is_visible',true)->orderBy('sort_order')->orderBy('id')->get();
+      }
+      $social = collect();
+      if (\Illuminate\Support\Facades\Schema::hasTable('social_links')) {
+        $social = \App\Models\SocialLink::where('is_visible',true)->orderBy('sort_order')->orderBy('id')->get();
+      }
+    @endphp
+
+    <div style="width:100%; max-width:none; margin:0; padding:0; background: {{ $ftBg }}; color: {{ $ftText }}; border-radius:14px">
+      <div style="display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap:22px; align-items:start">
+        <div>
+          <h4 style="margin:0 0 8px; color: {{ $ftText }}">{{ $aboutTitle }}</h4>
+          @if(!empty($footerLogo))
+            <div style="margin:6px 0 10px"><img src="{{ $footerLogo }}" alt="Footer Logo" style="width:120px; height:auto; border-radius:8px; border:1px solid rgba(148,163,184,.18)"></div>
+          @endif
+          @if(!empty($aboutBody))
+            <p style="margin:0 0 10px; color: {{ $ftText }}">{{ $aboutBody }}</p>
+          @else
+            <p style="margin:0 0 10px; color: {{ $ftText }}">{{ $aboutText }}</p>
+          @endif
+          @if(!empty($aboutLinkLabel) && !empty($aboutLinkUrl))
+            <div style="margin:8px 0 10px"><a href="{{ $aboutLinkUrl }}" style="color: {{ $ftLink }}; text-decoration:none">{{ $aboutLinkLabel }} →</a></div>
+          @endif
+          @if($showSocial)
+            <div>
+              @forelse($social as $s)
+                <a href="{{ $s->url }}" target="_blank" rel="noopener" title="{{ $s->label }}" style="color: {{ $ftLink }}; text-decoration:none; border:1px solid rgba(148,163,184,.25); padding:6px 8px; border-radius:10px">{{ $s->icon ?? '🔗' }}</a>
+              @empty
+              @endforelse
+            </div>
+          @endif
+        </div>
+
+        <div>
+          <h4 style="margin:0 0 8px; color: {{ $ftText }}">Services</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+            @if(isset($services) && $services->count())
+              @foreach($services as $svc)
+                <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">{{ $svc->title }}</a></li>
+              @endforeach
+            @else
+              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Air Freight</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Ocean Freight</a></li>
+            @endif
+          </ul>
+        </div>
+
+        <div>
+          <h4 style="margin:0 0 8px; color: {{ $ftText }}">Quick Links</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+            @forelse($footerLinks as $fl)
+              <li style="margin:6px 0"><a href="{{ $fl->url }}" style="color: {{ $ftLink }}; text-decoration:none">{{ $fl->label }}</a></li>
+            @empty
+              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Privacy Policy</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Terms of Service</a></li>
+            @endforelse
+          </ul>
+          <h4 style="margin:14px 0 8px; color: {{ $ftText }}">Contact Us</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+            @if($contactAddr)<li style="margin:6px 0">📍 {{ $contactAddr }}</li>@endif
+            @if($contactPhone)<li style="margin:6px 0">📞 {{ $contactPhone }}</li>@endif
+            @if($contactEmail)<li style="margin:6px 0">✉️ {{ $contactEmail }}</li>@endif
+            @if($footerHours)<li style="margin:6px 0">🕑 {{ $footerHours }}</li>@endif
+          </ul>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid rgba(148,163,184,.12); color: {{ $ftText }}">
+        <div>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. {{ $aboutText }}</div>
       </div>
     </div>
   </footer>
