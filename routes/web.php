@@ -1,0 +1,89 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\HomeBannerController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\ServiceUploadController;
+use App\Http\Controllers\Admin\ServiceVisibilityController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\NavLinkController;
+use App\Http\Controllers\Admin\GalleryItemController;
+use App\Http\Controllers\Admin\HelpItemController;
+use App\Http\Controllers\Admin\SocialLinkController;
+use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
+use App\Http\Controllers\QuoteController;
+use App\Models\Feature;
+use App\Models\HomeBanner;
+use App\Models\Service;
+use App\Models\NavLink;
+use App\Models\GalleryItem;
+use App\Models\HelpItem;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::get('/', function () {
+    if (Auth::check() && Auth::user()->is_admin) {
+        return redirect('/admin');
+    }
+    $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    $banner = HomeBanner::first();
+    $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $navLinks = NavLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
+    $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
+    $formServices = Service::orderBy('title')->orderBy('id')->get();
+    return view('home', compact('features','banner','services','navLinks','gallery','helpItems','formServices'));
+});
+
+// Public home preview that never redirects admins
+Route::get('/site', function () {
+    $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    $banner = HomeBanner::first();
+    $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $navLinks = NavLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
+    $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
+    $formServices = Service::orderBy('title')->orderBy('id')->get();
+    return view('home', compact('features','banner','services','navLinks','gallery','helpItems','formServices'));
+})->name('site.home');
+
+// Public quote submissions
+Route::post('/quotes', [QuoteController::class, 'store'])->name('quote.store');
+
+Route::middleware('guest')->group(function() {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::resource('features', FeatureController::class)->names('admin.features');
+    Route::patch('features/{feature}/toggle-visibility', [FeatureController::class, 'toggleVisibility'])->name('admin.features.toggle');
+    Route::get('banner', [HomeBannerController::class, 'edit'])->name('admin.banner.edit');
+    Route::post('banner', [HomeBannerController::class, 'update'])->name('admin.banner.update');
+    Route::resource('services', ServiceController::class)->names('admin.services');
+    Route::post('services/upload', [ServiceUploadController::class, 'store'])->name('admin.services.upload');
+    Route::patch('services/{service}/toggle-visibility', [ServiceVisibilityController::class, 'toggle'])->name('admin.services.toggle');
+    Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');
+    Route::post('settings', [SettingController::class, 'update'])->name('admin.settings.update');
+    Route::resource('nav-links', NavLinkController::class)->names('admin.navlinks');
+    Route::resource('gallery', GalleryItemController::class)->names('admin.gallery');
+    Route::resource('help-items', HelpItemController::class)->names('admin.helpitems');
+    Route::resource('social-links', SocialLinkController::class)->names('admin.sociallinks');
+    Route::resource('quotes', AdminQuoteController::class)->only(['index','show','edit','update','destroy'])->names('admin.quotes');
+});
