@@ -85,5 +85,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('gallery', GalleryItemController::class)->names('admin.gallery');
     Route::resource('help-items', HelpItemController::class)->names('admin.helpitems');
     Route::resource('social-links', SocialLinkController::class)->names('admin.sociallinks');
-    Route::resource('quotes', AdminQuoteController::class)->only(['index','show','edit','update','destroy'])->names('admin.quotes');
+    Route::resource('quotes', AdminQuoteController::class)->names('admin.quotes');
 });

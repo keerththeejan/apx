@@ -100,6 +100,7 @@
           <a href="{{ route('admin.navlinks.index') }}">Nav Links</a>
           <a href="{{ route('admin.gallery.index') }}">Gallery</a>
           <a href="{{ route('admin.helpitems.index') }}">Help Items</a>
+          <a href="{{ route('admin.quotes.index') }}">Quotes</a>
           <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
         </nav>
       </div>
@@ -117,12 +118,14 @@
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.gallery.index') }}">Manage Gallery</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.helpitems.index') }}">Manage Help Items</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.sociallinks.index') }}">Manage Social Links</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.quotes.index') }}">Manage Quotes</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.quotes.create') }}">Add Quote</a>
         </div>
         <div class="kpis">
           <div class="kpi"><h3>Total Users</h3><div class="v">—</div></div>
           <div class="kpi"><h3>Active Orders</h3><div class="v">—</div></div>
           <div class="kpi"><h3>Shipments Today</h3><div class="v">—</div></div>
-          <div class="kpi"><h3>Revenue</h3><div class="v">—</div></div>
+          <div class="kpi"><h3>New Quotes</h3><div class="v">{{ $newQuotes ?? 0 }}</div></div>
         </div>
         @if(session('status'))
           <div class="status">{{ session('status') }}</div>
@@ -182,24 +185,36 @@
           @endif
         </div>
 
-        <h3 style="margin:18px 0 10px; font-size:16px">Recent Activity</h3>
+        <h3 style="margin:18px 0 10px; font-size:16px">Recent Quotes</h3>
         <div class="card" style="padding:0; overflow:auto">
-          <table class="table" aria-label="Recent activity">
+          <table class="table" aria-label="Recent quotes">
             <thead>
               <tr>
-                <th>When</th>
-                <th>Event</th>
-                <th>User</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Service</th>
                 <th>Status</th>
+                <th>Received</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-                <td>—</td>
-              </tr>
+              @forelse(($recentQuotes ?? collect()) as $q)
+                <tr>
+                  <td>{{ $q->id }}</td>
+                  <td>{{ $q->name }}</td>
+                  <td>{{ $q->email }}</td>
+                  <td>{{ optional($q->service)->title ?? '—' }}</td>
+                  <td>{{ ucfirst(str_replace('_',' ',$q->status)) }}</td>
+                  <td>{{ $q->created_at->diffForHumans() }}</td>
+                  <td>
+                    <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25); text-decoration:none" href="{{ route('admin.quotes.show', $q) }}">View</a>
+                  </td>
+                </tr>
+              @empty
+                <tr><td colspan="7" style="color:#94a3b8">No recent quotes.</td></tr>
+              @endforelse
             </tbody>
           </table>
         </div>

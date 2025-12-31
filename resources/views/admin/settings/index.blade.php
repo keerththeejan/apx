@@ -47,6 +47,9 @@
       <label for="address">Address</label>
       <textarea id="address" name="address">{{ old('address', $settings['address']) }}</textarea>
 
+      <label for="footer_text">Footer Text</label>
+      <input id="footer_text" type="text" name="footer_text" value="{{ old('footer_text', $settings['footer_text']) }}" placeholder="All rights reserved.">
+
       <label for="default_theme">Default Admin Theme</label>
       <select id="default_theme" name="default_theme">
         @php $themes = ['dark'=>'Dark','slate'=>'Slate','indigo'=>'Indigo','emerald'=>'Emerald','rose'=>'Rose','amber'=>'Amber','sky'=>'Sky','violet'=>'Violet']; @endphp

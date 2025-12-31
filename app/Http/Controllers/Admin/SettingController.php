@@ -27,6 +27,7 @@ class SettingController extends Controller
             'logo_url' => ['nullable','string','max:2000'],
             'logo_file' => ['nullable','image','mimes:jpg,jpeg,png,webp,svg','max:4096'],
             'default_theme' => ['required','in:dark,slate,indigo,emerald,rose,amber,sky,violet'],
+            'footer_text' => ['nullable','string','max:500'],
         ]);
 
         // If a logo image was uploaded, store it under public/uploads/logos and override logo_url
@@ -58,6 +59,7 @@ class SettingController extends Controller
             'address' => $rows['address']->value ?? null,
             'logo_url' => $rows['logo_url']->value ?? null,
             'default_theme' => $rows['default_theme']->value ?? 'dark',
+            'footer_text' => $rows['footer_text']->value ?? 'All rights reserved.',
         ];
     }
 

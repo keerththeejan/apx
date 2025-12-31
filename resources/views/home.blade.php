@@ -137,6 +137,7 @@
           $cfgName = isset($siteName) ? $siteName : optional(\App\Models\Setting::where('key','site_name')->first())->value;
           $cfgLogo = isset($logoUrl) ? $logoUrl : optional(\App\Models\Setting::where('key','logo_url')->first())->value;
           $cfgTag  = optional(\App\Models\Setting::where('key','tagline')->first())->value;
+          $cfgFooter = optional(\App\Models\Setting::where('key','footer_text')->first())->value;
         @endphp
         @if($cfgLogo)
           <img src="{{ $cfgLogo }}" alt="Logo">
@@ -343,7 +344,7 @@
 
   <footer class="footer">
     <div style="display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap">
-      <div>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. All rights reserved.</div>
+      <div>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. {{ $cfgFooter ?? 'All rights reserved.' }}</div>
       <div class="social" style="display:flex; gap:12px">
         @php($social = collect())
         @if(\Illuminate\Support\Facades\Schema::hasTable('social_links'))
