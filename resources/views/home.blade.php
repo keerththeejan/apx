@@ -140,9 +140,19 @@
           $cfgLogo = isset($logoUrl) ? $logoUrl : optional(\App\Models\Setting::where('key','logo_url')->first())->value;
           $cfgTag  = optional(\App\Models\Setting::where('key','tagline')->first())->value;
           $cfgFooter = optional(\App\Models\Setting::where('key','footer_text')->first())->value;
+          $toUrl = function ($p) {
+            if (empty($p)) return null;
+            if (\Illuminate\Support\Str::startsWith($p, ['http://','https://'])) return $p;
+            $p = trim((string)$p);
+            $base = request()->getSchemeAndHttpHost() . request()->getBaseUrl();
+            if (\Illuminate\Support\Str::startsWith($p, '/')) {
+              return $base . $p;
+            }
+            return $base . '/' . ltrim($p, '/');
+          };
         @endphp
         @if($cfgLogo)
-          <img src="{{ $cfgLogo }}" alt="Logo">
+          <img src="{{ $toUrl($cfgLogo) }}" alt="Logo">
         @else
           <span>📦</span>
         @endif
@@ -190,7 +200,7 @@
             <div class="feature-card">
               <div class="ic">
                 @if(!empty($f->icon_image_url))
-                  <img src="{{ $f->icon_image_url }}" alt="{{ $f->title }} icon">
+                  <img src="{{ $toUrl($f->icon_image_url) }}" alt="{{ $f->title }} icon">
                 @else
                   {{ $f->icon ?? '•' }}
                 @endif
@@ -236,7 +246,7 @@
             @endforeach
           </div>
           <div class="preview">
-            <img id="svc-image" src="{{ optional($firstService)->image_url ?? 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop' }}" alt="Service preview">
+            <img id="svc-image" src="{{ !empty(optional($firstService)->image_url) ? $toUrl($firstService->image_url) : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop' }}" alt="Service preview">
             <ul class="check-card" id="svc-check">
               @php $items = is_array(optional($firstService)->checklist ?? null) ? $firstService->checklist : ['Fast Delivery','Safety','Good Package','Privacy']; @endphp
               @foreach($items as $it)
@@ -246,7 +256,7 @@
           </div>
 
           @foreach($services as $i => $s)
-            <template id="svc-data-{{ $i }}" data-image="{{ $s->image_url ?? '' }}">
+            <template id="svc-data-{{ $i }}" data-image="{{ !empty($s->image_url) ? $toUrl($s->image_url) : '' }}">
               @if(is_array($s->checklist))
                 @foreach($s->checklist as $it)
                   <li>{{ $it }}</li>
@@ -283,7 +293,7 @@
       @if(isset($gallery) && $gallery->count())
         @foreach($gallery as $g)
           <div class="gcard">
-            <img src="{{ $g->image_url }}" alt="{{ $g->label ?? 'Gallery' }}">
+            <img src="{{ $toUrl($g->image_url) }}" alt="{{ $g->label ?? 'Gallery' }}">
             <div class="meta">
               <span class="d">{{ $g->date_label ?? '' }}</span>
               <span class="t">{{ $g->label ?? '' }}</span>
@@ -376,7 +386,7 @@
         <div>
           <h4 style="margin:0 0 8px; color: {{ $ftText }}">{{ $aboutTitle }}</h4>
           @if(!empty($footerLogo))
-            <div style="margin:6px 0 10px"><img src="{{ $footerLogo }}" alt="Footer Logo" style="width:120px; height:auto; border-radius:8px; border:1px solid rgba(148,163,184,.18)"></div>
+            <div style="margin:6px 0 10px"><img src="{{ $toUrl($footerLogo) }}" alt="Footer Logo" style="width:120px; height:auto; border-radius:8px; border:1px solid rgba(148,163,184,.18)"></div>
           @endif
           @if(!empty($aboutBody))
             <p style="margin:0 0 10px; color: {{ $ftText }}">{{ $aboutBody }}</p>

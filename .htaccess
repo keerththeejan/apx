@@ -1,2 +1,9 @@
-RewriteEngine On
-RewriteRule ^(.*)$ /APLX0/$1 [R=302,L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    DirectoryIndex index.php
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>
