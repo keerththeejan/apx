@@ -27,10 +27,14 @@
     nav a:active{transform: scale(.98)}
     nav a + a{margin-top:4px}
     .content{padding:16px}
+    .content .wrap{max-width: 980px; margin:0 auto}
     .menu{display:none; background:#111827; color:var(--text); border:1px solid rgba(148,163,184,.2); padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer}
     .logout{background:var(--danger); border:0; color:#fff; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer}
     .btn{display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid var(--border); background:linear-gradient(135deg, var(--accent), rgba(255,255,255,.06)); color:#fff; text-decoration:none; font-weight:700}
     input, textarea, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:#0b1a21; color:#e5e7eb}
+    label{display:block; margin-top:12px; margin-bottom:6px; color:var(--muted); font-size:12px; font-weight:800; letter-spacing:.02em}
+    .row{display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:12px; align-items:start}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
     table{width:100%; border-collapse:separate; border-spacing:0; background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.85)); border:1px solid var(--border); border-radius:12px; overflow:hidden}
     th,td{padding:12px 14px; border-bottom:1px solid var(--border); text-align:left}
     th{font-size:12px; color:var(--muted); font-weight:700; background:var(--panel)}
@@ -40,8 +44,8 @@
     .sidebar{transition: transform .2s ease}
     .navsec{margin-top:12px; padding-top:10px; border-top:1px solid var(--border); color:var(--muted); font-size:12px; font-weight:800; letter-spacing:.08em; text-transform:uppercase}
     .navsub a{padding-left:28px; font-size:14px}
-    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} nav{position:static} }
-    @media (max-width: 520px){ .menu{display:inline-block} .wrap{padding:10px} .sidebar{position:fixed; left:0; top:0; height:100%; width:82%; max-width:300px; z-index:45; transform: translateX(-102%)} .sidebar.open{transform: translateX(0)} .backdrop.show{display:block} }
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} nav{position:static} .row{grid-template-columns: repeat(2, minmax(0, 1fr))} }
+    @media (max-width: 520px){ .menu{display:inline-block} .wrap{padding:10px} .content{padding:12px} .row{grid-template-columns: 1fr} .sidebar{position:fixed; left:0; top:0; height:100%; width:82%; max-width:300px; z-index:45; transform: translateX(-102%)} .sidebar.open{transform: translateX(0)} .backdrop.show{display:block} }
   </style>
 </head>
 <body>
@@ -82,6 +86,7 @@
             <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
           </div>
           <a href="{{ route('admin.features.index') }}">Features</a>
+          <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
         </nav>

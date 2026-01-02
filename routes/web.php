@@ -16,14 +16,17 @@ use App\Http\Controllers\Admin\HelpItemController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\FooterLinkController;
 use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
+use App\Http\Controllers\Admin\DailyActivityController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\ActivityController;
 use App\Models\Feature;
 use App\Models\HomeBanner;
 use App\Models\Service;
 use App\Models\NavLink;
 use App\Models\GalleryItem;
 use App\Models\HelpItem;
+use App\Models\DailyActivity;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,11 +46,17 @@ Route::get('/', function () {
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
     $banner = HomeBanner::first();
     $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $activities = DailyActivity::where('is_visible', true)
+        ->orderByDesc('activity_date')
+        ->orderBy('sort_order')
+        ->orderByDesc('id')
+        ->take(6)
+        ->get();
     $navLinks = NavLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
     $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
     $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
     $formServices = Service::orderBy('title')->orderBy('id')->get();
-    return view('home', compact('features','banner','services','navLinks','gallery','helpItems','formServices'));
+    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices'));
 });
 
 // Public home preview that never redirects admins
@@ -55,17 +64,26 @@ Route::get('/site', function () {
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
     $banner = HomeBanner::first();
     $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $activities = DailyActivity::where('is_visible', true)
+        ->orderByDesc('activity_date')
+        ->orderBy('sort_order')
+        ->orderByDesc('id')
+        ->take(6)
+        ->get();
     $navLinks = NavLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
     $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
     $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
     $formServices = Service::orderBy('title')->orderBy('id')->get();
-    return view('home', compact('features','banner','services','navLinks','gallery','helpItems','formServices'));
+    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices'));
 })->name('site.home');
 
 // Public quote submissions
 Route::post('/quotes', [QuoteController::class, 'store'])->name('quote.store');
 // Newsletter subscribe
 Route::post('/newsletter', [NewsletterController::class, 'store'])->name('newsletter.store');
+
+// Public activities list
+Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
 
 Route::middleware('guest')->group(function() {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -78,6 +96,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::resource('features', FeatureController::class)->names('admin.features');
     Route::patch('features/{feature}/toggle-visibility', [FeatureController::class, 'toggleVisibility'])->name('admin.features.toggle');
+    Route::resource('activities', DailyActivityController::class)->names('admin.activities');
+    Route::patch('activities/{activity}/toggle-visibility', [DailyActivityController::class, 'toggleVisibility'])->name('admin.activities.toggle');
+    Route::patch('activities/{activity}/sort-order', [DailyActivityController::class, 'updateSortOrder'])->name('admin.activities.sort');
     Route::get('banner', [HomeBannerController::class, 'edit'])->name('admin.banner.edit');
     Route::post('banner', [HomeBannerController::class, 'update'])->name('admin.banner.update');
     Route::resource('services', ServiceController::class)->names('admin.services');

@@ -30,6 +30,15 @@ class SettingController extends Controller
         $data = $request->validate([
             'site_name' => ['sometimes','required','string','max:120'],
             'tagline' => ['nullable','string','max:200'],
+            'site_default_theme' => ['nullable','in:dark,light'],
+            'header_bg_color' => ['nullable','regex:/^#?[0-9a-fA-F]{3,8}$/'],
+            'header_border_color' => ['nullable','string','max:60'],
+            'header_link_color' => ['nullable','regex:/^#?[0-9a-fA-F]{3,8}$/'],
+            'header_text_color' => ['nullable','regex:/^#?[0-9a-fA-F]{3,8}$/'],
+            'header_tagline_color' => ['nullable','regex:/^#?[0-9a-fA-F]{3,8}$/'],
+            'header_brand_font_size' => ['nullable','integer','min:12','max:48'],
+            'header_brand_font_weight' => ['nullable','in:400,500,600,700,800'],
+            'header_brand_font_style' => ['nullable','in:normal,italic'],
             'contact_email' => ['nullable','email','max:120'],
             'contact_phone' => ['nullable','string','max:60'],
             'address' => ['nullable','string','max:500'],
@@ -76,7 +85,7 @@ class SettingController extends Controller
         // Coerce booleans
         $data['footer_show_social'] = $request->boolean('footer_show_social');
         // Normalize colors to start with '#'
-        foreach (['footer_bg_color','footer_text_color','footer_link_color'] as $ckey) {
+        foreach (['header_bg_color','header_link_color','header_text_color','header_tagline_color','footer_bg_color','footer_text_color','footer_link_color'] as $ckey) {
             if (!empty($data[$ckey])) {
                 $val = ltrim((string)$data[$ckey], '#');
                 $data[$ckey] = '#'.$val;
@@ -101,6 +110,15 @@ class SettingController extends Controller
         return [
             'site_name' => $rows['site_name']->value ?? 'Parcel Transport',
             'tagline' => $rows['tagline']->value ?? 'Safe Transportation & Logistics',
+            'site_default_theme' => $rows['site_default_theme']->value ?? 'dark',
+            'header_bg_color' => $rows['header_bg_color']->value ?? '#0b1220',
+            'header_border_color' => $rows['header_border_color']->value ?? 'rgba(148,163,184,.12)',
+            'header_link_color' => $rows['header_link_color']->value ?? '#94a3b8',
+            'header_text_color' => $rows['header_text_color']->value ?? '#e2e8f0',
+            'header_tagline_color' => $rows['header_tagline_color']->value ?? '#94a3b8',
+            'header_brand_font_size' => (int)($rows['header_brand_font_size']->value ?? 16),
+            'header_brand_font_weight' => (string)($rows['header_brand_font_weight']->value ?? '800'),
+            'header_brand_font_style' => (string)($rows['header_brand_font_style']->value ?? 'normal'),
             'contact_email' => $rows['contact_email']->value ?? null,
             'contact_phone' => $rows['contact_phone']->value ?? null,
             'address' => $rows['address']->value ?? null,

@@ -9,38 +9,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root { --bg: #0b1220; --card: #0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#1e293b; --blue:#3b82f6; }
+    body[data-theme="light"] { --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --brand:#e2e8f0; --blue:#2563eb }
     * { box-sizing: border-box }
     html, body { height: 100% }
     body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
-    .topbar { background: #0b1220; border-bottom: 1px solid rgba(148,163,184,.12); position: sticky; top:0; z-index:10 }
+    .topbar { background: var(--header-bg, var(--bg)); border-bottom: 1px solid var(--header-border, rgba(148,163,184,.12)); position: sticky; top:0; z-index:10 }
     .nav { position:relative; max-width: 1200px; margin: 0 auto; padding: 10px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px }
     .brand { display:flex; align-items:center; gap:10px; font-weight:800 }
     .brand img { width:50px; height:50px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25) }
-    .brand span { line-height:1.05 }
-    .brand small { color: var(--muted); font-weight:600; display:block; line-height:1.1 }
+    .brand span { line-height:1.05; color: var(--header-text, var(--text)); font-size: var(--brand-size, 16px); font-weight: var(--brand-weight, 800); font-style: var(--brand-style, normal) }
+    .brand small { color: var(--header-tagline, var(--muted)); font-weight:600; display:block; line-height:1.1 }
     .links { display:flex; align-items:center; gap:22px }
-    .links a { color: var(--muted); text-decoration:none; margin-left:22px; font-weight:600 }
-    .links a:hover { color:#fff }
-    .hamb { display:none; background:#111827; color:#e2e8f0; border:1px solid rgba(148,163,184,.25); padding:8px 10px; border-radius:10px; font-weight:700 }
+    .links a { color: var(--header-link, var(--muted)); text-decoration:none; font-weight:600 }
+    .links a:hover { color: var(--header-text, var(--text)) }
+    .hamb { display:none; background: rgba(17,24,39,.6); color: var(--header-text, #e2e8f0); border:1px solid var(--header-border, rgba(148,163,184,.25)); padding:8px 10px; border-radius:10px; font-weight:700 }
+    .themebtn { display:inline-block; background: rgba(17,24,39,.6); color: var(--header-text, #e2e8f0); border:1px solid var(--header-border, rgba(148,163,184,.25)); padding:8px 10px; border-radius:10px; font-weight:700; cursor:pointer }
+    body[data-theme="light"] .hamb,
+    body[data-theme="light"] .themebtn { background: rgba(226,232,240,.85); color: var(--header-text, var(--text)) }
     @media (max-width: 720px){
-      .links { position:absolute; right:24px; top:calc(100% + 8px); z-index:50; background:#0b1220; border:1px solid rgba(148,163,184,.12); border-radius:12px; padding:10px; display:none; flex-direction:column; gap:6px; min-width: 180px }
+      .links { position:absolute; right:24px; top:calc(100% + 8px); z-index:50; background: var(--header-bg, #0b1220); border:1px solid var(--header-border, rgba(148,163,184,.12)); border-radius:12px; padding:10px; display:none; flex-direction:column; gap:6px; min-width: 200px; box-shadow: 0 16px 40px rgba(0,0,0,.35) }
       .links a { margin:6px 0 0 0 }
       .links.open { display:flex }
       .hamb { display:inline-block }
+      .themebtn { display:none }
       .brand img { width:28px; height:28px; border-radius:7px }
       .brand small { display:none }
     }
     .icon { width:18px; height:18px; opacity:.9; vertical-align:-3px; margin-right:6px }
-    .hero-banner { position: relative; min-height: 62vh; display:grid; place-items:center; text-align:center; }
-    .hero-banner::before { content:""; position:absolute; inset:0; background: var(--hero-bg, url('https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=1600&auto=format&fit=crop')) center/cover no-repeat; filter: brightness(.7); }
+    .hero-banner { position: relative; min-height: var(--banner-h, clamp(420px, 62vh, 760px)); display:grid; place-items:center; text-align:center; }
+    .hero-banner::before { content:""; position:absolute; inset:0; background: var(--hero-bg, url('https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=1600&auto=format&fit=crop')) var(--hero-pos, center) / var(--hero-size, cover) no-repeat; filter: brightness(.7); }
     .hero-banner::after { content:""; position:absolute; inset:0; background: linear-gradient(to bottom, rgba(2,6,23,.55), rgba(2,6,23,.45)); }
-    .hero-content { position:relative; padding: 0 24px; max-width: 950px }
+    .hero-content { position:relative; padding: 0 24px; width: 80%; max-width: var(--hero-content-w, 950px) }
     .eyebrow { color:#cbd5e1; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.95 }
     .title { margin:10px 0 0; font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; text-shadow: 0 2px 6px rgba(0,0,0,.35) }
     .subtitle { margin-top:10px; color: #d1d5db; font-weight:500; opacity:.9 }
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
     .btn { padding:10px 16px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); backdrop-filter: blur(4px); color:#fff; text-decoration:none; font-weight:600 }
     .btn.primary { background: var(--blue); border-color: transparent }
+
+    body[data-theme="light"] .eyebrow { color: var(--text); opacity: 1 }
+    body[data-theme="light"] .subtitle { color: var(--text); opacity: .85 }
+    body[data-theme="light"] .btn { background: rgba(226,232,240,.85); color: var(--text); border-color: rgba(15,23,42,.15) }
+    body[data-theme="light"] .btn.primary { color: #fff; border-color: transparent }
+
     .section { width: 80%; max-width: none; margin: 0 auto; padding: 28px 0 }
     .features { display:grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 22px }
     .feature-card { background: rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.12); border-radius:14px; padding:18px; text-align:left }
@@ -48,6 +59,23 @@
     .feature-card .ic img { width:100%; height:100%; border-radius:10px; object-fit:cover; display:block }
     .feature-card h3 { margin:6px 0 6px; font-size:18px }
     .feature-card p { margin:0; color:#94a3b8; font-size:14px; line-height:1.5 }
+    body[data-theme="light"] .feature-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .feature-card p { color: var(--muted) }
+
+    .activities { display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 22px }
+    .activity-card { background: rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.12); border-radius:14px; overflow:hidden; text-align:left }
+    .activity-card img { width:100%; height:160px; object-fit:cover; display:block; background:#0b1220 }
+    .activity-card .pad { padding:16px }
+    .activity-card h3 { margin:0 0 6px; font-size:18px }
+    .activity-card .meta { color:#94a3b8; font-size:12px; margin-bottom:10px }
+    .activity-card p { margin:0; color:#94a3b8; font-size:14px; line-height:1.5 }
+    body[data-theme="light"] .activity-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .activity-card .meta,
+    body[data-theme="light"] .activity-card p { color: var(--muted) }
+    .clamp2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+    .clamp2.expanded { display:block; -webkit-line-clamp:unset; overflow:visible }
+    .readmore { margin-top:8px; border:0; background:transparent; color:#93c5fd; font-weight:700; cursor:pointer; padding:0 }
+    .readmore:hover { text-decoration: underline }
 
     .services { display:grid; grid-template-columns: 360px 1fr; gap: 22px; align-items:stretch; margin-top: 28px }
     .tabs { background: rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.12); border-radius:14px; padding:10px; display:flex; flex-direction:column; gap:10px }
@@ -59,10 +87,13 @@
     .check-card { position:absolute; right:14px; top:14px; background: rgba(239,68,68,.95); color:#fff; padding:12px 14px; border-radius:12px; width: 210px; box-shadow: 0 10px 30px rgba(239,68,68,.35) }
     .check-card li { list-style:none; margin:6px 0 }
     .check-card li::before { content:"✓ "; margin-right:6px }
-    .footer { width: 80%; max-width: none; margin: 32px auto; padding: 0; color: var(--muted); font-size:14px }
+    .footer { width: 100%; margin: 32px 0 0; padding: 0; color: var(--muted); font-size:14px }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 22px 24px }
     .footer form, .footer input { display:none }
     @media (max-width: 1100px) { .features { grid-template-columns: repeat(2, 1fr) } .services { grid-template-columns: 1fr } }
+    @media (max-width: 1100px) { .activities { grid-template-columns: repeat(2, 1fr) } }
     @media (max-width: 620px) { .features { grid-template-columns: 1fr } }
+    @media (max-width: 620px) { .activities { grid-template-columns: 1fr } }
 
     /* Why section */
     .why { position:relative; padding: 42px 0; }
@@ -133,29 +164,43 @@
   </style>
 </head>
 <body>
-  <header class="topbar">
+  @php
+    $cfgName = isset($siteName) ? $siteName : optional(\App\Models\Setting::where('key','site_name')->first())->value;
+    $cfgLogo = isset($logoUrl) ? $logoUrl : optional(\App\Models\Setting::where('key','logo_url')->first())->value;
+    $cfgTag  = optional(\App\Models\Setting::where('key','tagline')->first())->value;
+    $cfgFooter = optional(\App\Models\Setting::where('key','footer_text')->first())->value;
+    $cfgSiteTheme = optional(\App\Models\Setting::where('key','site_default_theme')->first())->value;
+    $cfgHeaderBg = optional(\App\Models\Setting::where('key','header_bg_color')->first())->value;
+    $cfgHeaderBorder = optional(\App\Models\Setting::where('key','header_border_color')->first())->value;
+    $cfgHeaderLink = optional(\App\Models\Setting::where('key','header_link_color')->first())->value;
+    $cfgHeaderText = optional(\App\Models\Setting::where('key','header_text_color')->first())->value;
+    $cfgHeaderTagline = optional(\App\Models\Setting::where('key','header_tagline_color')->first())->value;
+    $cfgBrandSize = optional(\App\Models\Setting::where('key','header_brand_font_size')->first())->value;
+    $cfgBrandWeight = optional(\App\Models\Setting::where('key','header_brand_font_weight')->first())->value;
+    $cfgBrandStyle = optional(\App\Models\Setting::where('key','header_brand_font_style')->first())->value;
+    $toUrl = function ($p) {
+      if (empty($p)) return null;
+      $p = trim((string) $p);
+      if (\Illuminate\Support\Str::startsWith($p, ['http://','https://','data:'])) return $p;
+      $path = ltrim($p, '/');
+      if (\Illuminate\Support\Str::startsWith($path, 'uploads/')) {
+        $path = 'public/'.$path;
+      }
+      return asset($path);
+    };
+    $logoSrc = null;
+    if (!empty($cfgLogo)) {
+      $logoSrc = $toUrl($cfgLogo);
+    }
+    $bannerBgSrc = null;
+    if (isset($banner) && $banner && !empty($banner->bg_image_url)) {
+      $bannerBgSrc = $toUrl($banner->bg_image_url);
+    }
+  @endphp
+
+  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
     <div class="nav">
       <div class="brand">
-        @php
-          $cfgName = isset($siteName) ? $siteName : optional(\App\Models\Setting::where('key','site_name')->first())->value;
-          $cfgLogo = isset($logoUrl) ? $logoUrl : optional(\App\Models\Setting::where('key','logo_url')->first())->value;
-          $cfgTag  = optional(\App\Models\Setting::where('key','tagline')->first())->value;
-          $cfgFooter = optional(\App\Models\Setting::where('key','footer_text')->first())->value;
-          $toUrl = function ($p) {
-            if (empty($p)) return null;
-            $p = trim((string) $p);
-            if (\Illuminate\Support\Str::startsWith($p, ['http://','https://','data:'])) return $p;
-            $path = ltrim($p, '/');
-            if (\Illuminate\Support\Str::startsWith($path, 'uploads/')) {
-              $path = 'public/'.$path;
-            }
-            return asset($path);
-          };
-          $logoSrc = null;
-          if (!empty($cfgLogo)) {
-            $logoSrc = $toUrl($cfgLogo);
-          }
-        @endphp
         @if($logoSrc)
           <img src="{{ $logoSrc }}" alt="Logo">
         @else
@@ -164,7 +209,10 @@
         <span>{{ $cfgName ?? 'Parcel Transport' }}</span>
         <small>{{ $cfgTag ?? 'Safe Transportation & Logistics' }}</small>
       </div>
-      <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
+      <div style="display:flex; align-items:center; gap:10px">
+        <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme">Theme</button>
+        <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
+      </div>
       <div id="primary-links" class="links">
         @if(isset($navLinks) && $navLinks->count())
           @foreach($navLinks as $nl)
@@ -177,12 +225,12 @@
           <a href="#track">Track</a>
           <a href="#book">Book</a>
         @endif
-        <a href="{{ route('login') }}">🔓 Login</a>
+        <a href="{{ route('login') }}"> Login</a>
       </div>
     </div>
   </header>
 
-  <section class="hero-banner" style="{{ isset($banner) && $banner && $banner->bg_image_url ? "--hero-bg: url('".$banner->bg_image_url."')" : '' }}">
+  <section class="hero-banner" style="{{ !empty($bannerBgSrc) ? "--hero-bg: url('".$bannerBgSrc."');" : '' }}{{ isset($banner) && $banner && !empty($banner->banner_height_px) ? "--banner-h: ".(int)$banner->banner_height_px."px;" : '' }}{{ isset($banner) && $banner && !empty($banner->bg_position) ? "--hero-pos: ".$banner->bg_position.";" : '' }}{{ isset($banner) && $banner && !empty($banner->bg_size) ? "--hero-size: ".$banner->bg_size.";" : '' }}{{ isset($banner) && $banner && !empty($banner->banner_content_max_width_px) ? "--hero-content-w: ".(int)$banner->banner_content_max_width_px."px;" : '' }}">
     <style>
       /* dynamic bg via style attr below; this block keeps specificity minimal */
     </style>
@@ -236,6 +284,47 @@
             <p>Secure storage and inventory management.</p>
           </div>
         @endif
+      </div>
+    </section>
+
+    <section class="section" aria-label="Daily Activities">
+      <h2 style="margin:0">Daily Activities</h2>
+      <div class="activities">
+        @if(isset($activities) && $activities->count())
+          @foreach($activities as $a)
+            <div class="activity-card">
+              @if(!empty($a->image_url))
+                <img src="{{ $toUrl($a->image_url) }}" alt="{{ $a->title }}">
+              @else
+                <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?q=80&w=1200&auto=format&fit=crop" alt="{{ $a->title }}">
+              @endif
+              <div class="pad">
+                <h3>{{ $a->title }}</h3>
+                <div class="meta">{{ $a->activity_date ? $a->activity_date->format('Y-m-d') : '' }}</div>
+                @php
+                  $bodyText = trim((string)($a->body ?? ''));
+                  $hasMore = \Illuminate\Support\Str::length($bodyText) > 140;
+                @endphp
+                <p class="clamp2 js-clamp">{{ $bodyText }}</p>
+                @if($hasMore)
+                  <button type="button" class="readmore js-readmore">Read more</button>
+                @endif
+              </div>
+            </div>
+          @endforeach
+        @else
+          <div class="activity-card">
+            <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?q=80&w=1200&auto=format&fit=crop" alt="Activity">
+            <div class="pad">
+              <h3>No posts yet</h3>
+              <div class="meta"> </div>
+              <p>Add your first daily activity from the Admin panel.</p>
+            </div>
+          </div>
+        @endif
+      </div>
+      <div style="margin-top:14px; display:flex; justify-content:center">
+        <a class="btn" href="{{ route('activities.index') }}">More</a>
       </div>
     </section>
 
@@ -384,27 +473,33 @@
       if (\Illuminate\Support\Facades\Schema::hasTable('social_links')) {
         $social = \App\Models\SocialLink::where('is_visible',true)->orderBy('sort_order')->orderBy('id')->get();
       }
+
+      $footerBgEffective = $ftBg ?: ($cfgHeaderBg ?: '#0b1220');
+      $footerTextEffective = $ftText ?: '#94a3b8';
+      $footerLinkEffective = $ftLink ?: '#cbd5e1';
+      $footerBorderEffective = $cfgHeaderBorder ?: 'rgba(148,163,184,.12)';
     @endphp
 
-    <div style="width:100%; max-width:none; margin:0; padding:0; background: {{ $ftBg }}; color: {{ $ftText }}; border-radius:14px">
+    <div style="width:100%; margin:0; padding:0; background: {{ $footerBgEffective }}; color: {{ $footerTextEffective }}; border-top:1px solid {{ $footerBorderEffective }}">
+      <div class="footer-inner">
       <div style="display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap:22px; align-items:start">
         <div>
-          <h4 style="margin:0 0 8px; color: {{ $ftText }}">{{ $aboutTitle }}</h4>
+          <h4 style="margin:0 0 8px; color: {{ $footerTextEffective }}">{{ $aboutTitle }}</h4>
           @if(!empty($footerLogo))
             <div style="margin:6px 0 10px"><img src="{{ $toUrl($footerLogo) }}" alt="Footer Logo" style="width:120px; height:auto; border-radius:8px; border:1px solid rgba(148,163,184,.18)"></div>
           @endif
           @if(!empty($aboutBody))
-            <p style="margin:0 0 10px; color: {{ $ftText }}">{{ $aboutBody }}</p>
+            <p style="margin:0 0 10px; color: {{ $footerTextEffective }}">{{ $aboutBody }}</p>
           @else
-            <p style="margin:0 0 10px; color: {{ $ftText }}">{{ $aboutText }}</p>
+            <p style="margin:0 0 10px; color: {{ $footerTextEffective }}">{{ $aboutText }}</p>
           @endif
           @if(!empty($aboutLinkLabel) && !empty($aboutLinkUrl))
-            <div style="margin:8px 0 10px"><a href="{{ $aboutLinkUrl }}" style="color: {{ $ftLink }}; text-decoration:none">{{ $aboutLinkLabel }} →</a></div>
+            <div style="margin:8px 0 10px"><a href="{{ $aboutLinkUrl }}" style="color: {{ $footerLinkEffective }}; text-decoration:none">{{ $aboutLinkLabel }} →</a></div>
           @endif
           @if($showSocial)
             <div>
               @forelse($social as $s)
-                <a href="{{ $s->url }}" target="_blank" rel="noopener" title="{{ $s->label }}" style="color: {{ $ftLink }}; text-decoration:none; border:1px solid rgba(148,163,184,.25); padding:6px 8px; border-radius:10px">{{ $s->icon ?? '🔗' }}</a>
+                <a href="{{ $s->url }}" target="_blank" rel="noopener" title="{{ $s->label }}" style="color: {{ $footerLinkEffective }}; text-decoration:none; border:1px solid rgba(148,163,184,.25); padding:6px 8px; border-radius:10px">{{ $s->icon ?? '🔗' }}</a>
               @empty
               @endforelse
             </div>
@@ -412,31 +507,31 @@
         </div>
 
         <div>
-          <h4 style="margin:0 0 8px; color: {{ $ftText }}">Services</h4>
-          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+          <h4 style="margin:0 0 8px; color: {{ $footerTextEffective }}">Services</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $footerTextEffective }}">
             @if(isset($services) && $services->count())
               @foreach($services as $svc)
-                <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">{{ $svc->title }}</a></li>
+                <li style="margin:6px 0"><a href="#" style="color: {{ $footerLinkEffective }}; text-decoration:none">{{ $svc->title }}</a></li>
               @endforeach
             @else
-              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Air Freight</a></li>
-              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Ocean Freight</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $footerLinkEffective }}; text-decoration:none">Air Freight</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $footerLinkEffective }}; text-decoration:none">Ocean Freight</a></li>
             @endif
           </ul>
         </div>
 
         <div>
-          <h4 style="margin:0 0 8px; color: {{ $ftText }}">Quick Links</h4>
-          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+          <h4 style="margin:0 0 8px; color: {{ $footerTextEffective }}">Quick Links</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $footerTextEffective }}">
             @forelse($footerLinks as $fl)
-              <li style="margin:6px 0"><a href="{{ $fl->url }}" style="color: {{ $ftLink }}; text-decoration:none">{{ $fl->label }}</a></li>
+              <li style="margin:6px 0"><a href="{{ $fl->url }}" style="color: {{ $footerLinkEffective }}; text-decoration:none">{{ $fl->label }}</a></li>
             @empty
-              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Privacy Policy</a></li>
-              <li style="margin:6px 0"><a href="#" style="color: {{ $ftLink }}; text-decoration:none">Terms of Service</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $footerLinkEffective }}; text-decoration:none">Privacy Policy</a></li>
+              <li style="margin:6px 0"><a href="#" style="color: {{ $footerLinkEffective }}; text-decoration:none">Terms of Service</a></li>
             @endforelse
           </ul>
-          <h4 style="margin:14px 0 8px; color: {{ $ftText }}">Contact Us</h4>
-          <ul style="list-style:none; margin:0; padding:0; color: {{ $ftText }}">
+          <h4 style="margin:14px 0 8px; color: {{ $footerTextEffective }}">Contact Us</h4>
+          <ul style="list-style:none; margin:0; padding:0; color: {{ $footerTextEffective }}">
             @if($contactAddr)<li style="margin:6px 0">📍 {{ $contactAddr }}</li>@endif
             @if($contactPhone)<li style="margin:6px 0">📞 {{ $contactPhone }}</li>@endif
             @if($contactEmail)<li style="margin:6px 0">✉️ {{ $contactEmail }}</li>@endif
@@ -445,14 +540,33 @@
         </div>
       </div>
 
-      <div style="display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid rgba(148,163,184,.12); color: {{ $ftText }}">
+      <div style="display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:16px; padding-top:12px; border-top:1px solid rgba(148,163,184,.12); color: {{ $footerTextEffective }}">
         <div>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. {{ $aboutText }}</div>
+      </div>
       </div>
     </div>
   </footer>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear()
+
+    // Public site theme (dark/light)
+    const siteDefaultTheme = '{{ in_array(($cfgSiteTheme ?? 'dark'), ['dark','light']) ? ($cfgSiteTheme ?? 'dark') : 'dark' }}';
+    const savedSiteTheme = localStorage.getItem('site_theme') || siteDefaultTheme || 'dark';
+    document.body.setAttribute('data-theme', savedSiteTheme);
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn){
+      const setLabel = () => { themeBtn.textContent = (document.body.getAttribute('data-theme') === 'light') ? 'Light' : 'Dark'; };
+      setLabel();
+      themeBtn.addEventListener('click', () => {
+        const cur = document.body.getAttribute('data-theme') || 'dark';
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', next);
+        localStorage.setItem('site_theme', next);
+        setLabel();
+      });
+    }
+
     // Services tab interactivity (only if dynamic services exist)
     const tabs = document.querySelectorAll('#svc-tabs .tab');
     if (tabs && tabs.length) {

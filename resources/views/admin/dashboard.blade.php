@@ -107,6 +107,7 @@
           <a href="#">Shipments</a>
           <a href="{{ route('admin.settings.index') }}">Settings</a>
           <a href="{{ route('admin.features.index') }}">Features</a>
+          <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
           <a href="{{ route('admin.navlinks.index') }}">Nav Links</a>
@@ -124,6 +125,8 @@
         <div class="actionsbar" role="group" aria-label="Quick actions">
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.features.index') }}">Manage Features</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.features.create') }}">Add Feature</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.index') }}">Manage Activities</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.create') }}">Add Activity</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.banner.edit') }}">Edit Home Banner</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.index') }}">Manage Services</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.create') }}">Add Service</a>

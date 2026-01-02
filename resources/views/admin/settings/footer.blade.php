@@ -79,15 +79,24 @@
       <div class="row">
         <div>
           <label for="footer_bg_color">Background Color</label>
-          <input id="footer_bg_color" type="text" name="footer_bg_color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220">
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="footer_bg_color" type="text" name="footer_bg_color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220">
+            <input class="js-color" type="color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" data-target="#footer_bg_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
         </div>
         <div>
           <label for="footer_text_color">Text Color</label>
-          <input id="footer_text_color" type="text" name="footer_text_color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="footer_text_color" type="text" name="footer_text_color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
+            <input class="js-color" type="color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" data-target="#footer_text_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
         </div>
         <div>
           <label for="footer_link_color">Link Color</label>
-          <input id="footer_link_color" type="text" name="footer_link_color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" placeholder="#cbd5e1">
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="footer_link_color" type="text" name="footer_link_color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" placeholder="#cbd5e1">
+            <input class="js-color" type="color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" data-target="#footer_link_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
         </div>
       </div>
 
@@ -96,4 +105,33 @@
       </div>
     </form>
   </div>
+
+  <script>
+    (function(){
+      function isHexColor(v){
+        return /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?$/.test((v||'').trim());
+      }
+
+      document.querySelectorAll('.js-color').forEach((picker) => {
+        picker.addEventListener('input', () => {
+          const sel = picker.getAttribute('data-target');
+          const target = sel ? document.querySelector(sel) : null;
+          if (!target) return;
+          target.value = picker.value;
+        });
+      });
+
+      ['#footer_bg_color', '#footer_text_color', '#footer_link_color'].forEach((sel) => {
+        const input = document.querySelector(sel);
+        if (!input) return;
+        input.addEventListener('input', () => {
+          const picker = document.querySelector('.js-color[data-target="'+sel+'"]');
+          if (!picker) return;
+          if (isHexColor(input.value)) {
+            picker.value = '#'+input.value.trim().replace('#','');
+          }
+        });
+      });
+    })();
+  </script>
 @endsection

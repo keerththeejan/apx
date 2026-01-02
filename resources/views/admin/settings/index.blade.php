@@ -27,6 +27,90 @@
       <label for="tagline">Tagline</label>
       <input id="tagline" type="text" name="tagline" value="{{ old('tagline', $settings['tagline']) }}" placeholder="Safe Transportation & Logistics">
 
+      <label for="site_default_theme">Default Site Theme</label>
+      <select id="site_default_theme" name="site_default_theme">
+        @php $siteThemes = ['dark'=>'Dark','light'=>'Light']; @endphp
+        @foreach($siteThemes as $val=>$label)
+          <option value="{{ $val }}" {{ (string)old('site_default_theme', $settings['site_default_theme'] ?? 'dark')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
+        @endforeach
+      </select>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
+      <h3 style="margin:0 0 8px">Header</h3>
+      <div class="row">
+        <div>
+          <label for="header_bg_color">Header Background Color</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="header_bg_color" type="text" name="header_bg_color" value="{{ old('header_bg_color', $settings['header_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220">
+            <input class="js-color" type="color" value="{{ old('header_bg_color', $settings['header_bg_color'] ?? '#0b1220') }}" data-target="#header_bg_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+        </div>
+        <div>
+          <label for="header_border_color">Header Border Color</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="header_border_color" type="text" name="header_border_color" value="{{ old('header_border_color', $settings['header_border_color'] ?? 'rgba(148,163,184,.12)') }}" placeholder="rgba(148,163,184,.12)">
+            @php
+              $hdrBorder = (string) old('header_border_color', $settings['header_border_color'] ?? 'rgba(148,163,184,.12)');
+              $hdrBorderHex = '#94a3b8';
+              if (preg_match('/^\s*#?[0-9a-fA-F]{3,8}\s*$/', $hdrBorder)) {
+                $hdrBorderHex = '#'.ltrim(trim($hdrBorder),'#');
+              }
+            @endphp
+            <input class="js-color" type="color" value="{{ $hdrBorderHex }}" data-target="#header_border_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+        </div>
+        <div>
+          <label for="header_link_color">Header Link Color</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="header_link_color" type="text" name="header_link_color" value="{{ old('header_link_color', $settings['header_link_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
+            <input class="js-color" type="color" value="{{ old('header_link_color', $settings['header_link_color'] ?? '#94a3b8') }}" data-target="#header_link_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <div>
+          <label for="header_text_color">Header Text Color</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="header_text_color" type="text" name="header_text_color" value="{{ old('header_text_color', $settings['header_text_color'] ?? '#e2e8f0') }}" placeholder="#e2e8f0">
+            <input class="js-color" type="color" value="{{ old('header_text_color', $settings['header_text_color'] ?? '#e2e8f0') }}" data-target="#header_text_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+        </div>
+        <div>
+          <label for="header_tagline_color">Header Tagline Color</label>
+          <div style="display:flex; gap:10px; align-items:center">
+            <input id="header_tagline_color" type="text" name="header_tagline_color" value="{{ old('header_tagline_color', $settings['header_tagline_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
+            <input class="js-color" type="color" value="{{ old('header_tagline_color', $settings['header_tagline_color'] ?? '#94a3b8') }}" data-target="#header_tagline_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+        </div>
+        <div>
+          <label for="header_brand_font_size">Brand Font Size (px)</label>
+          <input id="header_brand_font_size" type="number" min="12" max="48" step="1" name="header_brand_font_size" value="{{ old('header_brand_font_size', $settings['header_brand_font_size'] ?? 16) }}">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <div>
+          <label for="header_brand_font_weight">Brand Font Weight</label>
+          <select id="header_brand_font_weight" name="header_brand_font_weight">
+            @php $weights = ['400'=>'400','500'=>'500','600'=>'600','700'=>'700','800'=>'800']; @endphp
+            @foreach($weights as $val=>$label)
+              <option value="{{ $val }}" {{ (string)old('header_brand_font_weight', $settings['header_brand_font_weight'] ?? '800')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div>
+          <label for="header_brand_font_style">Brand Font Style</label>
+          <select id="header_brand_font_style" name="header_brand_font_style">
+            @php $styles = ['normal'=>'Normal','italic'=>'Italic']; @endphp
+            @foreach($styles as $val=>$label)
+              <option value="{{ $val }}" {{ (string)old('header_brand_font_style', $settings['header_brand_font_style'] ?? 'normal')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div></div>
+      </div>
+
       <label for="logo_file">Logo Image</label>
       <input id="logo_file" type="file" name="logo_file" accept="image/*">
       <div style="color:#94a3b8; font-size:12px; margin-top:6px">PNG, JPG, WEBP, or SVG up to 4MB.</div>
@@ -101,4 +185,45 @@
       </div>
     </form>
   </div>
+
+  <script>
+    (function(){
+      function isHexColor(v){
+        return /^#?[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?$/.test((v||'').trim());
+      }
+
+      document.querySelectorAll('.js-color').forEach((picker) => {
+        picker.addEventListener('input', () => {
+          const sel = picker.getAttribute('data-target');
+          const target = sel ? document.querySelector(sel) : null;
+          if (!target) return;
+          target.value = picker.value;
+        });
+      });
+
+      ['#header_bg_color', '#header_border_color', '#header_link_color'].forEach((sel) => {
+        const input = document.querySelector(sel);
+        if (!input) return;
+        input.addEventListener('input', () => {
+          const picker = document.querySelector('.js-color[data-target="'+sel+'"]');
+          if (!picker) return;
+          if (isHexColor(input.value)) {
+            picker.value = '#'+input.value.trim().replace('#','');
+          }
+        });
+      });
+
+      ['#header_text_color', '#header_tagline_color'].forEach((sel) => {
+        const input = document.querySelector(sel);
+        if (!input) return;
+        input.addEventListener('input', () => {
+          const picker = document.querySelector('.js-color[data-target="'+sel+'"]');
+          if (!picker) return;
+          if (isHexColor(input.value)) {
+            picker.value = '#'+input.value.trim().replace('#','');
+          }
+        });
+      });
+    })();
+  </script>
 @endsection
