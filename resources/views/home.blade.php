@@ -13,16 +13,17 @@
     html, body { height: 100% }
     body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
     .topbar { background: #0b1220; border-bottom: 1px solid rgba(148,163,184,.12); position: sticky; top:0; z-index:10 }
-    .nav { max-width: 1200px; margin: 0 auto; padding: 10px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px }
+    .nav { position:relative; max-width: 1200px; margin: 0 auto; padding: 10px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px }
     .brand { display:flex; align-items:center; gap:10px; font-weight:800 }
     .brand img { width:50px; height:50px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25) }
-    .brand small { color: var(--muted); font-weight:600; display:inline-block }
-    .links { display:flex; align-items:center }
+    .brand span { line-height:1.05 }
+    .brand small { color: var(--muted); font-weight:600; display:block; line-height:1.1 }
+    .links { display:flex; align-items:center; gap:22px }
     .links a { color: var(--muted); text-decoration:none; margin-left:22px; font-weight:600 }
     .links a:hover { color:#fff }
     .hamb { display:none; background:#111827; color:#e2e8f0; border:1px solid rgba(148,163,184,.25); padding:8px 10px; border-radius:10px; font-weight:700 }
     @media (max-width: 720px){
-      .links { position:absolute; right:16px; top:56px; background:#0b1220; border:1px solid rgba(148,163,184,.12); border-radius:12px; padding:10px; display:none; flex-direction:column; gap:6px }
+      .links { position:absolute; right:24px; top:calc(100% + 8px); z-index:50; background:#0b1220; border:1px solid rgba(148,163,184,.12); border-radius:12px; padding:10px; display:none; flex-direction:column; gap:6px; min-width: 180px }
       .links a { margin:6px 0 0 0 }
       .links.open { display:flex }
       .hamb { display:inline-block }
@@ -142,17 +143,21 @@
           $cfgFooter = optional(\App\Models\Setting::where('key','footer_text')->first())->value;
           $toUrl = function ($p) {
             if (empty($p)) return null;
-            if (\Illuminate\Support\Str::startsWith($p, ['http://','https://'])) return $p;
-            $p = trim((string)$p);
-            $base = request()->getSchemeAndHttpHost() . request()->getBaseUrl();
-            if (\Illuminate\Support\Str::startsWith($p, '/')) {
-              return $base . $p;
+            $p = trim((string) $p);
+            if (\Illuminate\Support\Str::startsWith($p, ['http://','https://','data:'])) return $p;
+            $path = ltrim($p, '/');
+            if (\Illuminate\Support\Str::startsWith($path, 'uploads/')) {
+              $path = 'public/'.$path;
             }
-            return $base . '/' . ltrim($p, '/');
+            return asset($path);
           };
+          $logoSrc = null;
+          if (!empty($cfgLogo)) {
+            $logoSrc = $toUrl($cfgLogo);
+          }
         @endphp
-        @if($cfgLogo)
-          <img src="{{ $toUrl($cfgLogo) }}" alt="Logo">
+        @if($logoSrc)
+          <img src="{{ $logoSrc }}" alt="Logo">
         @else
           <span>📦</span>
         @endif

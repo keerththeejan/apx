@@ -62,6 +62,18 @@
   </style>
 </head>
 <body>
+  @php
+    $toUrl = function ($p) {
+      if (empty($p)) return null;
+      $p = trim((string) $p);
+      if (\Illuminate\Support\Str::startsWith($p, ['http://','https://','data:'])) return $p;
+      $path = ltrim($p, '/');
+      if (\Illuminate\Support\Str::startsWith($path, 'uploads/')) {
+        $path = 'public/'.$path;
+      }
+      return asset($path);
+    };
+  @endphp
   <header>
     <div class="brand">Admin Dashboard</div>
     <div style="display:flex; align-items:center; gap:10px">
@@ -152,7 +164,7 @@
                   <td>{{ $f->id }}</td>
                   <td>
                     @if(!empty($f->icon_image_url))
-                      <img src="{{ $f->icon_image_url }}" alt="Icon" style="width:28px; height:28px; border-radius:6px; object-fit:cover; border:1px solid rgba(148,163,184,.25)">
+                      <img src="{{ $toUrl($f->icon_image_url) }}" alt="Icon" style="width:28px; height:28px; border-radius:6px; object-fit:cover; border:1px solid rgba(148,163,184,.25)">
                     @else
                       {{ $f->icon ?? '•' }}
                     @endif

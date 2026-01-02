@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SettingController extends Controller
 {
@@ -27,7 +28,7 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'site_name' => ['required','string','max:120'],
+            'site_name' => ['sometimes','required','string','max:120'],
             'tagline' => ['nullable','string','max:200'],
             'contact_email' => ['nullable','email','max:120'],
             'contact_phone' => ['nullable','string','max:60'],
@@ -36,7 +37,7 @@ class SettingController extends Controller
             'logo_file' => ['nullable','image','mimes:jpg,jpeg,png,webp,svg','max:4096'],
             'footer_logo_url' => ['nullable','string','max:2000'],
             'footer_logo_file' => ['nullable','image','mimes:jpg,jpeg,png,webp,svg','max:4096'],
-            'default_theme' => ['required','in:dark,slate,indigo,emerald,rose,amber,sky,violet'],
+            'default_theme' => ['sometimes','required','in:dark,slate,indigo,emerald,rose,amber,sky,violet'],
             'footer_text' => ['nullable','string','max:500'],
             'footer_newsletter' => ['nullable','string','max:500'],
             'footer_hours' => ['nullable','string','max:200'],
@@ -57,7 +58,7 @@ class SettingController extends Controller
             $ext = $request->file('logo_file')->getClientOriginalExtension() ?: 'png';
             $name = 'logo_'.date('Ymd_His').'_'.substr(bin2hex(random_bytes(4)),0,8).'.'.$ext;
             $request->file('logo_file')->move($dir, $name);
-            $publicPath = '/uploads/logos/'.$name;
+            $publicPath = '/public/uploads/logos/'.$name;
             $data['logo_url'] = $publicPath;
         }
 
@@ -68,7 +69,7 @@ class SettingController extends Controller
             $ext = $request->file('footer_logo_file')->getClientOriginalExtension() ?: 'png';
             $name = 'footer_logo_'.date('Ymd_His').'_'.substr(bin2hex(random_bytes(4)),0,8).'.'.$ext;
             $request->file('footer_logo_file')->move($dir, $name);
-            $publicPath = '/uploads/logos/'.$name;
+            $publicPath = '/public/uploads/logos/'.$name;
             $data['footer_logo_url'] = $publicPath;
         }
 
@@ -86,7 +87,12 @@ class SettingController extends Controller
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
-        return redirect()->route('admin.settings.index')->with('status', 'Settings saved');
+        $prev = url()->previous();
+        $redirectTo = Str::contains($prev, ['/admin/footer', 'admin/footer'])
+            ? route('admin.settings.footer')
+            : route('admin.settings.index');
+
+        return redirect($redirectTo)->with('status', 'Settings saved');
     }
 
     private function settingsMap(): array

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        if (Schema::hasTable('newsletter_subscriptions')) {
+            return;
+        }
         Schema::create('newsletter_subscriptions', function (Blueprint $table) {
             $table->id();
             $table->string('email')->index();
