@@ -132,10 +132,10 @@
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
       <h3 style="margin:0 0 8px">Banner auto-change</h3>
       <label style="display:flex; gap:8px; align-items:center; margin-bottom:10px">
-        <input type="checkbox" name="banner_auto_rotate" value="1" {{ old('banner_auto_rotate', $settings['banner_auto_rotate'] ?? true) ? 'checked' : '' }}> Auto-rotate banner background images
+        <input type="checkbox" name="banner_auto_rotate" value="1" {{ old('banner_auto_rotate', data_get($settings, 'banner_auto_rotate', true)) ? 'checked' : '' }}> Auto-rotate banner background images
       </label>
       <label for="banner_rotate_interval_sec">Rotate interval (seconds)</label>
-      <input id="banner_rotate_interval_sec" type="number" name="banner_rotate_interval_sec" min="2" max="30" value="{{ old('banner_rotate_interval_sec', $settings['banner_rotate_interval_sec'] ?? 5) }}" style="max-width:120px">
+      <input id="banner_rotate_interval_sec" type="number" name="banner_rotate_interval_sec" min="2" max="30" value="{{ old('banner_rotate_interval_sec', data_get($settings, 'banner_rotate_interval_sec', 5)) }}" style="max-width:120px">
       <div style="color:var(--muted); font-size:12px; margin-top:4px">2–30 seconds between image changes. Add multiple images in Home Banner edit.</div>
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">

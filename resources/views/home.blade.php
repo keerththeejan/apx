@@ -51,11 +51,13 @@
     .hero-banner__dot:hover { background: rgba(255,255,255,.8); }
     .hero-banner__dot.active { background: #fff; transform: scale(1.2); }
     .hero-banner--single .hero-banner__arrow, .hero-banner--single .hero-banner__dots { display: none; }
-    .eyebrow { color: #ffffff; }
-    .subtitle { color: #f1f5f9; }
-    .eyebrow { font-size: clamp(13px, 2vw, 16px); font-weight:700; letter-spacing:.08em; text-transform:uppercase; text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 10px rgba(0,0,0,.8), 0 0 20px rgba(0,0,0,.5); }
-    .title { margin:10px 0 0; font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; color:#ffffff; text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 4px 12px rgba(0,0,0,.7), 0 0 40px rgba(0,0,0,.5); }
-    .subtitle { margin-top:12px; font-size: clamp(15px, 2.2vw, 18px); font-weight:600; text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 10px rgba(255, 255, 255, 0.8), 0 0 24px rgba(0,0,0,.5); }
+    /* Title Line 1 color & shadow used for Eyebrow, Title, Subtitle */
+    .hero-content .eyebrow,
+    .hero-content .title,
+    .hero-content .subtitle { color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 4px 12px rgba(0,0,0,.7), 0 0 40px rgba(0,0,0,.5); }
+    .eyebrow { font-size: clamp(13px, 2vw, 16px); font-weight:700; letter-spacing:.08em; text-transform:uppercase; margin:0; }
+    .title { margin:10px 0 0; font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; }
+    .subtitle { margin-top:12px; font-size: clamp(16px, 2.2vw, 19px); font-weight:600; line-height:1.35; }
     .hero-banner .actions { display:none; }
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
     .btn { padding:10px 16px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); backdrop-filter: blur(4px); color:#fff; text-decoration:none; font-weight:600 }

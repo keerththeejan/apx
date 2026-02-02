@@ -12,6 +12,10 @@ class SettingController extends Controller
     public function index()
     {
         $settings = $this->settingsMap();
+        $settings = array_merge([
+            'banner_auto_rotate' => true,
+            'banner_rotate_interval_sec' => 5,
+        ], $settings);
         // ensure defaults exist in DB
         $this->ensureDefaults($settings);
         return view('admin.settings.index', ['settings' => $settings]);
@@ -145,8 +149,8 @@ class SettingController extends Controller
             'footer_bg_color' => $rows['footer_bg_color']->value ?? '#0b1220',
             'footer_text_color' => $rows['footer_text_color']->value ?? '#94a3b8',
             'footer_link_color' => $rows['footer_link_color']->value ?? '#cbd5e1',
-            'banner_auto_rotate' => (bool)(optional($rows['banner_auto_rotate'])->value ?? true),
-            'banner_rotate_interval_sec' => (int)(optional($rows['banner_rotate_interval_sec'])->value ?? 5),
+            'banner_auto_rotate' => (bool)(optional($rows->get('banner_auto_rotate'))->value ?? true),
+            'banner_rotate_interval_sec' => (int)(optional($rows->get('banner_rotate_interval_sec'))->value ?? 5),
         ];
     }
 
