@@ -75,9 +75,9 @@
       <div id="sidebar" class="card sidebar" role="navigation" aria-label="Admin menu">
         <nav>
           <a href="{{ route('admin.dashboard') }}">Overview</a>
-          <a href="#">Users</a>
-          <a href="#">Orders</a>
-          <a href="#">Shipments</a>
+          <a href="{{ route('admin.profile.edit') }}">My account</a>
+          <a href="{{ route('admin.users.index') }}">Users</a>
+          <a href="{{ route('admin.company') }}">Company details</a>
           <a href="{{ route('admin.settings.index') }}">Settings</a>
           <div class="navsec">Footer</div>
           <div class="navsub">

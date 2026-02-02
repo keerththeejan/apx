@@ -15,6 +15,7 @@ class HomeBanner extends Model
         'title_line2',
         'subtitle',
         'bg_image_url',
+        'bg_image_urls',
         'banner_height_px',
         'bg_position',
         'banner_content_max_width_px',
@@ -23,5 +24,9 @@ class HomeBanner extends Model
         'primary_url',
         'secondary_text',
         'secondary_url',
+    ];
+
+    protected $casts = [
+        'bg_image_urls' => 'array',
     ];
 }

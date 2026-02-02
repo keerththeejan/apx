@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\FooterLinkController;
 use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
 use App\Http\Controllers\Admin\DailyActivityController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\ActivityController;
@@ -94,6 +96,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::post('profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+    Route::get('profile/password', [ProfileController::class, 'editPassword'])->name('admin.profile.password');
+    Route::post('profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
+    Route::resource('users', UserController::class)->names('admin.users')->except(['show']);
+    Route::get('company', function () {
+        return redirect()->route('admin.settings.index', [], 302)->withFragment('company');
+    })->name('admin.company');
     Route::resource('features', FeatureController::class)->names('admin.features');
     Route::patch('features/{feature}/toggle-visibility', [FeatureController::class, 'toggleVisibility'])->name('admin.features.toggle');
     Route::resource('activities', DailyActivityController::class)->names('admin.activities');

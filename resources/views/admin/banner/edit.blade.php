@@ -37,7 +37,13 @@
     <small class="help">Paste a full image URL or upload an image below.</small>
 
     <label for="bg_image_file">Background Image Upload</label>
-    <input id="bg_image_file" type="file" name="bg_image_file" accept="image/*">
+    <input id="bg_image_file" type="file" name="bg_image_file" accept="image/jpeg,image/png,image/webp,image/jpg">
+    <small class="help">JPG, PNG or WEBP. Max 6 MB. If upload fails, try a smaller image or check PHP upload limits.</small>
+
+    <label for="bg_image_urls">Additional background images for auto-rotate (one URL per line)</label>
+    <textarea id="bg_image_urls" name="bg_image_urls" rows="4" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg">{{ old('bg_image_urls', ($banner && is_array($banner->bg_image_urls)) ? implode("\n", $banner->bg_image_urls) : '') }}</textarea>
+    <small class="help">Add more image URLs to rotate with the main image. Enable "Auto-rotate banner" in Settings.</small>
+
     @if(!empty(optional($banner)->bg_image_url))
       <div style="margin-top:10px">
         <div style="color:#94a3b8; font-weight:700; font-size:12px; margin-bottom:6px">Current Image Preview</div>

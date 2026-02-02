@@ -21,8 +21,9 @@
     <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
       @csrf
 
+      <h3 id="company" style="margin:0 0 12px">Company details</h3>
       <label for="site_name">Site Name</label>
-      <input id="site_name" type="text" name="site_name" value="{{ old('site_name', $settings['site_name']) }}" required>
+      <input id="site_name" type="text" name="site_name" value="{{ old('site_name', $settings['site_name']) }}" placeholder="Optional">
 
       <label for="tagline">Tagline</label>
       <input id="tagline" type="text" name="tagline" value="{{ old('tagline', $settings['tagline']) }}" placeholder="Safe Transportation & Logistics">
@@ -37,6 +38,16 @@
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
       <h3 style="margin:0 0 8px">Header</h3>
+
+      <h4 style="margin:16px 0 8px; color:var(--muted); font-size:14px">Font size adjuster (APX & tagline)</h4>
+      <p style="margin:0 0 10px; color:var(--muted); font-size:13px">Quick presets set both company name and tagline size. Or use the precise fields below.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px">
+        <button type="button" class="btn font-preset" data-brand="14" data-tagline="12" style="padding:8px 12px; font-size:13px">Small</button>
+        <button type="button" class="btn font-preset" data-brand="18" data-tagline="14" style="padding:8px 12px; font-size:13px">Medium</button>
+        <button type="button" class="btn font-preset" data-brand="24" data-tagline="16" style="padding:8px 12px; font-size:13px">Large</button>
+        <button type="button" class="btn font-preset" data-brand="32" data-tagline="18" style="padding:8px 12px; font-size:13px">Extra large</button>
+      </div>
+
       <div class="row">
         <div>
           <label for="header_bg_color">Header Background Color</label>
@@ -85,15 +96,22 @@
         </div>
         <div>
           <label for="header_brand_font_size">Brand Font Size (px)</label>
-          <input id="header_brand_font_size" type="number" min="12" max="48" step="1" name="header_brand_font_size" value="{{ old('header_brand_font_size', $settings['header_brand_font_size'] ?? 16) }}">
+          <input id="header_brand_font_size" type="number" min="12" max="96" step="1" name="header_brand_font_size" value="{{ old('header_brand_font_size', $settings['header_brand_font_size'] ?? 16) }}">
+          <div style="color:var(--muted); font-size:11px; margin-top:4px">12–96 px. Company name in header.</div>
         </div>
+        <div>
+          <label for="header_tagline_font_size">Tagline Font Size (px)</label>
+          <input id="header_tagline_font_size" type="number" min="10" max="48" step="1" name="header_tagline_font_size" value="{{ old('header_tagline_font_size', $settings['header_tagline_font_size'] ?? 14) }}">
+          <div style="color:var(--muted); font-size:11px; margin-top:4px">10–48 px. Tagline under company name.</div>
+        </div>
+        <div></div>
       </div>
 
       <div class="row" style="margin-top:12px">
         <div>
           <label for="header_brand_font_weight">Brand Font Weight</label>
           <select id="header_brand_font_weight" name="header_brand_font_weight">
-            @php $weights = ['400'=>'400','500'=>'500','600'=>'600','700'=>'700','800'=>'800']; @endphp
+            @php $weights = ['100'=>'100 (Thin)','200'=>'200 (Extra light)','300'=>'300 (Light)','400'=>'400 (Normal)','500'=>'500 (Medium)','600'=>'600 (Semi bold)','700'=>'700 (Bold)','800'=>'800 (Extra bold)','900'=>'900 (Black)']; @endphp
             @foreach($weights as $val=>$label)
               <option value="{{ $val }}" {{ (string)old('header_brand_font_weight', $settings['header_brand_font_weight'] ?? '800')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
@@ -111,6 +129,17 @@
         <div></div>
       </div>
 
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
+      <h3 style="margin:0 0 8px">Banner auto-change</h3>
+      <label style="display:flex; gap:8px; align-items:center; margin-bottom:10px">
+        <input type="checkbox" name="banner_auto_rotate" value="1" {{ old('banner_auto_rotate', $settings['banner_auto_rotate'] ?? true) ? 'checked' : '' }}> Auto-rotate banner background images
+      </label>
+      <label for="banner_rotate_interval_sec">Rotate interval (seconds)</label>
+      <input id="banner_rotate_interval_sec" type="number" name="banner_rotate_interval_sec" min="2" max="30" value="{{ old('banner_rotate_interval_sec', $settings['banner_rotate_interval_sec'] ?? 5) }}" style="max-width:120px">
+      <div style="color:var(--muted); font-size:12px; margin-top:4px">2–30 seconds between image changes. Add multiple images in Home Banner edit.</div>
+
+      <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
+      <h3 style="margin:0 0 8px">Logo</h3>
       <label for="logo_file">Logo Image</label>
       <input id="logo_file" type="file" name="logo_file" accept="image/*">
       <div style="color:#94a3b8; font-size:12px; margin-top:6px">PNG, JPG, WEBP, or SVG up to 4MB.</div>
@@ -222,6 +251,15 @@
           if (isHexColor(input.value)) {
             picker.value = '#'+input.value.trim().replace('#','');
           }
+        });
+      });
+
+      document.querySelectorAll('.font-preset').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const brand = document.getElementById('header_brand_font_size');
+          const tagline = document.getElementById('header_tagline_font_size');
+          if (brand) brand.value = btn.getAttribute('data-brand') || brand.value;
+          if (tagline) tagline.value = btn.getAttribute('data-tagline') || tagline.value;
         });
       });
     })();

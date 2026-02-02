@@ -15,10 +15,10 @@
     body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); }
     .topbar { background: var(--header-bg, var(--bg)); border-bottom: 1px solid var(--header-border, rgba(148,163,184,.12)); position: sticky; top:0; z-index:10 }
     .nav { position:relative; max-width: 1200px; margin: 0 auto; padding: 10px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px }
-    .brand { display:flex; align-items:center; gap:10px; font-weight:800 }
-    .brand img { width:50px; height:50px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25) }
+    .brand { display:flex; align-items:center; justify-content:flex-start; gap:10px; font-weight:800; text-align:left; margin-right:auto; margin-left:-2in }
+    .brand img { width:4in; height:auto; max-height:1.5in; border-radius:8px; object-fit:contain; border:1px solid rgba(148,163,184,.25); display:block }
     .brand span { line-height:1.05; color: var(--header-text, var(--text)); font-size: var(--brand-size, 16px); font-weight: var(--brand-weight, 800); font-style: var(--brand-style, normal) }
-    .brand small { color: var(--header-tagline, var(--muted)); font-weight:600; display:block; line-height:1.1 }
+    .brand small { color: var(--header-tagline, var(--muted)); font-weight:600; display:block; line-height:1.1; font-size: var(--tagline-size, 14px) }
     .links { display:flex; align-items:center; gap:22px }
     .links a { color: var(--header-link, var(--muted)); text-decoration:none; font-weight:600 }
     .links a:hover { color: var(--header-text, var(--text)) }
@@ -32,17 +32,31 @@
       .links.open { display:flex }
       .hamb { display:inline-block }
       .themebtn { display:none }
-      .brand img { width:28px; height:28px; border-radius:7px }
+      .brand img { width:4in; height:auto; max-height:1.5in; border-radius:7px; object-fit:contain }
       .brand small { display:none }
     }
     .icon { width:18px; height:18px; opacity:.9; vertical-align:-3px; margin-right:6px }
-    .hero-banner { position: relative; min-height: var(--banner-h, clamp(420px, 62vh, 760px)); display:grid; place-items:center; text-align:center; }
-    .hero-banner::before { content:""; position:absolute; inset:0; background: var(--hero-bg, url('https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=1600&auto=format&fit=crop')) var(--hero-pos, center) / var(--hero-size, cover) no-repeat; filter: brightness(.7); }
-    .hero-banner::after { content:""; position:absolute; inset:0; background: linear-gradient(to bottom, rgba(2,6,23,.55), rgba(2,6,23,.45)); }
-    .hero-content { position:relative; padding: 0 24px; width: 80%; max-width: var(--hero-content-w, 950px) }
-    .eyebrow { color:#cbd5e1; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.95 }
-    .title { margin:10px 0 0; font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; text-shadow: 0 2px 6px rgba(0,0,0,.35) }
-    .subtitle { margin-top:10px; color: #d1d5db; font-weight:500; opacity:.9 }
+    .hero-banner { position: relative; min-height: var(--banner-h, clamp(560px, 72vh, 900px)); display:grid; place-items:center; text-align:center; overflow: hidden; }
+    .hero-banner__slides { position: absolute; inset: 0; z-index: 0; }
+    .hero-banner__slide { position: absolute; inset: 0; background-position: var(--hero-pos, center); background-size: var(--hero-size, cover); background-repeat: no-repeat; opacity: 0; transition: opacity 0.6s ease; filter: brightness(.7); }
+    .hero-banner__slide.active { opacity: 1; z-index: 1; }
+    .hero-banner__overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,6,23,.55), rgba(2,6,23,.45)); z-index: 2; pointer-events: none; }
+    .hero-content { position: relative; z-index: 3; padding: 0 24px; width: 80%; max-width: var(--hero-content-w, 950px) }
+    .hero-banner__arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; width: 48px; height: 48px; border-radius: 50%; background: rgba(0,0,0,.4); color: #fff; border: 1px solid rgba(255,255,255,.3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; line-height: 1; transition: background .2s, color .2s; user-select: none; }
+    .hero-banner__arrow:hover { background: rgba(0,0,0,.6); color: #fff; }
+    .hero-banner__arrow.prev { left: 16px; }
+    .hero-banner__arrow.next { right: 16px; }
+    .hero-banner__dots { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 4; display: flex; gap: 10px; align-items: center; justify-content: center; }
+    .hero-banner__dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.6); cursor: pointer; transition: background .2s, transform .2s; }
+    .hero-banner__dot:hover { background: rgba(255,255,255,.8); }
+    .hero-banner__dot.active { background: #fff; transform: scale(1.2); }
+    .hero-banner--single .hero-banner__arrow, .hero-banner--single .hero-banner__dots { display: none; }
+    .eyebrow { color: #ffffff; }
+    .subtitle { color: #f1f5f9; }
+    .eyebrow { font-size: clamp(13px, 2vw, 16px); font-weight:700; letter-spacing:.08em; text-transform:uppercase; text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 10px rgba(0,0,0,.8), 0 0 20px rgba(0,0,0,.5); }
+    .title { margin:10px 0 0; font-size: clamp(28px, 5vw, 44px); line-height:1.1; font-weight:800; color:#ffffff; text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 4px 12px rgba(0,0,0,.7), 0 0 40px rgba(0,0,0,.5); }
+    .subtitle { margin-top:12px; font-size: clamp(15px, 2.2vw, 18px); font-weight:600; text-shadow: 0 1px 4px rgba(0,0,0,.95), 0 2px 10px rgba(255, 255, 255, 0.8), 0 0 24px rgba(0,0,0,.5); }
+    .hero-banner .actions { display:none; }
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
     .btn { padding:10px 16px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); backdrop-filter: blur(4px); color:#fff; text-decoration:none; font-weight:600 }
     .btn.primary { background: var(--blue); border-color: transparent }
@@ -178,6 +192,7 @@
     $cfgBrandSize = optional(\App\Models\Setting::where('key','header_brand_font_size')->first())->value;
     $cfgBrandWeight = optional(\App\Models\Setting::where('key','header_brand_font_weight')->first())->value;
     $cfgBrandStyle = optional(\App\Models\Setting::where('key','header_brand_font_style')->first())->value;
+    $cfgTaglineSize = optional(\App\Models\Setting::where('key','header_tagline_font_size')->first())->value;
     $toUrl = function ($p) {
       if (empty($p)) return null;
       $p = trim((string) $p);
@@ -193,12 +208,27 @@
       $logoSrc = $toUrl($cfgLogo);
     }
     $bannerBgSrc = null;
-    if (isset($banner) && $banner && !empty($banner->bg_image_url)) {
-      $bannerBgSrc = $toUrl($banner->bg_image_url);
+    $bannerImages = [];
+    if (isset($banner) && $banner) {
+      if (!empty($banner->bg_image_url)) {
+        $u = $toUrl($banner->bg_image_url);
+        if ($u) { $bannerImages[] = $u; $bannerBgSrc = $u; }
+      }
+      if (!empty($banner->bg_image_urls) && is_array($banner->bg_image_urls)) {
+        foreach ($banner->bg_image_urls as $u) {
+          $u = trim((string)$u);
+          if ($u !== '') { $u2 = $toUrl($u); if ($u2) $bannerImages[] = $u2; }
+        }
+      }
+      if ($bannerBgSrc === null && count($bannerImages) > 0) { $bannerBgSrc = $bannerImages[0]; }
     }
+    $bannerAutoRotate = filter_var(optional(\App\Models\Setting::where('key','banner_auto_rotate')->first())->value ?? true, FILTER_VALIDATE_BOOLEAN);
+    $bannerRotateIntervalSec = (int)(optional(\App\Models\Setting::where('key','banner_rotate_interval_sec')->first())->value ?? 5);
+    if ($bannerRotateIntervalSec < 2) $bannerRotateIntervalSec = 2;
+    if ($bannerRotateIntervalSec > 30) $bannerRotateIntervalSec = 30;
   @endphp
 
-  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
+  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgTaglineSize) ? '--tagline-size: '.(int)$cfgTaglineSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
     <div class="nav">
       <div class="brand">
         @if($logoSrc)
@@ -230,19 +260,34 @@
     </div>
   </header>
 
-  <section class="hero-banner" style="{{ !empty($bannerBgSrc) ? "--hero-bg: url('".$bannerBgSrc."');" : '' }}{{ isset($banner) && $banner && !empty($banner->banner_height_px) ? "--banner-h: ".(int)$banner->banner_height_px."px;" : '' }}{{ isset($banner) && $banner && !empty($banner->bg_position) ? "--hero-pos: ".$banner->bg_position.";" : '' }}{{ isset($banner) && $banner && !empty($banner->bg_size) ? "--hero-size: ".$banner->bg_size.";" : '' }}{{ isset($banner) && $banner && !empty($banner->banner_content_max_width_px) ? "--hero-content-w: ".(int)$banner->banner_content_max_width_px."px;" : '' }}">
-    <style>
-      /* dynamic bg via style attr below; this block keeps specificity minimal */
-    </style>
+  @php
+    $heroPos = isset($banner) && $banner && !empty($banner->bg_position) ? $banner->bg_position : 'center';
+    $heroSize = isset($banner) && $banner && !empty($banner->bg_size) ? $banner->bg_size : 'cover';
+    $defaultSlideUrl = 'https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=1600&auto=format&fit=crop';
+    $sliderImages = count($bannerImages) > 0 ? $bannerImages : [$defaultSlideUrl];
+    $isSingleSlide = count($sliderImages) < 2;
+  @endphp
+  <section id="hero-banner" class="hero-banner {{ $isSingleSlide ? 'hero-banner--single' : '' }}" data-banner-images="{{ json_encode($sliderImages) }}" data-banner-auto-rotate="{{ $bannerAutoRotate ? '1' : '0' }}" data-banner-interval="{{ $bannerRotateIntervalSec }}" style="{{ isset($banner) && $banner && !empty($banner->banner_height_px) ? "--banner-h: ".(int)$banner->banner_height_px."px;" : '' }}{{ isset($banner) && $banner && !empty($banner->banner_content_max_width_px) ? "--hero-content-w: ".(int)$banner->banner_content_max_width_px."px;" : '' }} --hero-pos: {{ $heroPos }}; --hero-size: {{ $heroSize }};">
+    <div class="hero-banner__slides">
+      @foreach($sliderImages as $i => $imgUrl)
+        <div class="hero-banner__slide {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}" style="background-image: url('{{ e($imgUrl) }}');"></div>
+      @endforeach
+    </div>
+    <div class="hero-banner__overlay"></div>
     <div class="hero-content">
       <div class="eyebrow">{{ optional($banner)->eyebrow ?? 'Safe Transportation & Logistics' }}</div>
       <h1 class="title">{{ optional($banner)->title_line1 ?? 'Adaptable coordinated factors' }}<br>{{ optional($banner)->title_line2 ?? 'Quick Conveyance' }}</h1>
       <p class="subtitle">{{ optional($banner)->subtitle ?? 'Reliable logistics solutions for every shipment. From pick-up to delivery, track and manage your parcels with ease.' }}</p>
-      <div class="actions">
-        <a class="btn primary" href="{{ optional($banner)->primary_url ?? '#get-started' }}">{{ optional($banner)->primary_text ?? 'Get Started' }}</a>
-        <a class="btn" href="{{ optional($banner)->secondary_url ?? '#learn' }}">{{ optional($banner)->secondary_text ?? 'Learn More' }}</a>
-      </div>
     </div>
+    @if(!$isSingleSlide)
+      <button type="button" class="hero-banner__arrow prev" aria-label="Previous slide">‹</button>
+      <button type="button" class="hero-banner__arrow next" aria-label="Next slide">›</button>
+      <div class="hero-banner__dots" role="tablist" aria-label="Banner slides">
+        @foreach($sliderImages as $i => $imgUrl)
+          <button type="button" class="hero-banner__dot {{ $i === 0 ? 'active' : '' }}" role="tab" aria-label="Slide {{ $i + 1 }}" data-index="{{ $i }}"></button>
+        @endforeach
+      </div>
+    @endif
   </section>
 
   <main>
@@ -596,6 +641,43 @@
         if (window.innerWidth > 720) { links.classList.remove('open'); hamb.setAttribute('aria-expanded','false'); }
       });
     }
+
+    // Banner slider
+    (function(){
+      const el = document.getElementById('hero-banner');
+      if (!el) return;
+      const slides = el.querySelectorAll('.hero-banner__slide');
+      const dots = el.querySelectorAll('.hero-banner__dot');
+      const prevBtn = el.querySelector('.hero-banner__arrow.prev');
+      const nextBtn = el.querySelector('.hero-banner__arrow.next');
+      const total = slides.length;
+      if (total < 2) return;
+
+      let current = 0;
+      let autoTimer = null;
+      const autoRotate = el.getAttribute('data-banner-auto-rotate') === '1';
+      const intervalSec = parseInt(el.getAttribute('data-banner-interval') || '5', 10) || 5;
+
+      function goToSlide(idx) {
+        current = (idx + total) % total;
+        slides.forEach((s, i) => s.classList.toggle('active', i === current));
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+      }
+
+      function next() { goToSlide(current + 1); resetAuto(); }
+      function prev() { goToSlide(current - 1); resetAuto(); }
+
+      function resetAuto() {
+        if (autoTimer) clearInterval(autoTimer);
+        if (autoRotate) autoTimer = setInterval(next, intervalSec * 1000);
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', prev);
+      if (nextBtn) nextBtn.addEventListener('click', next);
+      dots.forEach((dot, i) => dot.addEventListener('click', () => { goToSlide(i); resetAuto(); }));
+
+      if (autoRotate) autoTimer = setInterval(next, intervalSec * 1000);
+    })();
   </script>
 </body>
 </html>
