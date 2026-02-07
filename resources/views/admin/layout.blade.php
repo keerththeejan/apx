@@ -86,6 +86,7 @@
             <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
           </div>
           <a href="{{ route('admin.features.index') }}">Features</a>
+          <a href="{{ route('admin.trackinglinks.index') }}">Parcel Tracking Links</a>
           <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>

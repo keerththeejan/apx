@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\GalleryItemController;
 use App\Http\Controllers\Admin\HelpItemController;
 use App\Http\Controllers\Admin\SocialLinkController;
 use App\Http\Controllers\Admin\FooterLinkController;
+use App\Http\Controllers\Admin\TrackingLinkController;
 use App\Http\Controllers\Admin\QuoteController as AdminQuoteController;
 use App\Http\Controllers\Admin\DailyActivityController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -29,6 +30,7 @@ use App\Models\NavLink;
 use App\Models\GalleryItem;
 use App\Models\HelpItem;
 use App\Models\DailyActivity;
+use App\Models\TrackingLink;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +60,8 @@ Route::get('/', function () {
     $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
     $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
     $formServices = Service::orderBy('title')->orderBy('id')->get();
-    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices'));
+    $trackingLinks = TrackingLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices','trackingLinks'));
 });
 
 // Public home preview that never redirects admins
@@ -76,7 +79,8 @@ Route::get('/site', function () {
     $gallery = GalleryItem::orderBy('sort_order')->orderBy('id')->take(12)->get();
     $helpItems = HelpItem::orderBy('sort_order')->orderBy('id')->take(6)->get();
     $formServices = Service::orderBy('title')->orderBy('id')->get();
-    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices'));
+    $trackingLinks = TrackingLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    return view('home', compact('features','banner','services','activities','navLinks','gallery','helpItems','formServices','trackingLinks'));
 })->name('site.home');
 
 // Public quote submissions
@@ -117,6 +121,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('settings', [SettingController::class, 'index'])->name('admin.settings.index');
     Route::get('footer', [SettingController::class, 'footer'])->name('admin.settings.footer');
     Route::post('settings', [SettingController::class, 'update'])->name('admin.settings.update');
+    Route::resource('tracking-links', TrackingLinkController::class)->names('admin.trackinglinks');
     Route::resource('nav-links', NavLinkController::class)->names('admin.navlinks');
     Route::resource('gallery', GalleryItemController::class)->names('admin.gallery');
     Route::resource('help-items', HelpItemController::class)->names('admin.helpitems');

@@ -78,6 +78,14 @@
     body[data-theme="light"] .feature-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
     body[data-theme="light"] .feature-card p { color: var(--muted) }
 
+    .track-section { padding: 28px 0 }
+    .track-wrap { margin-top: 16px; max-width: 560px }
+    .track-input { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.6); color: var(--text); font-size: 16px }
+    .track-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px }
+    .track-provider { margin: 0 }
+    .track-empty { color: var(--muted); font-size: 14px }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0 }
+
     .activities { display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 22px }
     .activity-card { background: rgba(15,23,42,.6); border:1px solid rgba(148,163,184,.12); border-radius:14px; overflow:hidden; text-align:left }
     .activity-card img { width:100%; height:160px; object-fit:cover; display:block; background:#0b1220 }
@@ -331,6 +339,22 @@
             <p>Secure storage and inventory management.</p>
           </div>
         @endif
+      </div>
+    </section>
+
+    <section id="track" class="section track-section" aria-label="Track your parcel">
+      <h2 style="margin:0">Track your parcel</h2>
+      <p style="color:var(--muted); margin:8px 0 14px">Enter your tracking number and choose a carrier to open their tracking page.</p>
+      <div class="track-wrap">
+        <label for="tracking_number" class="sr-only">Tracking number</label>
+        <input type="text" id="tracking_number" class="track-input" placeholder="Tracking number" autocomplete="off">
+        <div class="track-buttons">
+          @forelse(isset($trackingLinks) ? $trackingLinks : [] as $link)
+            <button type="button" class="btn track-provider" data-url-template="{{ e($link->url_template) }}" title="Opens in new tab">{{ $link->name }}</button>
+          @empty
+            <span class="track-empty">Add tracking links in Admin (Parcel Tracking Links) to enable 3rd party tracking.</span>
+          @endforelse
+        </div>
       </div>
     </section>
 
@@ -679,6 +703,19 @@
       dots.forEach((dot, i) => dot.addEventListener('click', () => { goToSlide(i); resetAuto(); }));
 
       if (autoRotate) autoTimer = setInterval(next, intervalSec * 1000);
+    })();
+
+    (function(){
+      const input = document.getElementById('tracking_number');
+      document.querySelectorAll('.track-provider').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var num = (input && input.value) ? input.value.trim() : '';
+          if (!num){ alert('Please enter a tracking number.'); return; }
+          var template = this.getAttribute('data-url-template') || '';
+          var url = template.replace(/\{tracking_number\}/gi, encodeURIComponent(num)).replace(/\{tracking\}/gi, encodeURIComponent(num));
+          if (url) window.open(url, '_blank', 'noopener');
+        });
+      });
     })();
   </script>
 </body>
