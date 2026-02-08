@@ -36,5 +36,14 @@
     <h3 style="margin:16px 0 8px">Change password</h3>
     <p style="color:var(--muted); margin:0 0 10px">Update your login password.</p>
     <a class="btn" href="{{ route('admin.profile.password') }}">Change password</a>
+
+    <hr style="border:0; border-top:1px solid var(--border); margin:20px 0">
+
+    <h3 style="margin:16px 0 8px">Users</h3>
+    <p style="color:var(--muted); margin:0 0 12px">Manage admin users: view all users, add new users, or edit existing ones.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
+      <a class="btn" href="{{ route('admin.users.index') }}">Manage users</a>
+      <a class="btn" href="{{ route('admin.users.create') }}">Add user</a>
+    </div>
   </div>
 @endsection
