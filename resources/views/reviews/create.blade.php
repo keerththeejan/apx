@@ -3,7 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Add your review</title>
+  @php
+    $seoSiteName = optional(\App\Models\Setting::where('key','site_name')->first())->value ?: 'Parcel Transport';
+    $seoTitle = 'Add Your Review | ' . $seoSiteName;
+    $seoDesc = 'Share your experience with ' . $seoSiteName . '. Leave a review for our parcel and logistics services.';
+    $seoKw = optional(\App\Models\Setting::where('key','meta_keywords')->first())->value;
+    $seoImg = optional(\App\Models\Setting::where('key','og_image')->first())->value;
+  @endphp
+  @include('partials.seo-meta', ['seoTitle' => $seoTitle, 'seoDescription' => $seoDesc, 'seoKeywords' => $seoKw, 'seoImage' => $seoImg, 'seoSiteName' => $seoSiteName])
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

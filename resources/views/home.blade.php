@@ -3,7 +3,21 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Parcel Transport • Home</title>
+  @php
+    $seoSiteName = optional(\App\Models\Setting::where('key','site_name')->first())->value ?: 'Parcel Transport';
+    $seoTitle = $seoSiteName . ' – Home';
+    $seoDesc = optional(\App\Models\Setting::where('key','meta_description')->first())->value ?? optional(\App\Models\Setting::where('key','tagline')->first())->value ?? 'Reliable parcel and logistics solutions. Track shipments, get quotes, and manage delivery with ease.';
+    $seoKw = optional(\App\Models\Setting::where('key','meta_keywords')->first())->value;
+    $seoImg = optional(\App\Models\Setting::where('key','og_image')->first())->value;
+    $jsonLd = [
+      '@context' => 'https://schema.org',
+      '@type' => 'WebSite',
+      'name' => $seoSiteName,
+      'url' => url('/'),
+      'description' => \Illuminate\Support\Str::limit(strip_tags($seoDesc), 160),
+    ];
+  @endphp
+  @include('partials.seo-meta', ['seoTitle' => $seoTitle, 'seoDescription' => $seoDesc, 'seoKeywords' => $seoKw, 'seoImage' => $seoImg, 'seoSiteName' => $seoSiteName, 'jsonLd' => $jsonLd])
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

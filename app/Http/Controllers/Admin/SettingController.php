@@ -66,6 +66,9 @@ class SettingController extends Controller
             'footer_link_color' => ['nullable','regex:/^#?[0-9a-fA-F]{3,8}$/'],
             'banner_auto_rotate' => ['nullable','boolean'],
             'banner_rotate_interval_sec' => ['nullable','integer','min:2','max:30'],
+            'meta_description' => ['nullable','string','max:500'],
+            'meta_keywords' => ['nullable','string','max:500'],
+            'og_image' => ['nullable','string','max:2000'],
         ]);
 
         // If a logo image was uploaded, store it under public/uploads/logos and override logo_url
@@ -153,6 +156,9 @@ class SettingController extends Controller
             'footer_link_color' => $rows['footer_link_color']->value ?? '#cbd5e1',
             'banner_auto_rotate' => (bool)(optional($rows->get('banner_auto_rotate'))->value ?? true),
             'banner_rotate_interval_sec' => (int)(optional($rows->get('banner_rotate_interval_sec'))->value ?? 5),
+            'meta_description' => optional($rows->get('meta_description'))->value ?? null,
+            'meta_keywords' => optional($rows->get('meta_keywords'))->value ?? null,
+            'og_image' => optional($rows->get('og_image'))->value ?? null,
         ];
     }
 

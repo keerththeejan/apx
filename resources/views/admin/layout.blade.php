@@ -101,6 +101,7 @@
           <a href="{{ route('admin.users.index') }}">Users</a>
           <a href="{{ route('admin.company') }}">Company details</a>
           <a href="{{ route('admin.settings.index') }}">Settings</a>
+          <a href="{{ route('admin.settings.index') }}?section=seo">SEO</a>
           <div class="navsec">Footer</div>
           <div class="navsub">
             <a href="{{ route('admin.settings.footer') }}">Footer Settings</a>

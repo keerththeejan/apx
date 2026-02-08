@@ -3,7 +3,66 @@
 @section('title', 'Settings - Admin')
 
 @section('content')
-  <div class="wrap">
+  <style>
+    .settings-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .settings-top-inner { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .admin-settings-form .color-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .admin-settings-form .color-row input[type="text"] { flex: 1 1 120px; min-width: 0; }
+    .admin-settings-form .color-row input[type="color"] { flex-shrink: 0; width: 54px; height: 44px; padding: 0; border-radius: 10px; }
+    .admin-settings-form .font-presets { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .admin-settings-form hr { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
+    .admin-settings-form h3 { margin: 0 0 8px; }
+    .settings-jump { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 10px 12px; margin-bottom: 16px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+    .settings-jump span { color: var(--muted); font-size: 12px; font-weight: 700; margin-right: 4px; }
+    .settings-jump a { color: var(--text); text-decoration: none; font-size: 13px; font-weight: 600; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+    .settings-jump a:hover { background: rgba(148,163,184,.15); color: #fff; }
+    .settings-section { margin-bottom: 4px; }
+    .settings-section-desc { color: var(--muted); font-size: 13px; margin: 0 0 12px; line-height: 1.4; }
+    /* Use full content width on settings page */
+    .content .wrap.settings-wrap { max-width: none; width: 100%; margin-left: 0; margin-right: 0; box-sizing: border-box; }
+    .admin-settings-form .row { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .admin-settings-form .row > * { min-width: 0; }
+    .admin-settings-form input, .admin-settings-form textarea, .admin-settings-form select { width: 100%; max-width: 100%; box-sizing: border-box; }
+    .admin-settings-form .settings-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
+    .admin-settings-form .settings-cols > * { min-width: 0; }
+    @media (min-width: 1200px) {
+      .admin-settings-form .settings-cols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .admin-settings-form .row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      .admin-settings-form .settings-cols { grid-template-columns: 1fr; gap: 16px; }
+      .settings-jump { padding: 8px 10px; gap: 6px; }
+      .settings-jump span { display: block; width: 100%; margin-bottom: 4px; }
+      .settings-jump a { padding: 8px 10px; font-size: 13px; }
+    }
+    @media (max-width: 640px) {
+      .content .wrap.settings-wrap { padding: 10px 12px; }
+      .settings-top { margin-bottom: 14px; gap: 6px; }
+      .settings-top h2 { font-size: 1.1rem; }
+      .admin-settings-form .row { grid-template-columns: 1fr; gap: 10px; }
+      .admin-settings-form h3 { font-size: 1rem; }
+      .admin-settings-form .settings-section-desc { font-size: 12px; margin-bottom: 10px; }
+      .admin-settings-form .color-row { gap: 8px; }
+      .admin-settings-form .color-row input[type="text"] { flex: 1 1 100%; }
+      .admin-settings-form .font-presets { gap: 6px; }
+      .admin-settings-form .font-presets .btn { padding: 8px 12px; font-size: 13px; min-height: 40px; }
+      .admin-settings-form .actions { flex-direction: column; gap: 8px; }
+      .admin-settings-form .actions .btn, .admin-settings-form .actions .logout { width: 100%; text-align: center; box-sizing: border-box; }
+    }
+    @media (max-width: 480px) {
+      .content .wrap.settings-wrap { padding: 8px 10px; }
+      .settings-jump { flex-direction: column; align-items: stretch; }
+      .settings-jump span { margin-bottom: 6px; }
+      .settings-jump a { text-align: center; padding: 10px; }
+      .admin-settings-form input, .admin-settings-form textarea, .admin-settings-form select { padding: 10px 12px; font-size: 16px; min-height: 44px; }
+      .admin-settings-form textarea { min-height: 80px; }
+      .admin-settings-form label { font-size: 12px; margin-top: 10px; }
+      .admin-settings-form .color-row input[type="color"] { width: 48px; height: 40px; min-width: 48px; }
+    }
+  </style>
+  <div class="wrap settings-wrap">
     @if(session('status'))
       <div class="status">{{ session('status') }}</div>
     @endif
@@ -11,37 +70,66 @@
       <div class="error">{{ $errors->first() }}</div>
     @endif
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
-      <div style="display:flex; gap:8px; align-items:center">
+    <div class="settings-top">
+      <div class="settings-top-inner">
         <a class="btn" href="{{ route('admin.dashboard') }}">Back</a>
         <h2 style="margin:0">Settings</h2>
       </div>
     </div>
 
-    <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
+    <form class="admin-settings-form" method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data">
       @csrf
 
-      <h3 id="company" style="margin:0 0 12px">Company details</h3>
-      <label for="site_name">Site Name</label>
-      <input id="site_name" type="text" name="site_name" value="{{ old('site_name', $settings['site_name']) }}" placeholder="Optional">
+      <nav class="settings-jump" aria-label="Jump to section">
+        <span>Jump to:</span>
+        <a href="{{ route('admin.settings.index') }}?section=company#company">Company</a>
+        <a href="{{ route('admin.settings.index') }}?section=seo#seo">SEO</a>
+        <a href="{{ route('admin.settings.index') }}?section=header#header">Header</a>
+        <a href="{{ route('admin.settings.index') }}?section=banner#banner">Banner</a>
+        <a href="{{ route('admin.settings.index') }}?section=logo#logo">Logo</a>
+        <a href="{{ route('admin.settings.index') }}?section=footer#footer">Footer</a>
+        <a href="{{ route('admin.settings.index') }}?section=footer-about#footer-about">Footer About</a>
+        <a href="#settings-actions">Save</a>
+      </nav>
 
-      <label for="tagline">Tagline</label>
-      <input id="tagline" type="text" name="tagline" value="{{ old('tagline', $settings['tagline']) }}" placeholder="Safe Transportation & Logistics">
+      <div class="settings-cols">
+        <div>
+          <div class="settings-section">
+            <h3 id="company" style="margin:0 0 8px">Company details</h3>
+            <p class="settings-section-desc">Site name and tagline appear in the header. Default theme applies to the public site when the user has not chosen a theme.</p>
+          </div>
+          <label for="site_name">Site Name</label>
+          <input id="site_name" type="text" name="site_name" value="{{ old('site_name', $settings['site_name']) }}" placeholder="Optional">
 
-      <label for="site_default_theme">Default Site Theme</label>
-      <select id="site_default_theme" name="site_default_theme">
-        @php $siteThemes = ['dark'=>'Dark','light'=>'Light']; @endphp
-        @foreach($siteThemes as $val=>$label)
-          <option value="{{ $val }}" {{ (string)old('site_default_theme', $settings['site_default_theme'] ?? 'dark')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
-        @endforeach
-      </select>
+          <label for="tagline">Tagline</label>
+          <input id="tagline" type="text" name="tagline" value="{{ old('tagline', $settings['tagline']) }}" placeholder="Safe Transportation & Logistics">
+
+          <label for="site_default_theme">Default Site Theme</label>
+          <select id="site_default_theme" name="site_default_theme">
+            @php $siteThemes = ['dark'=>'Dark','light'=>'Light']; @endphp
+            @foreach($siteThemes as $val=>$label)
+              <option value="{{ $val }}" {{ (string)old('site_default_theme', $settings['site_default_theme'] ?? 'dark')===(string)$val ? 'selected' : '' }}>{{ $label }}</option>
+            @endforeach
+          </select>
+        </div>
+        <div>
+          <h3 id="seo" style="margin:0 0 8px">SEO (all public pages)</h3>
+          <p class="settings-section-desc">Meta description and keywords are used on the home page. OG image is used when sharing links (e.g. social).</p>
+          <label for="meta_description">Default meta description</label>
+          <textarea id="meta_description" name="meta_description" rows="2" placeholder="Reliable parcel and logistics services. Track shipments, get quotes, and more.">{{ old('meta_description', $settings['meta_description'] ?? '') }}</textarea>
+          <label for="meta_keywords">Meta keywords (comma-separated)</label>
+          <input id="meta_keywords" type="text" name="meta_keywords" value="{{ old('meta_keywords', $settings['meta_keywords'] ?? '') }}" placeholder="parcel, logistics, shipping, track, delivery">
+          <label for="og_image">OG image URL (for social sharing)</label>
+          <input id="og_image" type="text" name="og_image" value="{{ old('og_image', $settings['og_image'] ?? '') }}" placeholder="https://... or /path/to/image.jpg">
+        </div>
+      </div>
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
-      <h3 style="margin:0 0 8px">Header</h3>
+      <h3 id="header" style="margin:0 0 8px">Header</h3>
 
       <h4 style="margin:16px 0 8px; color:var(--muted); font-size:14px">Font size adjuster (APX & tagline)</h4>
       <p style="margin:0 0 10px; color:var(--muted); font-size:13px">Quick presets set both company name and tagline size. Or use the precise fields below.</p>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px">
+      <div class="font-presets">
         <button type="button" class="btn font-preset" data-brand="14" data-tagline="12" style="padding:8px 12px; font-size:13px">Small</button>
         <button type="button" class="btn font-preset" data-brand="18" data-tagline="14" style="padding:8px 12px; font-size:13px">Medium</button>
         <button type="button" class="btn font-preset" data-brand="24" data-tagline="16" style="padding:8px 12px; font-size:13px">Large</button>
@@ -51,14 +139,14 @@
       <div class="row">
         <div>
           <label for="header_bg_color">Header Background Color</label>
-          <div style="display:flex; gap:10px; align-items:center">
+          <div class="color-row">
             <input id="header_bg_color" type="text" name="header_bg_color" value="{{ old('header_bg_color', $settings['header_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220">
             <input class="js-color" type="color" value="{{ old('header_bg_color', $settings['header_bg_color'] ?? '#0b1220') }}" data-target="#header_bg_color" style="width:54px; height:44px; padding:0; border-radius:10px">
           </div>
         </div>
         <div>
           <label for="header_border_color">Header Border Color</label>
-          <div style="display:flex; gap:10px; align-items:center">
+          <div class="color-row">
             <input id="header_border_color" type="text" name="header_border_color" value="{{ old('header_border_color', $settings['header_border_color'] ?? 'rgba(148,163,184,.12)') }}" placeholder="rgba(148,163,184,.12)">
             @php
               $hdrBorder = (string) old('header_border_color', $settings['header_border_color'] ?? 'rgba(148,163,184,.12)');
@@ -72,7 +160,7 @@
         </div>
         <div>
           <label for="header_link_color">Header Link Color</label>
-          <div style="display:flex; gap:10px; align-items:center">
+          <div class="color-row">
             <input id="header_link_color" type="text" name="header_link_color" value="{{ old('header_link_color', $settings['header_link_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
             <input class="js-color" type="color" value="{{ old('header_link_color', $settings['header_link_color'] ?? '#94a3b8') }}" data-target="#header_link_color" style="width:54px; height:44px; padding:0; border-radius:10px">
           </div>
@@ -82,14 +170,14 @@
       <div class="row" style="margin-top:12px">
         <div>
           <label for="header_text_color">Header Text Color</label>
-          <div style="display:flex; gap:10px; align-items:center">
+          <div class="color-row">
             <input id="header_text_color" type="text" name="header_text_color" value="{{ old('header_text_color', $settings['header_text_color'] ?? '#e2e8f0') }}" placeholder="#e2e8f0">
             <input class="js-color" type="color" value="{{ old('header_text_color', $settings['header_text_color'] ?? '#e2e8f0') }}" data-target="#header_text_color" style="width:54px; height:44px; padding:0; border-radius:10px">
           </div>
         </div>
         <div>
           <label for="header_tagline_color">Header Tagline Color</label>
-          <div style="display:flex; gap:10px; align-items:center">
+          <div class="color-row">
             <input id="header_tagline_color" type="text" name="header_tagline_color" value="{{ old('header_tagline_color', $settings['header_tagline_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
             <input class="js-color" type="color" value="{{ old('header_tagline_color', $settings['header_tagline_color'] ?? '#94a3b8') }}" data-target="#header_tagline_color" style="width:54px; height:44px; padding:0; border-radius:10px">
           </div>
@@ -130,7 +218,7 @@
       </div>
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
-      <h3 style="margin:0 0 8px">Banner auto-change</h3>
+      <h3 id="banner" style="margin:0 0 8px">Banner auto-change</h3>
       <label style="display:flex; gap:8px; align-items:center; margin-bottom:10px">
         <input type="checkbox" name="banner_auto_rotate" value="1" {{ old('banner_auto_rotate', data_get($settings, 'banner_auto_rotate', true)) ? 'checked' : '' }}> Auto-rotate banner background images
       </label>
@@ -139,7 +227,7 @@
       <div style="color:var(--muted); font-size:12px; margin-top:4px">2–30 seconds between image changes. Add multiple images in Home Banner edit.</div>
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
-      <h3 style="margin:0 0 8px">Logo</h3>
+      <h3 id="logo" style="margin:0 0 8px">Logo</h3>
       <label for="logo_file">Logo Image</label>
       <input id="logo_file" type="file" name="logo_file" accept="image/*">
       <div style="color:#94a3b8; font-size:12px; margin-top:6px">PNG, JPG, WEBP, or SVG up to 4MB.</div>
@@ -147,7 +235,7 @@
       <input id="logo_url" type="text" name="logo_url" value="{{ old('logo_url', $settings['logo_url']) }}" placeholder="https://..." />
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
-      <h3 style="margin:0 0 8px">Footer</h3>
+      <h3 id="footer" style="margin:0 0 8px">Footer</h3>
       <label for="footer_logo_file">Footer Logo Image</label>
       <input id="footer_logo_file" type="file" name="footer_logo_file" accept="image/*">
       <div style="color:#94a3b8; font-size:12px; margin-top:6px">PNG, JPG, WEBP, or SVG up to 4MB.</div>
@@ -183,7 +271,7 @@
       <input id="footer_hours" type="text" name="footer_hours" value="{{ old('footer_hours', $settings['footer_hours'] ?? '') }}" placeholder="Mon–Fri 9–6">
 
       <hr style="border:0; border-top:1px solid var(--border); margin:16px 0">
-      <h3 style="margin:0 0 8px">Footer About</h3>
+      <h3 id="footer-about" style="margin:0 0 8px">Footer About</h3>
       <label for="footer_about_title">About Title</label>
       <input id="footer_about_title" type="text" name="footer_about_title" value="{{ old('footer_about_title', $settings['footer_about_title'] ?? 'About') }}" placeholder="About">
 
@@ -213,7 +301,7 @@
         @endforeach
       </select>
 
-      <div class="actions">
+      <div class="actions" id="settings-actions">
         <button class="btn" type="submit">Save Settings</button>
         <a class="btn" href="{{ route('admin.dashboard') }}">Cancel</a>
       </div>
@@ -267,6 +355,22 @@
           if (tagline) tagline.value = btn.getAttribute('data-tagline') || tagline.value;
         });
       });
+    })();
+
+    (function(){
+      var hash = window.location.hash.replace('#', '');
+      var search = window.location.search || '';
+      var section = (search.match(/section=([^&]+)/) || [])[1] || hash;
+      var ids = ['company', 'seo', 'header', 'banner', 'logo', 'footer', 'footer-about', 'settings-actions'];
+      if (section && ids.indexOf(section) !== -1) {
+        var el = document.getElementById(section);
+        if (el) {
+          setTimeout(function(){ el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+          if (search.indexOf('section=') !== -1) {
+            try { history.replaceState(null, '', window.location.pathname + '#' + section); } catch (e) {}
+          }
+        }
+      }
     })();
   </script>
 @endsection

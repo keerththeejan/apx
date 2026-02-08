@@ -156,7 +156,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('profile/password', [ProfileController::class, 'updatePassword'])->name('admin.profile.password.update');
     Route::resource('users', UserController::class)->names('admin.users')->except(['show']);
     Route::get('company', function () {
-        return redirect()->route('admin.settings.index', [], 302)->withFragment('company');
+        return redirect(route('admin.settings.index').'?section=company');
     })->name('admin.company');
     Route::resource('features', FeatureController::class)->names('admin.features');
     Route::patch('features/{feature}/toggle-visibility', [FeatureController::class, 'toggleVisibility'])->name('admin.features.toggle');
