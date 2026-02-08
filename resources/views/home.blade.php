@@ -357,7 +357,9 @@
     .quotation-section .submit { margin-top:10px; padding:10px 14px; border-radius:10px; background:#0b1220; color:#fff; border:1px solid rgba(255,255,255,.25); font-weight:800; cursor:pointer }
     .quotation-result { margin-top:14px; padding:14px; background:rgba(0,0,0,.25); border-radius:10px; color:#fff }
     .quotation-result .quotation-line { margin-top:8px; font-size:15px }
+    .quotation-result .quotation-line:first-child { margin-top:0 }
     .quotation-result .quotation-line.dealer-price { color:#fde68a }
+    .quotation-result .quotation-line.quotation-total { margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,.2); font-size:17px }
     .quotation-whatsapp { margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,.25) }
     .quotation-whatsapp .wa-btn { display:inline-flex; align-items:center; gap:8px; padding:10px 16px; border-radius:10px; background:#25D366; color:#fff; text-decoration:none; font-weight:700; border:none; cursor:pointer; transition:background .2s }
     .quotation-whatsapp .wa-btn:hover { background:#20bd5a; color:#fff }
@@ -816,16 +818,19 @@
       </form>
       <div id="quotation-result-area">
       @if(session('quotation_result'))
-        @php $res = session('quotation_result'); @endphp
+        @php
+          $res = session('quotation_result');
+          $unitPrice = !empty($res['dealer_applied']) ? $res['dealer_unit_price'] : $res['customer_unit_price'];
+          $totalPrice = !empty($res['dealer_applied']) ? $res['total_dealer'] : $res['total_customer'];
+        @endphp
         <div class="quotation-result">
-          <div class="quotation-line"><strong>{{ $res['country'] }} – {{ $res['service'] }}</strong></div>
-          @if(!empty($res['dealer_applied']))
-            <div class="quotation-line dealer-price">Dealer total: {{ number_format($res['dealer_unit_price'], 2) }} × {{ $res['qty'] }} kg = <strong>{{ number_format($res['total_dealer'], 2) }}</strong></div>
-          @elseif(!empty($res['dealer_code_entered']))
-            <div class="quotation-line" style="color:#fca5a5">Dealer code not found or inactive.</div>
-            <div class="quotation-line">Total: {{ number_format($res['customer_unit_price'], 2) }} × {{ $res['qty'] }} kg = <strong>{{ number_format($res['total_customer'], 2) }}</strong></div>
-          @else
-            <div class="quotation-line">Total: {{ number_format($res['customer_unit_price'], 2) }} × {{ $res['qty'] }} kg = <strong>{{ number_format($res['total_customer'], 2) }}</strong></div>
+          <div class="quotation-line"><strong>Country:</strong> {{ $res['country'] }}</div>
+          <div class="quotation-line"><strong>Service:</strong> {{ $res['service'] }}</div>
+          <div class="quotation-line"><strong>Total Weight:</strong> {{ $res['qty'] }} kg</div>
+          <div class="quotation-line"><strong>Price per kg:</strong> {{ number_format($unitPrice, 0) }}</div>
+          <div class="quotation-line quotation-total"><strong>Total Price:</strong> {{ number_format($totalPrice, 0) }}</div>
+          @if(!empty($res['dealer_code_entered']) && empty($res['dealer_applied']))
+            <div class="quotation-line" style="color:#fca5a5; font-size:13px;">Dealer code not found or inactive.</div>
           @endif
         </div>
         <div class="quotation-downloads">
@@ -842,19 +847,19 @@
         $whatsappMessage = 'Your QUOTATION';
         if (session('quotation_result')) {
           $qr = session('quotation_result');
-          $priceLine = !empty($qr['dealer_applied'])
-            ? 'Dealer total: ' . number_format($qr['dealer_unit_price'] ?? 0, 2) . ' x ' . ($qr['qty'] ?? '') . ' kg = ' . number_format($qr['total_dealer'] ?? 0, 2)
-            : 'Total: ' . number_format($qr['customer_unit_price'] ?? 0, 2) . ' x ' . ($qr['qty'] ?? '') . ' kg = ' . number_format($qr['total_customer'] ?? 0, 2);
+          $unitPrice = !empty($qr['dealer_applied']) ? ($qr['dealer_unit_price'] ?? 0) : ($qr['customer_unit_price'] ?? 0);
+          $totalPrice = !empty($qr['dealer_applied']) ? ($qr['total_dealer'] ?? 0) : ($qr['total_customer'] ?? 0);
           $lines = [
             'QUOTATION',
             '================',
-            'Country & Service: ' . ($qr['country'] ?? '') . ' - ' . ($qr['service'] ?? ''),
-            'Quantity (kg): ' . ($qr['qty'] ?? ''),
+            'Country: ' . ($qr['country'] ?? ''),
+            'Service: ' . ($qr['service'] ?? ''),
+            'Total Weight: ' . ($qr['qty'] ?? '') . ' kg',
+            'Price per kg: ' . number_format($unitPrice, 0),
+            'Total Price: ' . number_format($totalPrice, 0),
             '',
-            $priceLine,
+            'Generated ' . now()->format('Y-m-d H:i'),
           ];
-          $lines[] = '';
-          $lines[] = 'Generated ' . now()->format('Y-m-d H:i');
           $whatsappMessage = implode("\n", $lines);
         }
       @endphp
