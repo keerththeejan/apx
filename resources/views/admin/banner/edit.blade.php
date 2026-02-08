@@ -32,6 +32,40 @@
     <label for="subtitle">Subtitle</label>
     <textarea id="subtitle" name="subtitle" placeholder="Short description for the banner">{{ old('subtitle', optional($banner)->subtitle) }}</textarea>
 
+    <div class="navsec" style="margin-top:20px; margin-bottom:10px">Text colors (banner hero)</div>
+    <p style="color:var(--muted); font-size:13px; margin:0 0 12px">Set a specific color for each text line. Use hex (e.g. #ffffff). Leave empty for default white.</p>
+    <div class="row">
+      <div>
+        <label for="eyebrow_color">Eyebrow color</label>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+          <input type="color" id="eyebrow_color_picker" value="{{ old('eyebrow_color', optional($banner)->eyebrow_color ?? '#ffffff') }}" title="Pick color" style="width:44px; height:36px; padding:2px; cursor:pointer; border-radius:8px; border:1px solid var(--border)">
+          <input id="eyebrow_color" type="text" name="eyebrow_color" value="{{ old('eyebrow_color', optional($banner)->eyebrow_color) }}" placeholder="#ffffff" maxlength="20" style="width:120px">
+        </div>
+      </div>
+      <div>
+        <label for="title_color">Title color</label>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+          <input type="color" id="title_color_picker" value="{{ old('title_color', optional($banner)->title_color ?? '#ffffff') }}" title="Pick color" style="width:44px; height:36px; padding:2px; cursor:pointer; border-radius:8px; border:1px solid var(--border)">
+          <input id="title_color" type="text" name="title_color" value="{{ old('title_color', optional($banner)->title_color) }}" placeholder="#ffffff" maxlength="20" style="width:120px">
+        </div>
+      </div>
+      <div>
+        <label for="subtitle_color">Subtitle color</label>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+          <input type="color" id="subtitle_color_picker" value="{{ old('subtitle_color', optional($banner)->subtitle_color ?? '#ffffff') }}" title="Pick color" style="width:44px; height:36px; padding:2px; cursor:pointer; border-radius:8px; border:1px solid var(--border)">
+          <input id="subtitle_color" type="text" name="subtitle_color" value="{{ old('subtitle_color', optional($banner)->subtitle_color) }}" placeholder="#ffffff" maxlength="20" style="width:120px">
+        </div>
+      </div>
+      <div>
+        <label for="title_line2_color">Title Line 2 color</label>
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+          <input type="color" id="title_line2_color_picker" value="{{ old('title_line2_color', optional($banner)->title_line2_color ?? '#ffffff') }}" title="Pick color" style="width:44px; height:36px; padding:2px; cursor:pointer; border-radius:8px; border:1px solid var(--border)">
+          <input id="title_line2_color" type="text" name="title_line2_color" value="{{ old('title_line2_color', optional($banner)->title_line2_color) }}" placeholder="#ffffff" maxlength="20" style="width:120px">
+        </div>
+        <small class="help">Second line of the title. Empty = same as Title color.</small>
+      </div>
+    </div>
+
     <label for="bg_image_url">Background Image URL</label>
     <input id="bg_image_url" type="text" name="bg_image_url" value="{{ old('bg_image_url', optional($banner)->bg_image_url) }}" placeholder="https://...">
     <small class="help">Paste a full image URL or upload an image below.</small>
@@ -116,4 +150,24 @@
       <a class="btn" href="/" target="_blank">View Site</a>
     </div>
   </form>
+
+  <script>
+    (function(){
+      function syncColor(pickerId, textId) {
+        var picker = document.getElementById(pickerId);
+        var text = document.getElementById(textId);
+        if (!picker || !text) return;
+        picker.addEventListener('input', function(){ text.value = picker.value; });
+        text.addEventListener('input', function(){
+          var v = text.value.trim();
+          if (/^#[0-9A-Fa-f]{3}$/.test(v)) { v = '#' + v[1]+v[1]+v[2]+v[2]+v[3]+v[3]; }
+          if (/^#[0-9A-Fa-f]{6}$/.test(v)) picker.value = v;
+        });
+      }
+      syncColor('eyebrow_color_picker', 'eyebrow_color');
+      syncColor('title_color_picker', 'title_color');
+      syncColor('subtitle_color_picker', 'subtitle_color');
+      syncColor('title_line2_color_picker', 'title_line2_color');
+    })();
+  </script>
 @endsection

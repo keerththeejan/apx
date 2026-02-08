@@ -43,6 +43,10 @@ class HomeBannerController extends Controller
             'primary_url' => ['nullable','string','max:255'],
             'secondary_text' => ['nullable','string','max:50'],
             'secondary_url' => ['nullable','string','max:255'],
+            'eyebrow_color' => ['nullable','string','max:20'],
+            'title_color' => ['nullable','string','max:20'],
+            'title_line2_color' => ['nullable','string','max:20'],
+            'subtitle_color' => ['nullable','string','max:20'],
         ]);
 
         // If an image was uploaded, store it under public/uploads/banners and override bg_image_url

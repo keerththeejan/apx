@@ -163,6 +163,11 @@
           <label for="contact_phone">Contact Phone</label>
           <input id="contact_phone" type="text" name="contact_phone" value="{{ old('contact_phone', $settings['contact_phone']) }}">
         </div>
+        <div>
+          <label for="whatsapp_number">WhatsApp Number (for “Send WhatsApp” after quotation)</label>
+          <input id="whatsapp_number" type="text" name="whatsapp_number" value="{{ old('whatsapp_number', $settings['whatsapp_number'] ?? '') }}" placeholder="94771234567">
+          <small class="help">Digits only, with country code (e.g. 94771234567). Leave empty to use Contact Phone.</small>
+        </div>
       </div>
 
       <label for="address">Address</label>

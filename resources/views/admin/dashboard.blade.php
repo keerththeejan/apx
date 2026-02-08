@@ -15,49 +15,47 @@
     body[data-theme="amber"]{--bg:#140d02;--panel:#1f1505;--muted:#fcd34d;--text:#fffbeb;--border:rgba(251,191,36,.28);--accent:#b45309;--danger:#f43f5e}
     body[data-theme="sky"]{--bg:#07121a;--panel:#0a1722;--muted:#bae6fd;--text:#e0f2fe;--border:rgba(56,189,248,.28);--accent:#075985;--danger:#f43f5e}
     body[data-theme="violet"]{--bg:#0d0b16;--panel:#15122a;--muted:#c4b5fd;--text:#ede9fe;--border:rgba(167,139,250,.28);--accent:#5b21b6;--danger:#f43f5e}
-    body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--text); margin:0}
-    header{display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:var(--panel); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50}
-    .brand{font-weight:800}
-    .wrap{max-width:none; width:100%; margin:0; padding:14px}
-    .grid{display:grid; grid-template-columns:280px minmax(0,1fr); gap:16px; align-items:start; width:100%}
+    body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--text); margin:0; overflow-x: hidden}
+    header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding:12px 16px; background:var(--panel); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50}
+    .brand{font-weight:800; font-size:1.05rem}
+    .header-nav{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+    .header-nav a{color:var(--text); text-decoration:none; font-weight:600; font-size:14px; padding:6px 10px; border-radius:8px; white-space:nowrap}
+    .header-nav a:hover{background:rgba(148,163,184,.15); color:#fff}
+    .wrap{max-width:none; width:100%; margin:0; padding:12px; min-width:0}
+    .grid{display:grid; grid-template-columns:260px minmax(0,1fr); gap:14px; align-items:start; width:100%; min-width:0}
     .card{background:linear-gradient(180deg, rgba(17,24,39,.85), rgba(2,6,23,.75)); border:1px solid var(--border); border-radius:var(--radius); box-shadow: var(--shadow)}
-    @supports (backdrop-filter: blur(6px)){
-      .card{backdrop-filter: blur(8px)}
-    }
-    nav{padding:14px; position:sticky; top:82px}
-    nav a{display:block; color:#cbd5e1; text-decoration:none; padding:11px 14px; border-radius:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; outline: none; transition: background .15s ease, color .15s ease, transform .08s ease}
-    nav a:hover, nav a:focus{background:#111827; color:#fff; outline:2px solid rgba(59,130,246,.25)}
-    nav a:active{transform: scale(.98)}
-    nav a + a{margin-top:4px}
-    .content{padding:16px}
+    @supports (backdrop-filter: blur(6px)){ .card{backdrop-filter: blur(8px)} }
+    .sidebar nav{padding:12px; position:sticky; top:82px}
+    .sidebar nav a{display:block; color:#cbd5e1; text-decoration:none; padding:9px 12px; border-radius:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; outline: none; transition: background .15s ease, color .15s ease; font-size:14px}
+    .sidebar nav a:hover, .sidebar nav a:focus{background:#111827; color:#fff; outline:2px solid rgba(59,130,246,.25)}
+    .sidebar nav a:active{transform: scale(.98)}
+    .sidebar nav a + a{margin-top:2px}
+    .content{padding:14px; min-width:0; overflow-x: auto}
     .actionsbar{display:flex; flex-wrap:wrap; gap:10px; margin:12px 0 16px}
     .kpis{display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:14px}
     .kpi{background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.8)); border:1px solid var(--border); border-radius:12px; padding:14px; min-height:72px}
     .kpi h3{margin:0; font-size:13px; color:var(--muted)}
     .kpi .v{font-size:22px; font-weight:800; margin-top:6px}
     .logout{background:var(--danger); border:0; color:#fff; padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer}
-    /* quick action links themed */
     .actionsbar .logout{background:linear-gradient(135deg, var(--accent), rgba(255,255,255,.06)); border:1px solid var(--border)}
     .actionsbar .logout:hover{filter:brightness(1.07)}
     .actionsbar .logout:active{transform: translateY(1px)}
-    .menu{display:none; background:#111827; color:var(--text); border:1px solid rgba(148,163,184,.2); padding:8px 12px; border-radius:10px; font-weight:700; cursor:pointer}
-    .table{width:100%; border-collapse:separate; border-spacing:0; background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.85)); border:1px solid var(--border); border-radius:12px; overflow:hidden}
-    .table th, .table td{padding:12px 14px; text-align:left; border-bottom:1px solid var(--border)}
+    .table{width:100%; min-width:320px; border-collapse:separate; border-spacing:0; background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.85)); border:1px solid var(--border); border-radius:12px; overflow:hidden}
+    .table th, .table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); font-size:14px}
     .table th{font-size:12px; color:var(--muted); font-weight:700; background:var(--panel)}
     .table tr:last-child td{border-bottom:none}
-    .sidebar{transition: transform .2s ease}
-    .backdrop{display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:40}
+    .sidebar{min-width:0}
     @media (max-width: 1200px){ .kpis{grid-template-columns: repeat(3, minmax(0,1fr))} }
-    @media (max-width: 980px){ .grid{grid-template-columns: 1fr} nav{position:static} }
-    @media (max-width: 820px){ .kpis{grid-template-columns: repeat(2, minmax(0,1fr))} }
-    @media (max-width: 620px){ .wrap{padding:10px} }
-    @media (max-width: 520px){
-      .kpis{grid-template-columns: 1fr}
-      .menu{display:inline-block}
-      .sidebar{position:fixed; left:0; top:0; height:100%; width:82%; max-width:300px; z-index:45; transform: translateX(-102%)}
-      .sidebar.open{transform: translateX(0)}
-      .backdrop.show{display:block}
+    @media (max-width: 980px){
+      .grid{grid-template-columns: 1fr}
+      .sidebar{order:1; width:100%; position:static}
+      .sidebar nav{position:static; display:flex; flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; gap:4px; padding:10px; -webkit-overflow-scrolling:touch; border-radius:var(--radius); background:var(--panel); border:1px solid var(--border)}
+      .sidebar nav a{flex:0 0 auto; margin-top:0; padding:8px 12px; font-size:13px}
+      .content{order:2}
     }
+    @media (max-width: 820px){ .kpis{grid-template-columns: repeat(2, minmax(0,1fr))} }
+    @media (max-width: 640px){ header{padding:10px 12px} .wrap{padding:10px} .content{padding:12px} .table{font-size:13px} .table th, .table td{padding:8px 10px} }
+    @media (max-width: 520px){ .kpis{grid-template-columns: 1fr} .header-nav a{font-size:13px} .sidebar nav a{font-size:12px; padding:6px 10px} }
     @media (prefers-reduced-motion: reduce){ .sidebar{transition:none} }
   </style>
 </head>
@@ -76,9 +74,10 @@
   @endphp
   <header>
     <div class="brand">Admin Dashboard</div>
-    <div style="display:flex; align-items:center; gap:10px">
-      <label for="theme" style="color:var(--muted); font-size:12px; display:none">Theme</label>
-      <select id="theme" aria-label="Theme" style="appearance:none; background:#111827; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:8px 12px; font-weight:700">
+    <nav class="header-nav" aria-label="Admin quick links">
+      <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+      <a href="{{ route('site.home') }}" target="_blank" rel="noopener" style="display:inline-block; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:#1e293b; color:#fff; font-weight:600; text-decoration:none; font-size:14px">View Site</a>
+      <select id="theme" aria-label="Theme" style="appearance:none; background:#111827; color:var(--text); border:1px solid var(--border); border-radius:10px; padding:6px 10px; font-weight:700; font-size:14px; cursor:pointer">
         <option value="dark">Dark</option>
         <option value="slate">Slate</option>
         <option value="indigo">Indigo</option>
@@ -88,10 +87,8 @@
         <option value="sky">Sky</option>
         <option value="violet">Violet</option>
       </select>
-      <a href="{{ route('site.home') }}" target="_blank" rel="noopener" class="viewsite" style="display:inline-block; padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:#1e293b; color:#fff; font-weight:700; text-decoration:none">View Site</a>
-      <button class="menu" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
-    </div>
-    <form method="POST" action="{{ route('logout') }}">
+    </nav>
+    <form method="POST" action="{{ route('logout') }}" style="margin:0">
       @csrf
       <button class="logout" type="submit">Logout</button>
     </form>
@@ -107,6 +104,7 @@
           <a href="{{ route('admin.company') }}">Company details</a>
           <a href="{{ route('admin.settings.index') }}">Settings</a>
           <a href="{{ route('admin.features.index') }}">Features</a>
+          <a href="{{ route('admin.customerreviews.index') }}">Customer Reviews</a>
           <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
           <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
@@ -118,13 +116,13 @@
           <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
         </nav>
       </div>
-      <div id="backdrop" class="backdrop" aria-hidden="true"></div>
       <div class="card content">
         <h2 style="margin-top:0">Welcome, {{ auth()->user()->name }}</h2>
         <p>You are logged in as admin.</p>
         <div class="actionsbar" role="group" aria-label="Quick actions">
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.features.index') }}">Manage Features</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.features.create') }}">Add Feature</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.customerreviews.index') }}">Customer Reviews</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.index') }}">Manage Activities</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.create') }}">Add Activity</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.banner.edit') }}">Edit Home Banner</a>
@@ -239,21 +237,7 @@
     </div>
   </div>
   <script>
-    const btn = document.querySelector('.menu');
-    const sidebar = document.getElementById('sidebar');
-    const backdrop = document.getElementById('backdrop');
     const themeSelect = document.getElementById('theme');
-    function toggleDrawer(force){
-      const willOpen = typeof force === 'boolean' ? force : !sidebar.classList.contains('open');
-      sidebar.classList.toggle('open', willOpen);
-      btn && btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-      backdrop && backdrop.classList.toggle('show', willOpen);
-    }
-    if (btn && sidebar){ btn.addEventListener('click', () => toggleDrawer()); }
-    if (backdrop){ backdrop.addEventListener('click', () => toggleDrawer(false)); }
-    window.addEventListener('resize', () => { if (window.innerWidth > 520) toggleDrawer(false); });
-
-    // Theme persistence
     const serverDefault = '{{ isset($defaultTheme) ? $defaultTheme : 'dark' }}';
     const savedTheme = localStorage.getItem('admin_theme') || serverDefault || 'dark';
     document.body.setAttribute('data-theme', savedTheme);
