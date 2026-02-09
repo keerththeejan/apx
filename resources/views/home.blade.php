@@ -22,64 +22,92 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0b1220; --card: #0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#1e293b; --blue:#3b82f6; }
-    body[data-theme="light"] { --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --brand:#e2e8f0; --blue:#2563eb }
+    :root { --bg: #0b1220; --card: #0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#1e293b; --blue:#3b82f6; --accent:#dc2626; }
+    /* Reference theme: white bg, dark gray text, red accent – keeps your APX content */
+    body[data-theme="light"] { --bg:#ffffff; --card:#ffffff; --muted:#6b7280; --text:#1f2937; --brand:#f3f4f6; --blue:#dc2626; --accent:#dc2626; }
     * { box-sizing: border-box }
     html { overflow-x: hidden; height: 100%; zoom: 0.9 }
     body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); overflow-x: hidden; min-width: 0 }
-    .topbar { background: var(--header-bg, var(--bg)); border-bottom: 1px solid var(--header-border, rgba(148,163,184,.12)); position: sticky; top:0; z-index:10 }
-    .nav { position:relative; max-width: 1200px; margin: 0 auto; padding: 10px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px; min-width: 0 }
-    .brand { display:flex; align-items:center; justify-content:flex-start; gap:10px; font-weight:800; text-align:left; margin-right:auto; margin-left: 0; min-width: 0; flex: 1 1 auto }
-    .brand img { width: 180px; max-width: 4in; height: auto; max-height: 1.5in; border-radius: 8px; object-fit: contain; border: 1px solid rgba(148,163,184,.25); display: block; flex-shrink: 0 }
-    .brand span { line-height: 1.05; color: var(--header-text, var(--text)); font-size: var(--brand-size, 16px); font-weight: var(--brand-weight, 800); font-style: var(--brand-style, normal); word-break: break-word }
-    .brand small { color: var(--header-tagline, var(--muted)); font-weight: 600; display: block; line-height: 1.1; font-size: var(--tagline-size, 14px) }
-    .links { display: flex; align-items: center; gap: 16px; flex-shrink: 0 }
-    .links a { color: var(--header-link, var(--muted)); text-decoration: none; font-weight: 600; font-size: 14px }
-    .links a:hover { color: var(--header-text, var(--text)) }
+
+    /* Two-tier header: top bar (dark blue) + main nav (blue) */
+    .header-top { background: #0f172a; color: #e2e8f0; font-size: 13px; position: relative; z-index: 11 }
+    .header-top-inner { width: 80%; max-width: 1200px; margin: 0 auto; padding: 8px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap }
+    .header-top-left { display: flex; align-items: center; gap: 10px; flex-wrap: wrap }
+    .header-top-link { color: #e2e8f0; text-decoration: none; font-weight: 500 }
+    .header-top-link:hover { color: #fff }
+    .header-top-sep { color: #94a3b8; font-weight: 400 }
+    .header-top-right { display: flex; align-items: center; gap: 12px }
+    .header-top-social { color: #e2e8f0; text-decoration: none; font-size: 16px; line-height: 1; opacity: .9 }
+    .header-top-social:hover { color: #fff; opacity: 1 }
+    @media (max-width: 980px) { .header-top-inner { width: 100%; padding: 8px 24px } }
+    @media (max-width: 720px) { .header-top { font-size: 12px } .header-top-inner { padding: 6px 14px } .header-top-left, .header-top-right { gap: 8px } }
+
+    .topbar { background: #1e3a5f; border-bottom: none; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 8px rgba(0,0,0,.15) }
+    body[data-theme="light"] .topbar { background: #1e3a5f; border-bottom: none; }
+    body[data-theme="light"] .brand span, body[data-theme="light"] .logo-area span { color: #fff; }
+    body[data-theme="light"] .brand small, body[data-theme="light"] .logo-area small { color: rgba(255,255,255,.85); }
+    .nav { position: relative; width: 80%; max-width: 1200px; margin: 0 auto; padding: 10px 0; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0 }
+    .brand, .logo-area { display: flex; align-items: center; justify-content: flex-start; gap: 12px; font-weight: 800; text-align: left; margin-right: auto; margin-left: 0; min-width: 0; flex: 0 0 auto; padding: 8px 14px 8px 12px; text-decoration: none; color: #fff; background: rgba(255,255,255,.12); border-radius: 10px; border: 1px solid rgba(255,255,255,.15) }
+    .logo-area:focus { outline: 2px solid rgba(255,255,255,.6); outline-offset: 2px; border-radius: 10px }
+    .brand img, .logo-area img { width: 180px; max-width: 4in; height: auto; max-height: 1.5in; border-radius: 6px; object-fit: contain; border: none; display: block; flex-shrink: 0; background: transparent }
+    body[data-theme="light"] .brand img, body[data-theme="light"] .logo-area img { border: none; border-radius: 6px; background: transparent }
+    .brand span, .logo-area span { line-height: 1.05; color: #fff; font-size: var(--brand-size, 17px); font-weight: var(--brand-weight, 800); font-style: var(--brand-style, normal); word-break: break-word }
+    .brand small, .logo-area small { color: rgba(255,255,255,.9); font-weight: 600; display: block; line-height: 1.1; font-size: var(--tagline-size, 13px) }
+    .links { display: flex; align-items: center; gap: 20px; flex-shrink: 0 }
+    .links a { color: #fff; text-decoration: none; font-weight: 600; font-size: 14px }
+    .links a:hover { color: rgba(255,255,255,.9); text-decoration: underline }
+    body[data-theme="light"] .links a { color: #fff }
+    body[data-theme="light"] .links a:hover { color: rgba(255,255,255,.9) }
+    .links a.link-cta { padding: 10px 20px; border-radius: 8px; background: #374151; color: #fff !important; font-weight: 700; text-decoration: none }
+    .links a.link-cta:hover { background: #4b5563; color: #fff !important; text-decoration: none }
     .links a span { font-size: 0.95em; margin-right: 5px }
-    .hamb { display: none; background: rgba(17,24,39,.6); color: var(--header-text, #e2e8f0); border: 1px solid var(--header-border, rgba(148,163,184,.25)); padding: 8px 12px; border-radius: 10px; font-weight: 700; flex-shrink: 0 }
-    .themebtn { display: inline-block; background: rgba(17,24,39,.6); color: var(--header-text, #e2e8f0); border: 1px solid var(--header-border, rgba(148,163,184,.25)); padding: 8px 10px; border-radius: 10px; font-weight: 700; cursor: pointer }
+    .hamb { display: none; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 8px 12px; border-radius: 10px; font-weight: 700; flex-shrink: 0 }
+    .themebtn { display: inline-block; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.25); padding: 8px 10px; border-radius: 10px; font-weight: 700; cursor: pointer }
     body[data-theme="light"] .hamb,
-    body[data-theme="light"] .themebtn { background: rgba(226,232,240,.85); color: var(--header-text, var(--text)) }
+    body[data-theme="light"] .themebtn { background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,.25) }
+    @media (max-width: 980px) {
+      .nav { width: 100%; padding: 10px 24px }
+    }
     @media (max-width: 900px) {
-      .nav { padding: 10px 16px }
-      .brand img { width: 140px; max-height: 1.2in }
-      .brand span { font-size: clamp(14px, 2.5vw, 16px) }
+      .brand img, .logo-area img { width: 140px; max-height: 1.2in }
+      .brand span, .logo-area span { font-size: clamp(14px, 2.5vw, 16px) }
     }
     @media (max-width: 720px) {
       .nav { padding: 10px 14px; gap: 10px }
-      .links { position: absolute; right: 14px; top: calc(100% + 6px); z-index: 50; background: var(--header-bg, #0b1220); border: 1px solid var(--header-border, rgba(148,163,184,.12)); border-radius: 10px; padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 160px; max-width: 220px; box-shadow: 0 12px 32px rgba(0,0,0,.35) }
+      .links { position: absolute; right: 14px; top: calc(100% + 6px); z-index: 50; background: #1e3a5f; border: 1px solid rgba(255,255,255,.15); border-radius: 10px; padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 160px; max-width: 220px; box-shadow: 0 12px 32px rgba(0,0,0,.35) }
+      body[data-theme="light"] .links { background: #1e3a5f; border-color: rgba(255,255,255,.15) }
       .links a { margin: 0; padding: 6px 10px; font-size: 13px; border-radius: 6px; line-height: 1.3 }
       .links a:hover { background: rgba(148,163,184,.1) }
       .links.open { display: flex }
       .hamb { display: inline-block }
       .themebtn { display: none }
-      .brand img { width: 100px; max-width: 120px; max-height: 44px; border-radius: 6px }
-      .brand span { font-size: 14px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-      .brand small { display: none }
+      .brand img, .logo-area img { width: 100px; max-width: 120px; max-height: 44px; border-radius: 6px }
+      .brand span, .logo-area span { font-size: 14px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+      .brand small, .logo-area small { display: none }
+      .logo-area { padding: 4px 0 4px 2px; gap: 8px }
     }
     @media (max-width: 400px) {
       .nav { padding: 8px 12px }
-      .brand img { width: 80px; max-height: 36px }
-      .brand span { font-size: 13px; max-width: 100px }
+      .brand img, .logo-area img { width: 80px; max-height: 36px }
+      .brand span, .logo-area span { font-size: 13px; max-width: 100px }
       .hamb { padding: 6px 10px; font-size: 14px }
     }
     .icon { width:18px; height:18px; opacity:.9; vertical-align:-3px; margin-right:6px }
-    /* Main banner: 2300×1300 desktop, responsive below */
-    .hero-banner { position: relative; width: 100%; max-width: 2300px; margin: 0 auto; min-height: var(--banner-h, 1300px); display: grid; place-items: center; text-align: center; overflow: hidden; }
+    /* Main banner: full-width, left-aligned content, blue/teal overlay */
+    .hero-banner { position: relative; width: 100%; max-width: 100%; margin: 0 auto; min-height: var(--banner-h, 560px); display: flex; align-items: center; justify-content: flex-start; text-align: left; overflow: hidden; }
     .hero-banner__slides { position: absolute; inset: 0; z-index: 0; }
-    .hero-banner__slide { position: absolute; inset: 0; background-position: var(--hero-pos, center); background-size: var(--hero-size, cover); background-repeat: no-repeat; opacity: 0; transition: opacity 0.6s ease; filter: brightness(.7); }
+    .hero-banner__slide { position: absolute; inset: 0; background-position: var(--hero-pos, center); background-size: var(--hero-size, cover); background-repeat: no-repeat; opacity: 0; transition: opacity 0.6s ease; filter: brightness(.75); }
     .hero-banner__slide.active { opacity: 1; z-index: 1; }
-    .hero-banner__overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,6,23,.55), rgba(2,6,23,.45)); z-index: 2; pointer-events: none; }
-    .hero-content { position: relative; z-index: 3; padding: 0 20px; width: 90%; max-width: var(--hero-content-w, 820px); min-width: 0; }
+    .hero-banner__overlay { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,23,42,.75) 0%, rgba(30,58,95,.5) 40%, rgba(15,23,42,.35) 100%); z-index: 2; pointer-events: none; }
+    .hero-content { position: relative; z-index: 3; padding: 0 0 0 10%; width: 90%; max-width: var(--hero-content-w, 640px); min-width: 0; }
     .hero-banner__arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,.4); color: #fff; border: 1px solid rgba(255,255,255,.3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; transition: background .2s, color .2s; user-select: none; }
     .hero-banner__arrow:hover { background: rgba(0,0,0,.6); color: #fff; }
     .hero-banner__arrow.prev { left: 12px; }
     .hero-banner__arrow.next { right: 12px; }
     .hero-banner__dots { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); z-index: 4; display: flex; gap: 8px; align-items: center; justify-content: center; }
-    .hero-banner__dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.5); border: 1px solid rgba(255,255,255,.6); cursor: pointer; transition: background .2s, transform .2s; }
-    .hero-banner__dot:hover { background: rgba(255,255,255,.8); }
-    .hero-banner__dot.active { background: #fff; transform: scale(1.2); }
+    .hero-banner__dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.5); cursor: pointer; transition: background .2s, transform .2s; }
+    .hero-banner__dot:hover { background: rgba(255,255,255,.7); }
+    .hero-banner__dot.active { background: #3b82f6; border-color: #60a5fa; transform: scale(1.2); }
     .hero-banner--single .hero-banner__arrow, .hero-banner--single .hero-banner__dots { display: none; }
     /* Banner text colors: use CSS vars set from admin (default #ffffff) */
     .hero-content .eyebrow { color: var(--banner-eyebrow-color, #ffffff); text-shadow: 0 2px 4px rgba(0,0,0,.9), 0 4px 12px rgba(0,0,0,.7), 0 0 40px rgba(0,0,0,.5); }
@@ -89,13 +117,15 @@
     .eyebrow { font-size: clamp(10px, 1.8vw, 14px); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin: 0; line-height: 1.2; }
     .title { margin: 6px 0 0; font-size: clamp(18px, 4.2vw, 36px); line-height: 1.15; font-weight: 800; word-wrap: break-word; hyphens: auto; }
     .subtitle { margin-top: 8px; font-size: clamp(13px, 2vw, 16px); font-weight: 600; line-height: 1.35; }
-    .hero-banner .actions { display: none; }
+    .hero-banner .actions { display: flex; margin-top: 20px; gap: 12px; flex-wrap: wrap; }
+    .hero-banner .btn.primary { background: #374151; border-color: transparent; padding: 12px 24px; font-size: 15px; font-weight: 700; }
+    .hero-banner .btn.primary:hover { background: #4b5563; }
     @media (max-width: 1024px) {
       .hero-banner { min-height: var(--banner-h, 560px); }
     }
     @media (max-width: 720px) {
-      .hero-banner { min-height: var(--banner-h, clamp(180px, 36vh, 320px)); }
-      .hero-content { padding: 0 14px; width: 92%; }
+      .hero-banner { min-height: var(--banner-h, clamp(280px, 50vh, 380px)); }
+      .hero-content { padding: 0 14px; width: 92%; padding-left: 5%; }
       .eyebrow { font-size: 10px; }
       .title { font-size: clamp(16px, 5vw, 24px); margin-top: 6px; }
       .subtitle { font-size: clamp(12px, 3vw, 14px); margin-top: 6px; }
@@ -119,7 +149,7 @@
     }
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
     .btn { padding:10px 16px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); backdrop-filter: blur(4px); color:#fff; text-decoration:none; font-weight:600 }
-    .btn.primary { background: var(--blue); border-color: transparent }
+    .btn.primary { background: var(--accent, var(--blue)); border-color: transparent }
 
     body[data-theme="light"] .eyebrow { color: var(--text); opacity: 1 }
     body[data-theme="light"] .subtitle { color: var(--text); opacity: .85 }
@@ -128,8 +158,8 @@
     body[data-theme="light"] .hero-content .title { color: var(--banner-title-color, #ffffff) }
     body[data-theme="light"] .hero-content .title-line2 { color: var(--banner-title-line2-color, var(--banner-title-color, #ffffff)) }
     body[data-theme="light"] .hero-content .subtitle { color: var(--banner-subtitle-color, #ffffff); opacity: 1 }
-    body[data-theme="light"] .btn { background: rgba(226,232,240,.85); color: var(--text); border-color: rgba(15,23,42,.15) }
-    body[data-theme="light"] .btn.primary { color: #fff; border-color: transparent }
+    body[data-theme="light"] .btn { background: rgba(243,244,246,.9); color: var(--text); border-color: rgba(0,0,0,.1) }
+    body[data-theme="light"] .btn.primary { background: var(--accent); color: #fff; border-color: transparent }
 
     .section { width: 80%; max-width: none; margin: 0 auto; padding: 28px 0 }
     .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 22px }
@@ -138,8 +168,9 @@
     .feature-card .ic img { width: 100%; height: 100%; border-radius: 10px; object-fit: cover; display: block }
     .feature-card h3 { margin: 6px 0 6px; font-size: 18px }
     .feature-card p { margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.5 }
-    body[data-theme="light"] .feature-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .feature-card { background: #ffffff; border-color: rgba(0,0,0,.08); box-shadow: 0 1px 3px rgba(0,0,0,.05) }
     body[data-theme="light"] .feature-card p { color: var(--muted) }
+    body[data-theme="light"] .feature-card .ic { background: rgba(220,38,38,.12); color: #dc2626 }
 
     /* Customer reviews */
     .reviews-section { }
@@ -149,7 +180,7 @@
     .review-card .review-author { font-weight: 700; font-size: 15px; color: var(--text); margin: 0 }
     .review-card .review-role { font-size: 13px; color: var(--muted); margin: 2px 0 0 }
     .review-card .review-stars { margin-bottom: 10px; color: #fbbf24; font-size: 14px; letter-spacing: 2px }
-    body[data-theme="light"] .review-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .review-card { background: #ffffff; border-color: rgba(0,0,0,.08); box-shadow: 0 1px 3px rgba(0,0,0,.05) }
     body[data-theme="light"] .review-card .review-quote { color: var(--text) }
     body[data-theme="light"] .review-card .review-role { color: var(--muted) }
     .reviews-more-wrap { text-align: center; margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px }
@@ -157,8 +188,8 @@
     .reviews-more-btn { padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.55); color: #fff; font-weight: 600; cursor: pointer }
     .reviews-more-btn.reviews-more-btn-hidden { display: none }
     .reviews-more-btn:hover { background: rgba(30,41,59,.8); color: #fff }
-    .reviews-add-btn { display: inline-block; padding: 10px 20px; border-radius: 10px; border: none; background: var(--blue); color: #fff; font-weight: 600; text-decoration: none; font-size: 14px }
-    .reviews-add-btn:hover { filter: brightness(1.1); color: #fff }
+    .reviews-add-btn { display: inline-block; padding: 10px 20px; border-radius: 10px; border: none; background: var(--accent, var(--blue)); color: #fff; font-weight: 600; text-decoration: none; font-size: 14px }
+    .reviews-add-btn:hover { filter: brightness(1.05); color: #fff }
     @media (max-width: 992px) { .reviews-grid { grid-template-columns: repeat(2, 1fr) } }
     @media (max-width: 768px) {
       .reviews-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px }
@@ -176,11 +207,11 @@
     .review-add label { display: block; margin-bottom: 4px; color: var(--muted); font-size: 13px; font-weight: 600 }
     .review-add input, .review-add select, .review-add textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.6); color: var(--text); font-size: 15px; margin-bottom: 12px; box-sizing: border-box }
     .review-add textarea { min-height: 100px; resize: vertical }
-    .review-add .review-submit { padding: 10px 18px; border-radius: 10px; border: 0; background: var(--blue); color: #fff; font-weight: 600; font-size: 15px; cursor: pointer }
-    .review-add .review-submit:hover { filter: brightness(1.1) }
+    .review-add .review-submit { padding: 10px 18px; border-radius: 10px; border: 0; background: var(--accent, var(--blue)); color: #fff; font-weight: 600; font-size: 15px; cursor: pointer }
+    .review-add .review-submit:hover { filter: brightness(1.05) }
     .review-add .review-success { background: rgba(16,185,129,.15); color: #a7f3d0; border: 1px solid rgba(16,185,129,.35); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; font-size: 14px }
     .review-add .review-errors { background: rgba(239,68,68,.15); color: #fecaca; border: 1px solid rgba(239,68,68,.35); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; font-size: 14px }
-    body[data-theme="light"] .review-add { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .review-add { background: #ffffff; border-color: rgba(0,0,0,.08) }
 
     .track-section { padding: 28px 0; scroll-margin-top: 80px }
     .track-section-row { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap }
@@ -197,8 +228,8 @@
     .track-select { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(148,163,184,.25); background: rgba(15,23,42,.6); color: var(--text); font-size: 16px }
     .track-buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px }
     .track-submit-wrap { margin-top: 12px }
-    .track-submit { padding: 12px 20px; border-radius: 10px; border: 1px solid rgba(148,163,184,.25); background: var(--blue); color: #fff; font-weight: 600; font-size: 16px; cursor: pointer }
-    .track-submit:hover { filter: brightness(1.1) }
+    .track-submit { padding: 12px 20px; border-radius: 10px; border: 1px solid transparent; background: var(--accent, var(--blue)); color: #fff; font-weight: 600; font-size: 16px; cursor: pointer }
+    .track-submit:hover { filter: brightness(1.05) }
     .track-provider { margin: 0 }
     .track-empty { color: var(--muted); font-size: 14px }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0 }
@@ -210,7 +241,7 @@
     .activity-card h3 { margin: 0 0 6px; font-size: 18px }
     .activity-card .meta { color: #94a3b8; font-size: 12px; margin-bottom: 10px }
     .activity-card p { margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.5 }
-    body[data-theme="light"] .activity-card { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
+    body[data-theme="light"] .activity-card { background: #ffffff; border-color: rgba(0,0,0,.08); box-shadow: 0 1px 3px rgba(0,0,0,.05) }
     body[data-theme="light"] .activity-card .meta,
     body[data-theme="light"] .activity-card p { color: var(--muted) }
     .clamp2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
@@ -333,7 +364,7 @@
     /* Help + Quote section */
     .helpwrap { width: 80%; max-width: none; margin: 18px auto; padding: 0 }
     @media (max-width: 980px) { .section, .footer, .why .wrap, .quote-wrap, .gallery, .helpwrap { width: 100%; padding-left: 24px; padding-right: 24px } .why { padding-left: 24px; padding-right: 24px } }
-    @media (max-width: 640px) { .section { padding-left: 16px; padding-right: 16px; padding-top: 20px; padding-bottom: 20px } }
+    @media (max-width: 640px) { .section { padding-left: 10px; padding-right: 10px; padding-top: 20px; padding-bottom: 20px } .nav { padding: 10px 16px } }
     .helpgrid { display:grid; grid-template-columns: 1fr 1fr; gap:0; border:1px solid rgba(148,163,184,.12); border-radius:16px; overflow:hidden }
     .help { background:#0f172a; padding:22px }
     .help h3 { margin:0 0 6px; font-size:22px }
@@ -447,19 +478,48 @@
     $bannerRotateIntervalSec = (int)(optional(\App\Models\Setting::where('key','banner_rotate_interval_sec')->first())->value ?? 5);
     if ($bannerRotateIntervalSec < 2) $bannerRotateIntervalSec = 2;
     if ($bannerRotateIntervalSec > 30) $bannerRotateIntervalSec = 30;
+    $headerContactEmail = optional(\App\Models\Setting::where('key','contact_email')->first())->value;
+    $headerContactPhone = optional(\App\Models\Setting::where('key','contact_phone')->first())->value;
+    $headerSocial = collect();
+    if (\Illuminate\Support\Facades\Schema::hasTable('social_links')) {
+      $headerSocial = \App\Models\SocialLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    }
   @endphp
 
-  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgTaglineSize) ? '--tagline-size: '.(int)$cfgTaglineSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
+  {{-- Two-tier header: top bar (contact + social) + main nav (logo, menu, CTA) --}}
+  <div class="header-top">
+    <div class="header-top-inner">
+      <div class="header-top-left">
+        @if(!empty($headerContactEmail))
+          <a href="mailto:{{ e($headerContactEmail) }}" class="header-top-link">{{ $headerContactEmail }}</a>
+        @endif
+        @if(!empty($headerContactPhone))
+          @if(!empty($headerContactEmail))<span class="header-top-sep">|</span>@endif
+          <a href="tel:{{ preg_replace('/\D/', '', $headerContactPhone) }}" class="header-top-link">{{ $headerContactPhone }}</a>
+        @endif
+        @if(empty($headerContactEmail) && empty($headerContactPhone))
+          <span class="header-top-link">Contact us</span>
+        @endif
+      </div>
+      <div class="header-top-right">
+        @foreach($headerSocial as $s)
+          <a href="{{ $s->url }}" target="_blank" rel="noopener" title="{{ $s->label ?? '' }}" class="header-top-social" aria-label="{{ $s->label ?? 'Social' }}">{{ $s->icon ?? '🔗' }}</a>
+        @endforeach
+      </div>
+    </div>
+  </div>
+
+  <header class="topbar" role="banner" aria-label="Site header" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgTaglineSize) ? '--tagline-size: '.(int)$cfgTaglineSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
     <div class="nav">
-      <div class="brand">
+      <a href="{{ url('/') }}" class="brand logo-area" role="img" aria-label="{{ e($cfgName ?? 'Parcel Transport') }} — {{ e($cfgTag ?? 'Safe Transportation & Logistics') }}">
         @if($logoSrc)
-          <img src="{{ $logoSrc }}" alt="Logo">
+          <img src="{{ $logoSrc }}" alt="">
         @else
           <span>📦</span>
         @endif
         <span>{{ $cfgName ?? 'Parcel Transport' }}</span>
         <small>{{ $cfgTag ?? 'Safe Transportation & Logistics' }}</small>
-      </div>
+      </a>
       <div style="display:flex; align-items:center; gap:10px">
         <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme">Theme</button>
         <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
@@ -490,6 +550,7 @@
           <a href="{{ url('/') }}" class="js-home-link">Home</a>
           <a href="{{ route('track') }}">Track</a>
         @endif
+        <a href="#quote" class="link-cta">Get A Quote</a>
         <a href="{{ route('login') }}">Login</a>
       </div>
     </div>
@@ -520,9 +581,12 @@
     </div>
     <div class="hero-banner__overlay"></div>
     <div class="hero-content">
-      <div class="eyebrow">{{ optional($banner)->eyebrow ?? 'Safe Transportation & Logistics' }}</div>
-      <h1 class="title">{{ optional($banner)->title_line1 ?? 'Adaptable coordinated factors' }}<br><span class="title-line2">{{ optional($banner)->title_line2 ?? 'Quick Conveyance' }}</span></h1>
-      <p class="subtitle">{{ optional($banner)->subtitle ?? 'Reliable logistics solutions for every shipment. From pick-up to delivery, track and manage your parcels with ease.' }}</p>
+      <div class="eyebrow">{{ optional($banner)->eyebrow ?? 'Professional Services' }}</div>
+      <h1 class="title">{{ optional($banner)->title_line1 ?? 'Ship Global Or Deliver Local' }}<br><span class="title-line2">{{ optional($banner)->title_line2 ?? 'Ship Smarter' }}</span></h1>
+      <p class="subtitle">{{ optional($banner)->subtitle ?? 'With a passion for providing more than just transportation, we strive to be your travel partner, offering convenience, reliability, and a touch of excellence with every price.' }}</p>
+      <div class="actions">
+        <a href="#quote" class="btn primary">Get A Quote</a>
+      </div>
     </div>
     @if(!$isSingleSlide)
       <button type="button" class="hero-banner__arrow prev" aria-label="Previous slide">‹</button>
@@ -1057,16 +1121,16 @@
       if (dealerInput) { dealerInput.addEventListener('input', clearResult); dealerInput.addEventListener('change', clearResult); }
     })();
 
-    // Public site theme (dark/light)
-    const siteDefaultTheme = '{{ in_array(($cfgSiteTheme ?? 'dark'), ['dark','light']) ? ($cfgSiteTheme ?? 'dark') : 'dark' }}';
-    const savedSiteTheme = localStorage.getItem('site_theme') || siteDefaultTheme || 'dark';
+    // Public site theme (dark/light) – default light to match reference design
+    const siteDefaultTheme = '{{ in_array(($cfgSiteTheme ?? 'light'), ['dark','light']) ? ($cfgSiteTheme ?? 'light') : 'light' }}';
+    const savedSiteTheme = localStorage.getItem('site_theme') || siteDefaultTheme || 'light';
     document.body.setAttribute('data-theme', savedSiteTheme);
     const themeBtn = document.getElementById('theme-toggle');
     if (themeBtn){
       const setLabel = () => { themeBtn.textContent = (document.body.getAttribute('data-theme') === 'light') ? 'Light' : 'Dark'; };
       setLabel();
       themeBtn.addEventListener('click', () => {
-        const cur = document.body.getAttribute('data-theme') || 'dark';
+        const cur = document.body.getAttribute('data-theme') || 'light';
         const next = cur === 'dark' ? 'light' : 'dark';
         document.body.setAttribute('data-theme', next);
         localStorage.setItem('site_theme', next);
