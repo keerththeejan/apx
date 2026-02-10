@@ -106,7 +106,7 @@
           <a href="{{ route('admin.features.index') }}">Features</a>
           <a href="{{ route('admin.customerreviews.index') }}">Customer Reviews</a>
           <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
-          <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
+          <a href="{{ route('admin.banner.index') }}">Banners</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
           <a href="{{ route('admin.navlinks.index') }}">Nav Links</a>
           <a href="{{ route('admin.footerlinks.index') }}">Footer Links</a>
@@ -125,7 +125,7 @@
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.customerreviews.index') }}">Customer Reviews</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.index') }}">Manage Activities</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.activities.create') }}">Add Activity</a>
-          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.banner.edit') }}">Edit Home Banner</a>
+          <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.banner.index') }}">Banners</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.index') }}">Manage Services</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.services.create') }}">Add Service</a>
           <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)" href="{{ route('admin.navlinks.index') }}">Manage Nav Links</a>

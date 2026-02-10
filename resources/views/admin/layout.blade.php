@@ -111,7 +111,7 @@
           <a href="{{ route('admin.features.index') }}">Features</a>
           <a href="{{ route('admin.trackinglinks.index') }}">Parcel Tracking Links</a>
           <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
-          <a href="{{ route('admin.banner.edit') }}">Home Banner</a>
+          <a href="{{ route('admin.banner.index') }}">Banners</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
           <a href="{{ route('admin.quotationrates.index') }}">Quotation Rates</a>
           <a href="{{ route('admin.dealers.index') }}">Dealers (codes for dealer price)</a>

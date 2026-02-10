@@ -55,7 +55,7 @@ Route::get('/', function () {
         return redirect('/admin');
     }
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::first();
+    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
     $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
@@ -79,7 +79,7 @@ Route::get('/home', function () {
         return redirect('/admin');
     }
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::first();
+    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
     $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
@@ -100,7 +100,7 @@ Route::get('/home', function () {
 // Public home preview that never redirects admins
 Route::get('/site', function () {
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::first();
+    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
     $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
@@ -164,8 +164,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('activities', DailyActivityController::class)->names('admin.activities');
     Route::patch('activities/{activity}/toggle-visibility', [DailyActivityController::class, 'toggleVisibility'])->name('admin.activities.toggle');
     Route::patch('activities/{activity}/sort-order', [DailyActivityController::class, 'updateSortOrder'])->name('admin.activities.sort');
-    Route::get('banner', [HomeBannerController::class, 'edit'])->name('admin.banner.edit');
-    Route::post('banner', [HomeBannerController::class, 'update'])->name('admin.banner.update');
+    Route::get('banner', [HomeBannerController::class, 'index'])->name('admin.banner.index');
+    Route::get('banner/create', [HomeBannerController::class, 'create'])->name('admin.banner.create');
+    Route::post('banner', [HomeBannerController::class, 'store'])->name('admin.banner.store');
+    Route::get('banner/{banner}/edit', [HomeBannerController::class, 'edit'])->name('admin.banner.edit');
+    Route::match(['put', 'patch'], 'banner/{banner}', [HomeBannerController::class, 'update'])->name('admin.banner.update');
+    Route::delete('banner/{banner}', [HomeBannerController::class, 'destroy'])->name('admin.banner.destroy');
+    Route::post('banner/order', [HomeBannerController::class, 'updateOrder'])->name('admin.banner.order');
     Route::resource('services', ServiceController::class)->names('admin.services');
     Route::post('services/upload', [ServiceUploadController::class, 'store'])->name('admin.services.upload');
     Route::patch('services/{service}/toggle-visibility', [ServiceVisibilityController::class, 'toggle'])->name('admin.services.toggle');

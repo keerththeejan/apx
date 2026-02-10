@@ -16,7 +16,7 @@ class ActivityController extends Controller
             ->orderByDesc('id')
             ->paginate(12);
 
-        $banner = HomeBanner::first();
+        $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
 
         return view('activities.index', compact('activities','banner'));
     }
