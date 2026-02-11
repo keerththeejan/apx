@@ -50,6 +50,14 @@ use App\Models\CustomerReview;
 |
 */
 
+Route::get('/locale/{locale}', function ($locale) {
+    $allowed = ['en', 'ta', 'si'];
+    if (in_array($locale, $allowed, true)) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('locale.switch');
+
 Route::get('/', function () {
     if (Auth::check() && Auth::user()->is_admin) {
         return redirect('/admin');

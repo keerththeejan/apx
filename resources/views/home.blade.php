@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,15 +33,15 @@
     .nav { position: relative; width: 100%; max-width: none; margin: 0; padding: 12px 4in 12px 3in; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0; }
     .header-left { display: flex; align-items: center; gap: 14px; flex-shrink: 0; min-width: 0; }
     .brand { display: flex; align-items: center; justify-content: flex-start; gap: 12px; font-weight: 800; text-align: left; min-width: 0; flex: 0 0 auto; margin: 0; }
-    .header-tracking { flex: 0 0 auto; min-width: 0; max-width: 220px; display: flex; align-items: center; }
-    .header-track-form { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; }
-    .header-track-input { flex: 1; min-width: 0; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.15); color: var(--header-text, #fff); font-size: 13px; }
+    .header-tracking { flex: 0 0 auto; min-width: 0; max-width: 320px; display: flex; align-items: center; }
+    .header-track-form { display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; }
+    .header-track-input { flex: 1; min-width: 180px; padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.15); color: var(--header-text, #fff); font-size: 20px; box-sizing: border-box; }
     .header-track-input::placeholder { color: rgba(255,255,255,.7); }
-    .header-track-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.4); background: rgba(0,0,0,.25); color: var(--header-text, #fff); font-weight: 600; font-size: 13px; cursor: pointer; }
+    .header-track-btn { flex-shrink: 0; padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,.4); background: rgba(0,0,0,.25); color: var(--header-text, #fff); font-weight: 600; font-size: 20px; cursor: pointer; }
     .header-track-btn:hover { background: rgba(0,0,0,.4); }
     .header-right { display: flex; align-items: center; gap: 16px; margin-left: auto; flex-shrink: 0; min-width: 0; }
     .header-contact { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .header-contact-link { color: var(--header-link, #ffffff); text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap; }
+    .header-contact-link { color: var(--header-link, #ffffff); text-decoration: none; font-size: 20px; font-weight: 500; white-space: nowrap; }
     .header-contact-link:hover { color: var(--header-text, #ffffff); opacity: 0.95; }
     .header-tagline { color: var(--header-tagline, rgba(255,255,255,.9)); font-weight: 600; font-size: var(--menu-size, var(--tagline-size, 14px)); letter-spacing: 0.03em; white-space: nowrap; }
     .header-menu { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
@@ -56,6 +56,15 @@
     .hamb { display: none; background: rgba(17,24,39,.75); color: #fff; border: none; padding: 8px 14px; border-radius: 999px; font-weight: 700; flex-shrink: 0; }
     .themebtn { display: inline-block; background: rgba(30,30,30,.9); color: #ffffff; border: none; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: var(--menu-size, 14px); cursor: pointer; }
     .themebtn:hover { background: rgba(0,0,0,.95); color: #fff; }
+    .lang-switcher { display: flex; align-items: center; gap: 6px; flex-shrink: 0; font-size: 14px; font-weight: 600; }
+    .lang-switcher .lang-link { color: var(--header-link, #ffffff); text-decoration: none; opacity: 0.85; }
+    .lang-switcher .lang-link:hover { opacity: 1; color: var(--header-text, #fff); }
+    .lang-switcher .lang-link.active { opacity: 1; text-decoration: underline; }
+    .lang-switcher .lang-sep { color: rgba(255,255,255,.6); user-select: none; }
+    .lang-switcher-mobile { display: none; align-items: center; gap: 8px; padding: 10px 12px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,.2); font-size: 13px; }
+    .lang-switcher-mobile .lang-link { color: var(--header-link, #ffffff); text-decoration: none; opacity: 0.9; }
+    .lang-switcher-mobile .lang-link.active { text-decoration: underline; opacity: 1; }
+    .lang-switcher-mobile .lang-sep { color: rgba(255,255,255,.5); }
     body[data-theme="light"] .hamb { background: rgba(30,30,30,.9); color: #fff; }
     body[data-theme="light"] .themebtn { background: rgba(30,30,30,.9); color: #fff; }
     @media (max-width: 900px) {
@@ -63,14 +72,17 @@
       .nav { padding: 10px 2in 10px 1.5in }
       .brand img { width: 140px; max-height: 1.2in }
       .brand span { font-size: clamp(14px, 2.5vw, 16px) }
-      .header-tracking { max-width: 200px }
-      .header-contact-link { font-size: 12px }
+      .header-tracking { max-width: 280px }
+      .header-track-input { min-width: 160px }
+      .header-contact-link { font-size: 18px }
     }
     @media (max-width: 720px) {
       body { --content-gutter: 14px }
       .nav { padding: 10px 16px 10px 16px; gap: 0; flex-wrap: nowrap; justify-content: space-between; align-items: center; }
       .header-left { flex: 1 1 auto; min-width: 0; width: 100%; max-width: 100%; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap; }
       .header-right { display: none; }
+      .lang-switcher { font-size: 13px; }
+      .lang-switcher-mobile { display: flex; }
       .header-tracking { display: none }
       .header-contact { display: none }
       .brand { flex: 0 1 auto; min-width: 0; max-width: calc(100% - 56px); }
@@ -505,8 +517,8 @@
           <span class="header-tagline">{{ $cfgTag }}</span>
         @endif
         <div class="header-menu">
-          <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme"><span class="themebtn-label">Dark</span></button>
-          <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
+          <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme"><span class="themebtn-label">{{ __('site.dark') }}</span></button>
+          <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">{{ __('site.menu') }}</button>
           <div id="primary-links" class="links">
           @php $homePath = trim((string) parse_url(url('/'), PHP_URL_PATH), '/'); @endphp
           @if(isset($navLinks) && $navLinks->count())
@@ -531,18 +543,25 @@
               </a>
             @endforeach
           @else
-            <a href="{{ route('track') }}">Track</a>
+            <a href="{{ route('track') }}">{{ __('site.track') }}</a>
           @endif
-          <a href="{{ route('login') }}">Login</a>
+          <a href="{{ route('login') }}">{{ __('site.login') }}</a>
+            <div class="lang-switcher-mobile" aria-label="{{ __('site.language') }}">
+              <a href="{{ route('locale.switch', ['locale' => 'en']) }}" class="lang-link {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+              <span class="lang-sep">|</span>
+              <a href="{{ route('locale.switch', ['locale' => 'ta']) }}" class="lang-link {{ app()->getLocale() === 'ta' ? 'active' : '' }}">தமிழ்</a>
+              <span class="lang-sep">|</span>
+              <a href="{{ route('locale.switch', ['locale' => 'si']) }}" class="lang-link {{ app()->getLocale() === 'si' ? 'active' : '' }}">සිංහල</a>
+            </div>
           </div>
         </div>
       </div>
       <div class="header-right">
         <div class="header-tracking">
-          <form class="header-track-form" action="{{ route('track') }}" method="get" role="search" aria-label="Track parcel">
-            <label for="header-track-input" class="sr-only">Tracking number</label>
-            <input type="text" id="header-track-input" name="track" class="header-track-input" placeholder="Track parcel" autocomplete="off" maxlength="80">
-            <button type="submit" class="header-track-btn">Track</button>
+          <form class="header-track-form" action="{{ route('track') }}" method="get" role="search" aria-label="{{ __('site.track_parcel') }}">
+            <label for="header-track-input" class="sr-only">{{ __('site.tracking_number') }}</label>
+            <input type="text" id="header-track-input" name="track" class="header-track-input" placeholder="{{ __('site.track_parcel') }}" autocomplete="off" maxlength="80">
+            <button type="submit" class="header-track-btn">{{ __('site.track') }}</button>
           </form>
         </div>
         <div class="header-contact">
@@ -552,6 +571,14 @@
           @if(!empty($headerContactEmail))
             <a href="mailto:{{ $headerContactEmail }}" class="header-contact-link" title="Email us">✉️ {{ $headerContactEmail }}</a>
           @endif
+        </div>
+        <div class="lang-switcher" aria-label="{{ __('site.language') }}">
+          <a href="{{ route('locale.switch', ['locale' => 'en']) }}" class="lang-link {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
+          <span class="lang-sep">|</span>
+          <a href="{{ route('locale.switch', ['locale' => 'ta']) }}" class="lang-link {{ app()->getLocale() === 'ta' ? 'active' : '' }}">தமிழ்</a>
+          <span class="lang-sep">|</span>
+          <a href="{{ route('locale.switch', ['locale' => 'si']) }}" class="lang-link {{ app()->getLocale() === 'si' ? 'active' : '' }}">සිංහල</a>
+        </div>
         </div>
       </div>
     </div>
@@ -792,13 +819,13 @@
       </div>
     </section>
 
-    <section id="track" class="section track-section" aria-label="Track your parcel">
-      <h2 style="margin:0">Track your parcel</h2>
-      <p style="color:var(--muted); margin:8px 0 14px">Enter your tracking number, select a parcel company, then click Track to open their tracking page.</p>
+    <section id="track" class="section track-section" aria-label="{{ __('site.track_your_parcel') }}">
+      <h2 style="margin:0">{{ __('site.track_your_parcel') }}</h2>
+      <p style="color:var(--muted); margin:8px 0 14px">{{ __('site.track_section_help') }}</p>
       <div class="track-wrap">
         @php $trackingLinksList = isset($trackingLinks) ? $trackingLinks : collect(); @endphp
-        <label for="tracking_number" class="sr-only">Tracking number</label>
-        <input type="text" id="tracking_number" class="track-input" placeholder="Tracking number" autocomplete="off">
+        <label for="tracking_number" class="sr-only">{{ __('site.tracking_number') }}</label>
+        <input type="text" id="tracking_number" class="track-input" placeholder="{{ __('site.tracking_number') }}" autocomplete="off">
         <div class="track-select-wrap">
           <label for="track_carrier">Select parcel company</label>
           <select id="track_carrier" class="track-select" aria-label="Select parcel company">
@@ -809,7 +836,7 @@
           </select>
         </div>
         <div class="track-submit-wrap">
-          <button type="button" class="track-submit" id="track-submit-btn" aria-label="Track parcel">Track</button>
+          <button type="button" class="track-submit" id="track-submit-btn" aria-label="{{ __('site.track_parcel') }}">{{ __('site.track') }}</button>
         </div>
         <div class="track-buttons">
           @if($trackingLinksList->count())

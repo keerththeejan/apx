@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'menu' => 'Menu',
+    'track' => 'Track',
+    'login' => 'Login',
+    'track_parcel' => 'Track parcel',
+    'dark' => 'Dark',
+    'light' => 'Light',
+    'contact_us' => 'Contact Us',
+    'services' => 'Services',
+    'quick_links' => 'Quick Links',
+    'all_rights_reserved' => 'All rights reserved.',
+    'see_how_we_work' => 'See how we work',
+    'lets_collaborate' => "Let's Collaborate",
+    'get_quote' => 'Get Quote',
+    'send_message' => 'Send Message',
+    'your_name' => 'Your Name',
+    'your_email' => 'Your Email',
+    'your_message' => 'Your Message',
+    'language' => 'Language',
+    'english' => 'English',
+    'tamil' => 'Tamil',
+    'sinhala' => 'Sinhala',
+    'track_your_parcel' => 'Track your parcel',
+    'track_section_help' => 'Enter your tracking number, select a parcel company, then click Track to open their tracking page.',
+    'tracking_number' => 'Tracking number',
+];

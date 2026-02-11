@@ -1,6 +1,6 @@
 <footer class="footer">
   @php
-    $aboutText = $cfgFooter ?? 'All rights reserved.'; // legacy footer text
+    $aboutText = $cfgFooter ?? __('site.all_rights_reserved'); // legacy footer text
     $contactEmail = optional(\App\Models\Setting::where('key','contact_email')->first())->value;
     $contactPhone = optional(\App\Models\Setting::where('key','contact_phone')->first())->value;
     $contactAddr  = optional(\App\Models\Setting::where('key','address')->first())->value;
@@ -66,7 +66,7 @@
         </div>
 
         <div class="footer-col">
-          <h4 style="color: {{ $footerTextEffective }}">Services</h4>
+          <h4 style="color: {{ $footerTextEffective }}">{{ __('site.services') }}</h4>
           <ul style="color: {{ $footerTextEffective }}">
             @if(isset($services) && $services->count())
               @foreach($services as $svc)
@@ -80,7 +80,7 @@
         </div>
 
         <div class="footer-col">
-          <h4 style="color: {{ $footerTextEffective }}">Quick Links</h4>
+          <h4 style="color: {{ $footerTextEffective }}">{{ __('site.quick_links') }}</h4>
           <ul style="color: {{ $footerTextEffective }}">
             @forelse($footerLinks as $fl)
               <li><a href="{{ $fl->url }}" style="color: {{ $footerLinkEffective }}">{{ $fl->label }}</a></li>
@@ -92,7 +92,7 @@
         </div>
 
         <div class="footer-col">
-          <h4 style="color: {{ $footerTextEffective }}">Contact Us</h4>
+          <h4 style="color: {{ $footerTextEffective }}">{{ __('site.contact_us') }}</h4>
           <ul style="color: {{ $footerTextEffective }}">
             @if($contactAddr)<li>📍 {{ $contactAddr }}</li>@endif
             @if($contactPhone)<li>📞 {{ $contactPhone }}</li>@endif
