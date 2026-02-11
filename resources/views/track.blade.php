@@ -55,7 +55,7 @@
       <div class="track-wrap">
         @php $trackingLinksList = isset($trackingLinks) ? $trackingLinks : collect(); @endphp
         <label for="tracking_number" class="sr-only">Tracking number</label>
-        <input type="text" id="tracking_number" class="track-input" placeholder="Tracking number" autocomplete="off">
+        <input type="text" id="tracking_number" class="track-input" name="track" placeholder="Tracking number" autocomplete="off" value="{{ e(request('track', '')) }}">
         <div class="track-select-wrap">
           <label for="track_carrier">Select parcel company</label>
           <select id="track_carrier" class="track-select" aria-label="Select parcel company">

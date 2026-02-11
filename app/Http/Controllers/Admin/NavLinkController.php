@@ -59,4 +59,30 @@ class NavLinkController extends Controller
         $nav_link->delete();
         return redirect()->route('admin.navlinks.index')->with('status','Link deleted');
     }
+
+    public function moveUp(NavLink $nav_link)
+    {
+        $links = NavLink::orderBy('sort_order')->orderBy('id')->get();
+        $pos = $links->search(fn ($l) => (int) $l->id === (int) $nav_link->id);
+        if ($pos > 0) {
+            $prev = $links[$pos - 1];
+            $tmp = $nav_link->sort_order;
+            $nav_link->update(['sort_order' => $prev->sort_order]);
+            $prev->update(['sort_order' => $tmp]);
+        }
+        return redirect()->route('admin.navlinks.index')->with('status', 'Order updated');
+    }
+
+    public function moveDown(NavLink $nav_link)
+    {
+        $links = NavLink::orderBy('sort_order')->orderBy('id')->get();
+        $pos = $links->search(fn ($l) => (int) $l->id === (int) $nav_link->id);
+        if ($pos >= 0 && $pos < $links->count() - 1) {
+            $next = $links[$pos + 1];
+            $tmp = $nav_link->sort_order;
+            $nav_link->update(['sort_order' => $next->sort_order]);
+            $next->update(['sort_order' => $tmp]);
+        }
+        return redirect()->route('admin.navlinks.index')->with('status', 'Order updated');
+    }
 }

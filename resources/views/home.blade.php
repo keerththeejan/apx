@@ -27,50 +27,80 @@
     * { box-sizing: border-box }
     html { overflow-x: hidden; height: 100%; zoom: 0.9 }
     body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); overflow-x: hidden; min-width: 0; --content-gutter: 20px }
-    /* Header: logo left, menu right */
-    .topbar { background: var(--header-bg, #d83526); border-bottom: 1px solid var(--header-border, rgba(0,0,0,.08)); position: sticky; top: 0; z-index: 10; padding: 0 var(--content-gutter); }
+    /* Header: logo starts 3" from left, menu right */
+    .topbar { background: var(--header-bg, #d83526); border-bottom: 1px solid var(--header-border, rgba(0,0,0,.08)); position: sticky; top: 0; z-index: 10; padding: 0; }
     .topbar::before { content: ''; display: block; height: 4px; background: var(--header-strip, #fce4dc); }
-    .nav { position: relative; max-width: 1200px; margin: 0 auto; padding: 12px var(--content-gutter); display: flex; align-items: center; justify-content: flex-start; gap: 14px; min-width: 0; }
-    .brand { display: flex; align-items: center; justify-content: flex-start; gap: 12px; font-weight: 800; text-align: left; min-width: 0; flex: 0 0 auto; margin: 0; order: -1; }
-    .header-menu { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0; }
+    .nav { position: relative; width: 100%; max-width: none; margin: 0; padding: 12px 4in 12px 3in; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0; }
+    .header-left { display: flex; align-items: center; gap: 14px; flex-shrink: 0; min-width: 0; }
+    .brand { display: flex; align-items: center; justify-content: flex-start; gap: 12px; font-weight: 800; text-align: left; min-width: 0; flex: 0 0 auto; margin: 0; }
+    .header-tracking { flex: 0 0 auto; min-width: 0; max-width: 220px; display: flex; align-items: center; }
+    .header-track-form { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; }
+    .header-track-input { flex: 1; min-width: 0; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.15); color: var(--header-text, #fff); font-size: 13px; }
+    .header-track-input::placeholder { color: rgba(255,255,255,.7); }
+    .header-track-btn { flex-shrink: 0; padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,.4); background: rgba(0,0,0,.25); color: var(--header-text, #fff); font-weight: 600; font-size: 13px; cursor: pointer; }
+    .header-track-btn:hover { background: rgba(0,0,0,.4); }
+    .header-right { display: flex; align-items: center; gap: 16px; margin-left: auto; flex-shrink: 0; min-width: 0; }
+    .header-contact { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .header-contact-link { color: var(--header-link, #ffffff); text-decoration: none; font-size: 13px; font-weight: 500; white-space: nowrap; }
+    .header-contact-link:hover { color: var(--header-text, #ffffff); opacity: 0.95; }
+    .header-tagline { color: var(--header-tagline, rgba(255,255,255,.9)); font-weight: 600; font-size: var(--menu-size, var(--tagline-size, 14px)); letter-spacing: 0.03em; white-space: nowrap; }
+    .header-menu { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     .brand img { width: 180px; max-width: 4in; height: auto; max-height: 1.5in; border-radius: 8px; object-fit: contain; border: none; display: block; flex-shrink: 0; margin: 0; }
     .brand span { line-height: 1.05; color: var(--header-text, #ffffff); font-size: var(--brand-size, 17px); font-weight: var(--brand-weight, 800); font-style: var(--brand-style, normal); word-break: break-word; letter-spacing: 0.02em; }
     .brand small { color: var(--header-tagline, rgba(255,255,255,.9)); font-weight: 600; display: block; line-height: 1.1; font-size: var(--tagline-size, 14px); letter-spacing: 0.03em; }
-    .header-menu { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .links { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
-    .links a { color: var(--header-link, #ffffff); text-decoration: none; font-weight: 600; font-size: 14px; }
+    .links a { color: var(--header-link, #ffffff); text-decoration: none; font-weight: 600; font-size: var(--menu-size, 14px); }
     .links a:hover { color: var(--header-text, #ffffff); opacity: 0.9; }
     .links a span { font-size: 0.95em; margin-right: 5px; }
     .hamb { display: none; background: rgba(17,24,39,.75); color: #fff; border: none; padding: 8px 14px; border-radius: 999px; font-weight: 700; flex-shrink: 0; }
-    .themebtn { display: inline-block; background: rgba(30,30,30,.9); color: #ffffff; border: none; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14px; cursor: pointer; }
+    .themebtn { display: inline-block; background: rgba(30,30,30,.9); color: #ffffff; border: none; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: var(--menu-size, 14px); cursor: pointer; }
     .themebtn:hover { background: rgba(0,0,0,.95); color: #fff; }
     body[data-theme="light"] .hamb { background: rgba(30,30,30,.9); color: #fff; }
     body[data-theme="light"] .themebtn { background: rgba(30,30,30,.9); color: #fff; }
     @media (max-width: 900px) {
       body { --content-gutter: 16px }
-      .nav { padding: 10px var(--content-gutter) }
+      .nav { padding: 10px 2in 10px 1.5in }
       .brand img { width: 140px; max-height: 1.2in }
       .brand span { font-size: clamp(14px, 2.5vw, 16px) }
+      .header-tracking { max-width: 200px }
+      .header-contact-link { font-size: 12px }
     }
     @media (max-width: 720px) {
       body { --content-gutter: 14px }
-      .nav { padding: 10px var(--content-gutter); gap: 10px }
+      .nav { padding: 10px 16px 10px 16px; gap: 0; flex-wrap: nowrap; justify-content: space-between; align-items: center; }
+      .header-left { flex: 1 1 auto; min-width: 0; width: 100%; max-width: 100%; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap; }
+      .header-right { display: none; }
+      .header-tracking { display: none }
+      .header-contact { display: none }
+      .brand { flex: 0 1 auto; min-width: 0; max-width: calc(100% - 56px); }
+      .brand img { width: auto; max-width: 100px; max-height: 44px; border-radius: 6px; object-fit: contain; }
+      .brand span { font-size: 14px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+      .header-menu { flex: 0 0 auto; }
+      .header-tagline { display: none }
       .links { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; background: var(--header-bg, #0b1220); border: 1px solid var(--header-border, rgba(148,163,184,.12)); border-radius: 10px; padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 160px; max-width: 220px; box-shadow: 0 12px 32px rgba(0,0,0,.35) }
-      .links a { margin: 0; padding: 6px 10px; font-size: 13px; border-radius: 6px; line-height: 1.3 }
+      .links a { margin: 0; padding: 10px 12px; font-size: 13px; border-radius: 6px; line-height: 1.3; min-height: 44px; display: flex; align-items: center; }
       .links a:hover { background: rgba(148,163,184,.1) }
       .links.open { display: flex }
-      .hamb { display: inline-block }
+      .hamb { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 8px 12px; font-size: 13px; }
       .themebtn { display: none }
-      .brand img { width: 100px; max-width: 120px; max-height: 44px; border-radius: 6px }
-      .brand span { font-size: 14px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-      .brand small { display: none }
     }
     @media (max-width: 400px) {
       body { --content-gutter: 12px }
-      .nav { padding: 8px var(--content-gutter) }
-      .brand img { width: 80px; max-height: 36px }
-      .brand span { font-size: 13px; max-width: 100px }
-      .hamb { padding: 6px 10px; font-size: 14px }
+      .nav { padding: 8px 12px 8px 12px; }
+      .brand img { max-width: 80px; max-height: 36px; }
+      .brand span { font-size: 13px; max-width: 90px; }
+      .hamb { min-height: 42px; min-width: 42px; padding: 6px 10px; font-size: 12px; }
+    }
+    /* Mobile only: prevent horizontal scroll, stack content */
+    @media (max-width: 600px) {
+      .section { width: 100%; padding-left: var(--content-gutter); padding-right: var(--content-gutter); box-sizing: border-box; }
+      .features { grid-template-columns: 1fr; gap: 12px; }
+      main { overflow-x: hidden; max-width: 100%; }
+    }
+    @media (max-width: 480px) {
+      .reviews-grid { grid-template-columns: 1fr; }
+      .hero-content { text-align: left; }
     }
     .icon { width:18px; height:18px; opacity:.9; vertical-align:-3px; margin-right:6px }
     /* Main banner: 2300×1300 desktop, responsive below */
@@ -422,6 +452,9 @@
     $cfgBrandWeight = optional(\App\Models\Setting::where('key','header_brand_font_weight')->first())->value;
     $cfgBrandStyle = optional(\App\Models\Setting::where('key','header_brand_font_style')->first())->value;
     $cfgTaglineSize = optional(\App\Models\Setting::where('key','header_tagline_font_size')->first())->value;
+    $cfgMenuFontSize = optional(\App\Models\Setting::where('key','header_menu_font_size')->first())->value;
+    $headerContactEmail = optional(\App\Models\Setting::where('key','contact_email')->first())->value;
+    $headerContactPhone = optional(\App\Models\Setting::where('key','contact_phone')->first())->value;
     $toUrl = function ($p) {
       if (empty($p)) return null;
       $p = trim((string) $p);
@@ -457,47 +490,68 @@
     if ($bannerRotateIntervalSec > 30) $bannerRotateIntervalSec = 30;
   @endphp
 
-  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgTaglineSize) ? '--tagline-size: '.(int)$cfgTaglineSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
+  <header class="topbar" style="{{ !empty($cfgHeaderBg) ? '--header-bg: '.$cfgHeaderBg.';' : '' }}{{ !empty($cfgHeaderBorder) ? '--header-border: '.$cfgHeaderBorder.';' : '' }}{{ !empty($cfgHeaderLink) ? '--header-link: '.$cfgHeaderLink.';' : '' }}{{ !empty($cfgHeaderText) ? '--header-text: '.$cfgHeaderText.';' : '' }}{{ !empty($cfgHeaderTagline) ? '--header-tagline: '.$cfgHeaderTagline.';' : '' }}{{ !empty($cfgBrandSize) ? '--brand-size: '.(int)$cfgBrandSize.'px;' : '' }}{{ !empty($cfgTaglineSize) ? '--tagline-size: '.(int)$cfgTaglineSize.'px;' : '' }}{{ isset($cfgMenuFontSize) && $cfgMenuFontSize !== '' ? '--menu-size: '.(int)$cfgMenuFontSize.'px;' : '' }}{{ !empty($cfgBrandWeight) ? '--brand-weight: '.$cfgBrandWeight.';' : '' }}{{ !empty($cfgBrandStyle) ? '--brand-style: '.$cfgBrandStyle.';' : '' }}">
     <div class="nav">
-      <div class="brand">
-        @if($logoSrc)
-          <img src="{{ $logoSrc }}" alt="Logo">
-        @else
-          <span>📦</span>
+      <div class="header-left">
+        <div class="brand">
+          @if($logoSrc)
+            <img src="{{ $logoSrc }}" alt="Logo">
+          @else
+            <span>📦</span>
+          @endif
+          <span>{{ $cfgName ?? 'Parcel Transport' }}</span>
+        </div>
+        @if(trim((string)($cfgTag ?? '')) !== '')
+          <span class="header-tagline">{{ $cfgTag }}</span>
         @endif
-        <span>{{ $cfgName ?? 'Parcel Transport' }}</span>
-        @if(trim((string)($cfgTag ?? '')) !== '')<small>{{ $cfgTag }}</small>@endif
-      </div>
-      <div class="header-menu">
-        <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme"><span class="themebtn-label">Dark</span></button>
-        <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
-        <div id="primary-links" class="links">
-        @php $homePath = trim((string) parse_url(url('/'), PHP_URL_PATH), '/'); @endphp
-        @if(isset($navLinks) && $navLinks->count())
-          @foreach($navLinks as $nl)
-            @if(strtolower(trim((string)($nl->label ?? ''))) === 'book') @continue @endif
-            @php
-              $linkUrl = $nl->url;
-              if (!empty($linkUrl)) {
-                $linkUrl = trim((string) $linkUrl);
-                if (!\Illuminate\Support\Str::startsWith($linkUrl, ['http://', 'https://', 'mailto:', 'tel:', '#'])) {
-                  $linkUrl = url($linkUrl);
+        <div class="header-menu">
+          <button id="theme-toggle" class="themebtn" type="button" aria-label="Toggle theme"><span class="themebtn-label">Dark</span></button>
+          <button class="hamb" type="button" aria-expanded="false" aria-controls="primary-links">Menu</button>
+          <div id="primary-links" class="links">
+          @php $homePath = trim((string) parse_url(url('/'), PHP_URL_PATH), '/'); @endphp
+          @if(isset($navLinks) && $navLinks->count())
+            @foreach($navLinks as $nl)
+              @if(strtolower(trim((string)($nl->label ?? ''))) === 'book') @continue @endif
+              @php
+                $linkUrl = $nl->url;
+                if (!empty($linkUrl)) {
+                  $linkUrl = trim((string) $linkUrl);
+                  if (!\Illuminate\Support\Str::startsWith($linkUrl, ['http://', 'https://', 'mailto:', 'tel:', '#'])) {
+                    $linkUrl = url($linkUrl);
+                  }
                 }
-              }
-            @endphp
-            @php
-              $path = $linkUrl ? trim((string) parse_url($linkUrl, PHP_URL_PATH), '/') : '';
-              $isHomeUrl = ($path === $homePath || $path === 'home');
-            @endphp
-            @if($isHomeUrl) @continue @endif
-            <a href="{{ $linkUrl }}" @if($nl->target) target="{{ $nl->target }}" rel="noopener" @endif>
-              @if(!empty($nl->icon))<span style="margin-right:6px">{{ $nl->icon }}</span>@endif{{ $nl->label }}
-            </a>
-          @endforeach
-        @else
-          <a href="{{ route('track') }}">Track</a>
-        @endif
-        <a href="{{ route('login') }}">Login</a>
+              @endphp
+              @php
+                $path = $linkUrl ? trim((string) parse_url($linkUrl, PHP_URL_PATH), '/') : '';
+                $isHomeUrl = ($path === $homePath || $path === 'home');
+              @endphp
+              @if($isHomeUrl) @continue @endif
+              <a href="{{ $linkUrl }}" @if($nl->target) target="{{ $nl->target }}" rel="noopener" @endif>
+                @if(!empty($nl->icon))<span style="margin-right:6px">{{ $nl->icon }}</span>@endif{{ $nl->label }}
+              </a>
+            @endforeach
+          @else
+            <a href="{{ route('track') }}">Track</a>
+          @endif
+          <a href="{{ route('login') }}">Login</a>
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-tracking">
+          <form class="header-track-form" action="{{ route('track') }}" method="get" role="search" aria-label="Track parcel">
+            <label for="header-track-input" class="sr-only">Tracking number</label>
+            <input type="text" id="header-track-input" name="track" class="header-track-input" placeholder="Track parcel" autocomplete="off" maxlength="80">
+            <button type="submit" class="header-track-btn">Track</button>
+          </form>
+        </div>
+        <div class="header-contact">
+          @if(!empty($headerContactPhone))
+            <a href="tel:{{ preg_replace('/\s+/', '', $headerContactPhone) }}" class="header-contact-link" title="Call us">📞 {{ $headerContactPhone }}</a>
+          @endif
+          @if(!empty($headerContactEmail))
+            <a href="mailto:{{ $headerContactEmail }}" class="header-contact-link" title="Email us">✉️ {{ $headerContactEmail }}</a>
+          @endif
         </div>
       </div>
     </div>

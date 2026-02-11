@@ -178,6 +178,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('footer', [SettingController::class, 'footer'])->name('admin.settings.footer');
     Route::post('settings', [SettingController::class, 'update'])->name('admin.settings.update');
     Route::resource('tracking-links', TrackingLinkController::class)->names('admin.trackinglinks');
+    Route::post('nav-links/{nav_link}/move-up', [NavLinkController::class, 'moveUp'])->name('admin.navlinks.moveUp');
+    Route::post('nav-links/{nav_link}/move-down', [NavLinkController::class, 'moveDown'])->name('admin.navlinks.moveDown');
     Route::resource('nav-links', NavLinkController::class)->names('admin.navlinks');
     Route::resource('gallery', GalleryItemController::class)->names('admin.gallery');
     Route::resource('help-items', HelpItemController::class)->names('admin.helpitems');

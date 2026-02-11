@@ -199,6 +199,11 @@
               @endforeach
             </select>
           </div>
+          <div>
+            <label for="header_menu_font_size">Menu Font Size (px)</label>
+            <input id="header_menu_font_size" type="number" min="11" max="24" step="1" name="header_menu_font_size" value="{{ old('header_menu_font_size', $settings['header_menu_font_size'] ?? 14) }}">
+            <span class="help">11–24 px. Applies to nav links (Track, Login, etc.) and tagline in header.</span>
+          </div>
         </div>
       </div>
 
