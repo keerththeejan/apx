@@ -125,22 +125,29 @@
 
     <label for="bg_image_file">Background Image Upload</label>
     <input id="bg_image_file" type="file" name="bg_image_file" accept="image/jpeg,image/png,image/webp,image/jpg">
-    <small class="help">JPG, PNG or WEBP. Max 6 MB. If upload fails, try a smaller image or check PHP upload limits.</small>
+    <small class="help">JPG, PNG or WEBP. Max 20 MB. Image is compressed automatically after upload.</small>
 
     <label for="bg_image_urls">Additional background images for auto-rotate (one URL per line)</label>
     <textarea id="bg_image_urls" name="bg_image_urls" rows="4" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg">{{ old('bg_image_urls', ($banner && is_array($banner->bg_image_urls)) ? implode("\n", $banner->bg_image_urls) : '') }}</textarea>
     <small class="help">Add more image URLs to rotate with the main image. Enable "Auto-rotate banner" in Settings.</small>
 
-    @if(!empty(optional($banner)->bg_image_url))
-      <div style="margin-top:10px">
-        <div style="color:#94a3b8; font-weight:700; font-size:12px; margin-bottom:6px">Current Image Preview</div>
-        <img src="{{ asset(
-          \Illuminate\Support\Str::startsWith(ltrim((string) optional($banner)->bg_image_url, '/'), 'uploads/')
-            ? 'public/'.ltrim((string) optional($banner)->bg_image_url, '/')
-            : ltrim((string) optional($banner)->bg_image_url, '/'))
-        }}" alt="Banner" style="width:100%; max-width:720px; height:220px; object-fit:cover; border-radius:12px; border:1px solid rgba(148,163,184,.18)">
+    @php
+      $previewSrc = null;
+      if (!empty(optional($banner)->bg_image_url)) {
+        $u = trim((string) $banner->bg_image_url, '/');
+        if (\Illuminate\Support\Str::startsWith($u, 'http://') || \Illuminate\Support\Str::startsWith($u, 'https://')) {
+          $previewSrc = $u;
+        } else {
+          $previewSrc = asset($u);
+        }
+      }
+    @endphp
+    <div id="banner-preview-wrap" class="banner-preview-wrap" style="margin-top:14px; margin-bottom:20px; {{ $previewSrc ? '' : 'display:none' }}">
+      <div style="color:#94a3b8; font-weight:700; font-size:12px; margin-bottom:8px">Preview (original image fit)</div>
+      <div class="banner-preview-box" style="width:100%; max-width:900px; max-height:420px; min-height:180px; background:var(--card, #0f172a); border-radius:12px; border:1px solid rgba(148,163,184,.25); display:flex; align-items:center; justify-content:center; padding:12px; box-sizing:border-box">
+        <img id="banner-preview-img" src="{{ $previewSrc ?? '' }}" alt="Banner preview" style="max-width:100%; max-height:380px; width:auto; height:auto; object-fit:contain; border-radius:8px">
       </div>
-    @endif
+    </div>
 
     <div class="row">
       <div>
@@ -237,6 +244,24 @@
         var cb = fg.querySelector('.banner-use-cb');
         if (cb) cb.addEventListener('change', function() { toggleFieldGroup(fg); });
       });
+
+      // Live preview: new file selection
+      var fileInput = document.getElementById('bg_image_file');
+      var previewWrap = document.getElementById('banner-preview-wrap');
+      var previewImg = document.getElementById('banner-preview-img');
+      if (fileInput && previewWrap && previewImg) {
+        fileInput.addEventListener('change', function() {
+          var file = this.files && this.files[0];
+          if (file && file.type.indexOf('image/') === 0) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+              previewImg.src = e.target.result;
+              previewWrap.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
     })();
   </script>
 @endsection

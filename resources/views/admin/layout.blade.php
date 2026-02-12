@@ -45,7 +45,9 @@
     .sidebar{min-width:0}
     .navsec{margin-top:10px; padding-top:8px; border-top:1px solid var(--border); color:var(--muted); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase}
     .navsub a{padding-left:24px; font-size:13px}
-    /* Responsive: show all menu without click – horizontal scroll nav below header */
+    .menu-toggle{display:none; background:var(--panel); border:1px solid var(--border); color:var(--text); padding:10px 14px; border-radius:10px; font-weight:700; font-size:14px; cursor:pointer; align-items:center; gap:8px}
+    .menu-toggle:hover{background:var(--accent); color:#fff}
+    /* Responsive: mobile – show nav via toggle, header always visible */
     @media (max-width: 980px){
       .grid{grid-template-columns: 1fr}
       .sidebar{order:1; width:100%; position:static}
@@ -57,16 +59,28 @@
       .content{order:2}
       .row{grid-template-columns: repeat(2, minmax(0, 1fr))}
     }
+    @media (max-width: 768px){
+      .menu-toggle{display:inline-flex; margin-bottom:12px}
+      .sidebar{display:none; margin-bottom:0}
+      .sidebar.mobile-open{display:block; margin-bottom:12px}
+      .sidebar.mobile-open nav{display:block; overflow:visible; padding:12px}
+      .sidebar.mobile-open nav a{display:block; margin-top:2px; padding:10px 12px}
+      .sidebar.mobile-open .navsec{display:block; margin-top:12px; padding-top:8px; border-top:1px solid var(--border)}
+      .sidebar.mobile-open .navsub{display:block; padding:0; margin:0}
+      .sidebar.mobile-open .navsub a{display:block; padding-left:24px; margin-top:2px}
+    }
     @media (max-width: 640px){
-      header{padding:10px 12px}
+      header{padding:10px 12px; gap:8px}
       .wrap{padding:10px}
       .content{padding:12px}
       .row{grid-template-columns: 1fr}
       table{font-size:13px} th,td{padding:8px 10px}
+      .header-nav a{font-size:13px; padding:6px 10px}
     }
     @media (max-width: 480px){
-      .header-nav a{font-size:13px; padding:5px 8px}
-      .sidebar nav a{font-size:12px; padding:6px 10px}
+      .header-nav a{font-size:12px; padding:5px 8px}
+      .sidebar.mobile-open nav a{font-size:13px; padding:8px 10px}
+      .logout{padding:6px 10px; font-size:13px}
     }
   </style>
 </head>
@@ -93,6 +107,7 @@
   </header>
 
   <div class="wrap">
+    <button type="button" class="menu-toggle" id="admin-menu-toggle" aria-expanded="false" aria-controls="sidebar">☰ Menu</button>
     <div class="grid">
       <div id="sidebar" class="card sidebar" role="navigation" aria-label="Admin menu">
         <nav>
@@ -125,6 +140,24 @@
   </div>
 
   <script>
+    (function(){
+      var toggle = document.getElementById('admin-menu-toggle');
+      var sidebar = document.getElementById('sidebar');
+      if (toggle && sidebar) {
+        toggle.addEventListener('click', function() {
+          var open = sidebar.classList.toggle('mobile-open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          toggle.textContent = open ? '✕ Close' : '☰ Menu';
+        });
+        window.addEventListener('resize', function() {
+          if (window.innerWidth > 768) {
+            sidebar.classList.remove('mobile-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = '☰ Menu';
+          }
+        });
+      }
+    })();
     const themeSelect = document.getElementById('theme');
     const serverDefault = (typeof window !== 'undefined' && window.serverDefaultTheme) || '{{ isset($defaultTheme) ? $defaultTheme : '' }}' || (function(){
       try { return ({{ json_encode((string)optional(\App\Models\Setting::query()->where('key','default_theme')->first())->value ?? 'dark') }}); } catch(e){ return 'dark'; }

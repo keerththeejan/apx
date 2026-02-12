@@ -49,7 +49,15 @@
     <small class="help">Paste a full image URL or upload an image below.</small>
     <label for="bg_image_file">Background Image Upload</label>
     <input id="bg_image_file" type="file" name="bg_image_file" accept="image/jpeg,image/png,image/webp,image/jpg">
-    <small class="help">JPG, PNG or WEBP. Max 6 MB.</small>
+    <small class="help">JPG, PNG or WEBP. Max 20 MB. Image is compressed automatically after upload.</small>
+
+    <div id="banner-preview-wrap" class="banner-preview-wrap" style="margin-top:14px; margin-bottom:20px; display:none">
+      <div style="color:#94a3b8; font-weight:700; font-size:12px; margin-bottom:8px">Preview (original image fit)</div>
+      <div class="banner-preview-box" style="width:100%; max-width:900px; max-height:420px; min-height:180px; background:var(--card, #0f172a); border-radius:12px; border:1px solid rgba(148,163,184,.25); display:flex; align-items:center; justify-content:center; padding:12px; box-sizing:border-box">
+        <img id="banner-preview-img" src="" alt="Banner preview" style="max-width:100%; max-height:380px; width:auto; height:auto; object-fit:contain; border-radius:8px">
+      </div>
+    </div>
+
     <label for="bg_image_urls">Additional background images for auto-rotate (one URL per line)</label>
     <textarea id="bg_image_urls" name="bg_image_urls" rows="4" placeholder="https://...">{{ old('bg_image_urls') }}</textarea>
 
@@ -69,6 +77,20 @@
       syncColor('eyebrow_color_picker', 'eyebrow_color'); syncColor('title_color_picker', 'title_color'); syncColor('subtitle_color_picker', 'subtitle_color'); syncColor('title_line2_color_picker', 'title_line2_color');
       function toggleFieldGroup(fg) { var cb = fg.querySelector('.banner-use-cb'); var inner = fg.querySelector('.field-group-inner'); if (!cb || !inner) return; var use = cb.checked; fg.classList.toggle('disabled', !use); inner.querySelectorAll('input, textarea, select').forEach(function(inp) { inp.disabled = !use; }); }
       document.querySelectorAll('.banner-form .field-group').forEach(function(fg) { toggleFieldGroup(fg); var cb = fg.querySelector('.banner-use-cb'); if (cb) cb.addEventListener('change', function() { toggleFieldGroup(fg); }); });
+
+      var fileInput = document.getElementById('bg_image_file');
+      var previewWrap = document.getElementById('banner-preview-wrap');
+      var previewImg = document.getElementById('banner-preview-img');
+      if (fileInput && previewWrap && previewImg) {
+        fileInput.addEventListener('change', function() {
+          var file = this.files && this.files[0];
+          if (file && file.type.indexOf('image/') === 0) {
+            var reader = new FileReader();
+            reader.onload = function(e) { previewImg.src = e.target.result; previewWrap.style.display = 'block'; };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
     })();
   </script>
 @endsection

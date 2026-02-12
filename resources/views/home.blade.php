@@ -25,10 +25,18 @@
     :root { --bg: #0b1220; --card: #0f172a; --muted:#94a3b8; --text:#e2e8f0; --brand:#1e293b; --blue:#3b82f6; }
     body[data-theme="light"] { --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --brand:#e2e8f0; --blue:#2563eb }
     * { box-sizing: border-box }
-    html { overflow-x: hidden; height: 100%; zoom: 0.9 }
-    body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); overflow-x: hidden; min-width: 0; --content-gutter: 20px }
-    /* Header: logo starts 3" from left, menu right */
-    .topbar { background: var(--header-bg, #d83526); border-bottom: 1px solid var(--header-border, rgba(0,0,0,.08)); position: sticky; top: 0; z-index: 10; padding: 0; }
+    html { overflow-x: hidden; height: 100%; }
+    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: var(--bg); color: var(--text); overflow-x: hidden; min-width: 0; --content-gutter: 20px; --header-height: 80px; -webkit-tap-highlight-color: transparent; }
+    img { max-width: 100%; height: auto; }
+    /* Content and scroll start below fixed header - one border (header bottom), then spacer, then banner visible */
+    .content-below-header { display: block; min-height: 100vh; width: 100%; max-width: 100vw; overflow-x: hidden; }
+    .header-spacer { display: block; width: 100%; height: 240px; min-height: 240px; flex-shrink: 0; background: transparent; }
+    @media (max-width: 1024px) { .header-spacer { height: 180px; min-height: 180px; } }
+    @media (max-width: 900px) { .header-spacer { height: 110px; min-height: 110px; } }
+    @media (max-width: 720px) { .header-spacer { height: 72px; min-height: 72px; } }
+    @media (max-width: 400px) { .header-spacer { height: 64px; min-height: 64px; } }
+    /* Header: logo starts 3" from left, menu right; one clear border below, then banner */
+    .topbar { background: var(--header-bg, #d83526); border-bottom: 2px solid var(--header-border, rgba(0,0,0,.15)); position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0; box-sizing: border-box; }
     .topbar::before { content: ''; display: block; height: 4px; background: var(--header-strip, #fce4dc); }
     .nav { position: relative; width: 100%; max-width: none; margin: 0; padding: 12px 4in 12px 3in; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-width: 0; }
     .header-left { display: flex; align-items: center; gap: 14px; flex-shrink: 0; min-width: 0; }
@@ -68,7 +76,7 @@
     body[data-theme="light"] .hamb { background: rgba(30,30,30,.9); color: #fff; }
     body[data-theme="light"] .themebtn { background: rgba(30,30,30,.9); color: #fff; }
     @media (max-width: 900px) {
-      body { --content-gutter: 16px }
+      body { --content-gutter: 16px; --header-height: 68px; }
       .nav { padding: 10px 2in 10px 1.5in }
       .brand img { width: 140px; max-height: 1.2in }
       .brand span { font-size: clamp(14px, 2.5vw, 16px) }
@@ -77,7 +85,7 @@
       .header-contact-link { font-size: 18px }
     }
     @media (max-width: 720px) {
-      body { --content-gutter: 14px }
+      body { --content-gutter: 14px; --header-height: 60px; }
       .nav { padding: 10px 16px 10px 16px; gap: 0; flex-wrap: nowrap; justify-content: space-between; align-items: center; }
       .header-left { flex: 1 1 auto; min-width: 0; width: 100%; max-width: 100%; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: nowrap; }
       .header-right { display: none; }
@@ -88,40 +96,53 @@
       .brand { flex: 0 1 auto; min-width: 0; max-width: calc(100% - 56px); }
       .brand img { width: auto; max-width: 100px; max-height: 44px; border-radius: 6px; object-fit: contain; }
       .brand span { font-size: 14px; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
-      .header-menu { flex: 0 0 auto; }
+      .header-menu { flex: 0 0 auto; position: relative; }
       .header-tagline { display: none }
-      .links { position: absolute; right: 0; top: calc(100% + 6px); z-index: 50; background: var(--header-bg, #0b1220); border: 1px solid var(--header-border, rgba(148,163,184,.12)); border-radius: 10px; padding: 8px; display: none; flex-direction: column; gap: 2px; min-width: 160px; max-width: 220px; box-shadow: 0 12px 32px rgba(0,0,0,.35) }
-      .links a { margin: 0; padding: 10px 12px; font-size: 13px; border-radius: 6px; line-height: 1.3; min-height: 44px; display: flex; align-items: center; }
-      .links a:hover { background: rgba(148,163,184,.1) }
-      .links.open { display: flex }
-      .hamb { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 8px 12px; font-size: 13px; }
+      /* Mobile menu: responsive compact dropdown (right-aligned), not full-screen */
+      .links { position: fixed; right: 12px; left: auto; top: var(--header-mobile-top, 60px); z-index: 99; background: var(--header-bg, #d83526); border: none; border-radius: 12px; padding: 10px 0; display: flex; flex-direction: column; gap: 2px; min-width: 160px; max-width: min(280px, calc(100vw - 24px)); width: auto; box-shadow: 0 10px 28px rgba(0,0,0,.25); visibility: hidden; opacity: 0; transform: translateY(-8px); transition: visibility .2s ease, opacity .2s ease, transform .2s ease; box-sizing: border-box; }
+      .links.open { visibility: visible; opacity: 1; transform: translateY(0); }
+      .links a { margin: 0 8px; padding: 10px 12px; font-size: 14px; border-radius: 8px; line-height: 1.3; min-height: 44px; display: flex; align-items: center; justify-content: flex-start; color: #fff; font-weight: 600; transition: background .2s ease; }
+      .links a:hover { background: rgba(255,255,255,.15) }
+      .links a span { margin-right: 8px; font-size: 1em; opacity: .95; }
+      .lang-switcher-mobile { flex-wrap: wrap; justify-content: center; gap: 4px; padding: 8px 12px 0; margin-top: 6px; margin-left: 8px; margin-right: 8px; border-top: 1px solid rgba(255,255,255,.2); font-size: 13px; }
+      .lang-switcher-mobile .lang-link { color: #fff; padding: 4px 8px; font-weight: 600; }
+      .lang-switcher-mobile .lang-sep { color: rgba(255,255,255,.5); font-size: 12px; }
+      .hamb { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; padding: 8px 12px; font-size: 13px; font-weight: 700; border-radius: 10px; transition: background .2s ease, transform .1s ease; }
+      .hamb:active { transform: scale(0.98); }
       .themebtn { display: none }
     }
     @media (max-width: 400px) {
-      body { --content-gutter: 12px }
+      body { --content-gutter: 12px; --header-height: 56px; }
       .nav { padding: 8px 12px 8px 12px; }
       .brand img { max-width: 80px; max-height: 36px; }
       .brand span { font-size: 13px; max-width: 90px; }
       .hamb { min-height: 42px; min-width: 42px; padding: 6px 10px; font-size: 12px; }
+      .links { right: 8px; min-width: 140px; max-width: calc(100vw - 16px); padding: 8px 0; border-radius: 10px; }
+      .links a { margin: 0 6px; padding: 8px 10px; font-size: 13px; min-height: 42px; }
+      .lang-switcher-mobile { padding: 6px 10px 0; margin: 6px 6px 0; font-size: 12px; }
     }
-    /* Mobile only: prevent horizontal scroll, stack content */
-    @media (max-width: 600px) {
+    /* Mobile: prevent horizontal scroll, full-width sections */
+    @media (max-width: 900px) {
       .section { width: 100%; padding-left: var(--content-gutter); padding-right: var(--content-gutter); box-sizing: border-box; }
+    }
+    @media (max-width: 600px) {
+      .section { padding-top: 20px; padding-bottom: 20px; }
       .features { grid-template-columns: 1fr; gap: 12px; }
       main { overflow-x: hidden; max-width: 100%; }
     }
     @media (max-width: 480px) {
       .reviews-grid { grid-template-columns: 1fr; }
       .hero-content { text-align: left; }
+      .hero-banner { min-height: var(--banner-h, 45vh); }
     }
     .icon { width:18px; height:18px; opacity:.9; vertical-align:-3px; margin-right:6px }
-    /* Main banner: 2300×1300 desktop, responsive below */
-    .hero-banner { position: relative; width: 100%; max-width: 2300px; margin: 0 auto; min-height: var(--banner-h, 1300px); display: grid; place-items: center; text-align: center; overflow: hidden; }
-    .hero-banner__slides { position: absolute; inset: 0; z-index: 0; }
-    .hero-banner__slide { position: absolute; inset: 0; background-position: var(--hero-pos, center); background-size: var(--hero-size, cover); background-repeat: no-repeat; opacity: 0; transition: opacity 0.6s ease; filter: brightness(.7); }
+    /* Trending responsive banner: full width, always below header; content aligned so text never under header */
+    .hero-banner { position: relative; width: 100%; min-height: var(--banner-h, 70vh); margin-top: 0; margin-bottom: 32px; display: grid; grid-template-columns: 1fr; align-items: start; justify-items: center; text-align: center; overflow: hidden; scroll-margin-top: 240px; }
+    .hero-banner__slides { position: absolute; inset: 0; z-index: 0; background: var(--bg, #0b1220); }
+    .hero-banner__slide { position: absolute; inset: 0; background-position: var(--hero-pos, center); background-size: var(--hero-size, contain); background-repeat: no-repeat; background-color: var(--bg, #0b1220); opacity: 0; transition: opacity 0.6s ease; -webkit-background-size: var(--hero-size, contain); }
     .hero-banner__slide.active { opacity: 1; z-index: 1; }
-    .hero-banner__overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,6,23,.55), rgba(2,6,23,.45)); z-index: 2; pointer-events: none; }
-    .hero-content { position: relative; z-index: 3; padding: 0 var(--content-gutter, 20px); width: 90%; max-width: var(--hero-content-w, 820px); min-width: 0; }
+    .hero-banner__overlay { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+    .hero-content { position: relative; z-index: 3; padding: 20px var(--content-gutter, 20px) 20px; padding-top: 20px; width: 90%; max-width: var(--hero-content-w, 820px); min-width: 0; }
     .hero-banner__arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; width: 42px; height: 42px; border-radius: 50%; background: rgba(0,0,0,.4); color: #fff; border: 1px solid rgba(255,255,255,.3); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; transition: background .2s, color .2s; user-select: none; }
     .hero-banner__arrow:hover { background: rgba(0,0,0,.6); color: #fff; }
     .hero-banner__arrow.prev { left: 12px; }
@@ -141,30 +162,33 @@
     .subtitle { margin-top: 8px; font-size: clamp(13px, 2vw, 16px); font-weight: 600; line-height: 1.35; }
     .hero-banner .actions { display: none; }
     @media (max-width: 1024px) {
-      .hero-banner { min-height: var(--banner-h, 560px); }
+      .hero-banner { min-height: var(--banner-h, 60vh); }
     }
+    /* Mobile view only: fixed banner (no responsive scaling) */
     @media (max-width: 720px) {
-      .hero-banner { min-height: var(--banner-h, clamp(180px, 36vh, 320px)); }
-      .hero-content { padding: 0 var(--content-gutter); width: 92%; }
+      .hero-banner { min-height: 280px; scroll-margin-top: 72px; margin-bottom: 24px; }
+      .hero-banner__slide { background-size: cover !important; background-position: center !important; }
+      .hero-content { position: relative; padding: 16px var(--content-gutter); width: 100%; max-width: 100%; margin: 0; box-sizing: border-box; }
+      .track-section { scroll-margin-top: 72px; }
       .eyebrow { font-size: 10px; }
-      .title { font-size: clamp(16px, 5vw, 24px); margin-top: 6px; }
-      .subtitle { font-size: clamp(12px, 3vw, 14px); margin-top: 6px; }
-      .hero-banner__arrow { width: 34px; height: 34px; font-size: 18px; }
+      .title { font-size: 18px; line-height: 1.25; margin-top: 6px; }
+      .subtitle { font-size: 13px; margin-top: 6px; }
+      .hero-banner__arrow { width: 36px; height: 36px; font-size: 18px; min-width: 36px; min-height: 36px; }
       .hero-banner__arrow.prev { left: 8px; }
       .hero-banner__arrow.next { right: 8px; }
-      .hero-banner__dots { bottom: 10px; gap: 6px; }
+      .hero-banner__dots { bottom: 12px; gap: 6px; }
       .hero-banner__dot { width: 6px; height: 6px; }
     }
     @media (max-width: 480px) {
-      .hero-banner { min-height: var(--banner-h, clamp(150px, 32vh, 260px)); }
-      .hero-content { padding: 0 var(--content-gutter); width: 100%; }
+      .hero-banner { min-height: 240px; margin-bottom: 20px; }
+      .hero-content { padding: 12px var(--content-gutter); }
       .eyebrow { font-size: 9px; letter-spacing: .06em; }
-      .title { font-size: clamp(14px, 4.5vw, 20px); line-height: 1.2; margin-top: 4px; }
+      .title { font-size: 16px; line-height: 1.2; margin-top: 4px; }
       .subtitle { font-size: 12px; margin-top: 4px; }
-      .hero-banner__arrow { width: 30px; height: 30px; font-size: 16px; }
+      .hero-banner__arrow { width: 32px; height: 32px; font-size: 16px; min-width: 32px; min-height: 32px; }
       .hero-banner__arrow.prev { left: 6px; }
       .hero-banner__arrow.next { right: 6px; }
-      .hero-banner__dots { bottom: 8px; gap: 5px; }
+      .hero-banner__dots { bottom: 10px; gap: 5px; }
       .hero-banner__dot { width: 5px; height: 5px; }
     }
     .actions { margin-top:22px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
@@ -181,7 +205,7 @@
     body[data-theme="light"] .btn { background: rgba(226,232,240,.85); color: var(--text); border-color: rgba(15,23,42,.15) }
     body[data-theme="light"] .btn.primary { color: #fff; border-color: transparent }
 
-    .section { width: 80%; max-width: none; margin: 0 auto; padding: 28px 0 }
+    .section { width: 80%; max-width: none; margin: 0 auto; padding: 28px 0; min-width: 0; }
     .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; margin-top: 22px }
     .feature-card { background: rgba(15,23,42,.6); border: 1px solid rgba(148,163,184,.12); border-radius: 14px; padding: 18px; text-align: left; min-width: 0 }
     .feature-card .ic { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: rgba(30,64,175,.25); color: #93c5fd; margin-bottom: 10px }
@@ -232,7 +256,7 @@
     .review-add .review-errors { background: rgba(239,68,68,.15); color: #fecaca; border: 1px solid rgba(239,68,68,.35); padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; font-size: 14px }
     body[data-theme="light"] .review-add { background: rgba(255,255,255,.9); border-color: rgba(15,23,42,.12) }
 
-    .track-section { padding: 28px 0; scroll-margin-top: 80px }
+    .track-section { padding: 28px 0; scroll-margin-top: 240px }
     .track-section-row { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap }
     .track-section-left { flex: 1 1 320px; min-width: 0 }
     .track-section-right { flex: 1 1 320px; min-width: 0 }
@@ -438,7 +462,15 @@
       .quotation-downloads { flex-direction: column; align-items: stretch }
       .quotation-downloads .dl-btn { justify-content: center }
     }
+    /* Very small screens: prevent overflow, touch-friendly */
+    @media (max-width: 360px) {
+      body { --content-gutter: 10px; }
+      .section { padding-left: 10px; padding-right: 10px; padding-top: 16px; padding-bottom: 16px; }
+      .hero-content { padding-left: 10px; padding-right: 10px; }
+    }
     @media (max-width: 480px) {
+      .hero-banner { scroll-margin-top: 64px; }
+      .track-section { scroll-margin-top: 64px; }
       .helpwrap { padding-left: 16px; padding-right: 16px }
       .quotation-section { padding: 14px; margin-bottom: 16px }
       .quotation-section h4 { font-size: 17px }
@@ -584,6 +616,8 @@
     </div>
   </header>
 
+  <div id="content-below-header" class="content-below-header">
+  <div class="header-spacer" aria-hidden="true"></div>
   @php
     $heroPos = isset($banner) && $banner && !empty($banner->bg_position) ? $banner->bg_position : 'center';
     $heroSize = isset($banner) && $banner && !empty($banner->bg_size) ? $banner->bg_size : 'cover';
@@ -607,7 +641,6 @@
         <div class="hero-banner__slide {{ $i === 0 ? 'active' : '' }}" data-index="{{ $i }}" style="background-image: url('{{ e($imgUrl) }}');"></div>
       @endforeach
     </div>
-    <div class="hero-banner__overlay"></div>
     <div class="hero-content">
       @if(trim((string)(optional($banner)->eyebrow ?? '')) !== '')
         <div class="eyebrow">{{ $banner->eyebrow }}</div>
@@ -1019,8 +1052,46 @@
 
   @include('partials.footer')
 
+  </div><!-- .content-below-header -->
+
   <script>
     (function(){ var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear(); })();
+
+    // On first load, ensure page is at top so banner is visible below header (before scrolling)
+    (function(){
+      if (window.history && window.history.scrollRestoration) window.history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    })();
+
+    // Sync header-spacer and --header-h to actual header height so banner and text align below header
+    (function(){
+      var topbar = document.querySelector('.topbar');
+      var spacer = document.querySelector('.header-spacer');
+      var heroBanner = document.getElementById('hero-banner');
+      var trackSection = document.querySelector('.track-section');
+      function syncSpacer() {
+        if (!topbar || !spacer) return;
+        var h = topbar.offsetHeight;
+        spacer.style.height = h + 'px';
+        spacer.style.minHeight = h + 'px';
+        document.body.style.setProperty('--header-h', h + 'px');
+        if (window.innerWidth <= 720) document.body.style.setProperty('--header-mobile-top', h + 'px');
+        else document.body.style.removeProperty('--header-mobile-top');
+        if (heroBanner) heroBanner.style.scrollMarginTop = h + 'px';
+        if (trackSection) trackSection.style.scrollMarginTop = h + 'px';
+      }
+      function runSync() {
+        syncSpacer();
+        requestAnimationFrame(syncSpacer);
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runSync);
+        window.addEventListener('load', syncSpacer);
+      } else {
+        runSync();
+      }
+      window.addEventListener('resize', syncSpacer);
+    })();
 
     // Hide quotation result when viewing #track (e.g. after refresh on #track)
     (function() {
@@ -1081,16 +1152,29 @@
         if (img) img.src = src && src.length ? src : 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1600&auto=format&fit=crop';
       }));
     }
-    // Mobile header toggle
+    // Mobile menu toggle (trending overlay)
     const hamb = document.querySelector('.hamb');
     const links = document.getElementById('primary-links');
     if (hamb && links){
-      hamb.addEventListener('click', () => {
+      hamb.addEventListener('click', function(e) {
+        e.stopPropagation();
         const open = links.classList.toggle('open');
         hamb.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.style.overflow = open && window.innerWidth <= 720 ? 'hidden' : '';
       });
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 720) { links.classList.remove('open'); hamb.setAttribute('aria-expanded','false'); }
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 720) {
+          links.classList.remove('open');
+          hamb.setAttribute('aria-expanded','false');
+          document.body.style.overflow = '';
+        }
+      });
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth <= 720 && links.classList.contains('open') && !links.contains(e.target) && !hamb.contains(e.target)) {
+          links.classList.remove('open');
+          hamb.setAttribute('aria-expanded','false');
+          document.body.style.overflow = '';
+        }
       });
     }
 
@@ -1110,7 +1194,7 @@
       });
     })();
 
-    // Banner slider
+    // Banner slider with auto-advance option
     (function(){
       const el = document.getElementById('hero-banner');
       if (!el) return;
@@ -1123,8 +1207,8 @@
 
       let current = 0;
       let autoTimer = null;
-      const autoRotate = el.getAttribute('data-banner-auto-rotate') === '1';
-      const intervalSec = parseInt(el.getAttribute('data-banner-interval') || '5', 10) || 5;
+      const autoRotate = el.getAttribute('data-banner-auto-rotate') !== '0';
+      const intervalSec = Math.max(3, Math.min(30, parseInt(el.getAttribute('data-banner-interval') || '5', 10) || 5));
 
       function goToSlide(idx) {
         current = (idx + total) % total;
@@ -1132,19 +1216,19 @@
         dots.forEach((d, i) => d.classList.toggle('active', i === current));
       }
 
-      function next() { goToSlide(current + 1); resetAuto(); }
-      function prev() { goToSlide(current - 1); resetAuto(); }
+      function advanceSlide() { goToSlide(current + 1); resetAuto(); }
+      function goPrev() { goToSlide(current - 1); resetAuto(); }
 
       function resetAuto() {
         if (autoTimer) clearInterval(autoTimer);
-        if (autoRotate) autoTimer = setInterval(next, intervalSec * 1000);
+        if (autoRotate) autoTimer = setInterval(advanceSlide, intervalSec * 1000);
       }
 
-      if (prevBtn) prevBtn.addEventListener('click', prev);
-      if (nextBtn) nextBtn.addEventListener('click', next);
+      if (prevBtn) prevBtn.addEventListener('click', goPrev);
+      if (nextBtn) nextBtn.addEventListener('click', advanceSlide);
       dots.forEach((dot, i) => dot.addEventListener('click', () => { goToSlide(i); resetAuto(); }));
 
-      if (autoRotate) autoTimer = setInterval(next, intervalSec * 1000);
+      if (autoRotate) autoTimer = setInterval(advanceSlide, intervalSec * 1000);
     })();
 
     (function(){
