@@ -1,5 +1,5 @@
 @php
-  $seoTitle = $seoTitle ?? config('app.name', 'Parcel Transport');
+  $seoTitle = $seoTitle ?? config('app.name', 'apx.lk');
   $seoDescription = $seoDescription ?? null;
   $seoKeywords = $seoKeywords ?? null;
   $seoCanonical = $seoCanonical ?? url()->current();

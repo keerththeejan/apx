@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   @php
-    $seoSiteName = optional(\App\Models\Setting::where('key','site_name')->first())->value ?: 'Parcel Transport';
-    $seoTitle = $seoSiteName . ' – Home';
+    $seoSiteName = optional(\App\Models\Setting::where('key','site_name')->first())->value ?: 'apx.lk';
+    $seoTitle = $seoSiteName;
     $seoDesc = optional(\App\Models\Setting::where('key','meta_description')->first())->value ?? optional(\App\Models\Setting::where('key','tagline')->first())->value ?? 'Reliable parcel and logistics solutions. Track shipments, get quotes, and manage delivery with ease.';
     $seoKw = optional(\App\Models\Setting::where('key','meta_keywords')->first())->value;
     $seoImg = optional(\App\Models\Setting::where('key','og_image')->first())->value;
@@ -543,7 +543,7 @@
           @else
             <span>📦</span>
           @endif
-          <span>{{ $cfgName ?? 'Parcel Transport' }}</span>
+          <span>{{ $cfgName ?? 'apx.lk' }}</span>
         </div>
         @if(trim((string)($cfgTag ?? '')) !== '')
           <span class="header-tagline">{{ $cfgTag }}</span>
