@@ -46,7 +46,7 @@
     @if(!empty($service->image_url))
       <div style="margin-top:6px"><img src="{{ $service->image_url }}" alt="Preview" style="width:220px; height:120px; object-fit:cover; border-radius:10px; border:1px solid rgba(148,163,184,.25)"></div>
     @endif
-    <small class="help">Image shown in the preview on the right of the services section.</small>
+    <small class="help">Image shown in the preview on the right of the services section. For best fit use a <strong>landscape</strong> image (e.g. 1200×600 or 800×400 px); it will be cropped to fit a fixed height (object-fit: cover).</small>
 
     <label for="checklist_text">Checklist items (one per line)</label>
     <textarea id="checklist_text" name="checklist_text">{{ old('checklist_text', $checklist_text) }}</textarea>

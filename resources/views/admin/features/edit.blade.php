@@ -69,7 +69,16 @@
       <label for="icon_image_file">Icon Image (optional)</label>
       <input id="icon_image_file" type="file" name="icon_image_file" accept="image/*">
       @if($feature->icon_image_url)
-        <div style="margin-top:6px"><img src="{{ $feature->icon_image_url }}" alt="Icon" style="width:40px; height:40px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25)"></div>
+        @php
+          $eu = trim((string) $feature->icon_image_url);
+          if (\Illuminate\Support\Str::startsWith($eu, ['http://', 'https://', 'data:'])) {
+            $eIconSrc = $eu;
+          } else {
+            $base = request()->getSchemeAndHttpHost() . request()->getBasePath();
+            $eIconSrc = rtrim($base, '/') . '/' . ltrim($eu, '/');
+          }
+        @endphp
+        <div style="margin-top:6px"><img src="{{ $eIconSrc }}" alt="Icon" style="width:40px; height:40px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25)"></div>
       @endif
       <div style="color:#94a3b8; font-size:12px; margin-top:6px">PNG, JPG, WEBP, or SVG up to 4MB. If provided, this image will be shown instead of the emoji icon.</div>
 

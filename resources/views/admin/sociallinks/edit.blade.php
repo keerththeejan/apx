@@ -1,83 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit Social Link - Admin</title>
-  <style>
-    body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:#0b1220; color:#e2e8f0; margin:0}
-    header{display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#0f172a; border-bottom:1px solid rgba(148,163,184,.12)}
-    .wrap{max-width:800px; margin:0 auto; padding:18px 20px}
-    label{display:block; margin:10px 0 6px; color:#cbd5e1}
-    input, textarea, select{width:100%; padding:10px 12px; border-radius:8px; border:1px solid rgba(148,163,184,.25); background:#0b1a21; color:#e5e7eb}
-    .row{display:grid; grid-template-columns: 1fr 1fr; gap:10px}
-    .btn{display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background:#1e293b; color:#fff; text-decoration:none; font-weight:700}
-    .actions{display:flex; gap:10px; margin-top:12px}
-    .error{background: rgba(239,68,68,.15); color:#fecaca; border:1px solid rgba(239,68,68,.35); padding:10px 12px; border-radius:8px; font-size:14px; margin-bottom:10px}
-  </style>
-</head>
-<body>
-  <header>
-    <div>Edit Social Link</div>
-    <div>
+@extends('admin.layout')
+
+@section('title', 'Edit Social Link - Admin')
+
+@section('content')
+  @if(session('status'))
+    <div class="status">{{ session('status') }}</div>
+  @endif
+  @if($errors->any())
+    <div class="error">{{ $errors->first() }}</div>
+  @endif
+
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+    <div style="display:flex; gap:8px; align-items:center">
       <a class="btn" href="{{ route('admin.sociallinks.index') }}">Back</a>
+      <h2 style="margin:0">Edit Social Link</h2>
     </div>
-  </header>
-
-  <div class="wrap">
-    @if ($errors->any())
-      <div class="error">{{ $errors->first() }}</div>
-    @endif
-
-    <form method="POST" action="{{ route('admin.sociallinks.update', $link) }}">
-      @csrf
-      @method('PUT')
-
-      <label for="label">Label</label>
-      <input id="label" type="text" name="label" value="{{ old('label', $link->label) }}" required>
-
-      <label for="url">URL</label>
-      <input id="url" type="url" name="url" value="{{ old('url', $link->url) }}" placeholder="https://..." required>
-
-      <label for="icon">Icon (emoji or short text)</label>
-      <input id="icon" type="text" name="icon" value="{{ old('icon', $link->icon) }}" placeholder="Pick or type…" list="socialiconlist">
-      <datalist id="socialiconlist">
-        <option value="🌐">Website</option>
-        <option value="📧">Email</option>
-        <option value="📞">Phone</option>
-        <option value="📸">Instagram</option>
-        <option value="👍">Facebook</option>
-        <option value="𝕏">X / Twitter</option>
-        <option value="in">LinkedIn</option>
-        <option value="▶️">YouTube</option>
-        <option value="💬">WhatsApp</option>
-        <option value="✈️">Telegram</option>
-        <option value="🐙">GitHub</option>
-      </datalist>
-
-      <div class="row">
-        <div>
-          <label for="sort_order">Sort Order</label>
-          <input id="sort_order" type="number" name="sort_order" value="{{ old('sort_order', $link->sort_order) }}" min="0">
-        </div>
-        <div>
-          <label for="is_visible">Visible</label>
-          <select id="is_visible" name="is_visible">
-            <option value="1" {{ old('is_visible', $link->is_visible ? '1' : '0') == '1' ? 'selected' : '' }}>Yes</option>
-            <option value="0" {{ old('is_visible', $link->is_visible ? '1' : '0') == '0' ? 'selected' : '' }}>No</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn" type="submit">Update</button>
-        <form method="POST" action="{{ route('admin.sociallinks.destroy', $link) }}" onsubmit="return confirm('Delete this social link?')">
-          @csrf
-          @method('DELETE')
-          <button class="btn" style="background:#ef4444;border-color:#ef4444" type="submit">Delete</button>
-        </form>
-      </div>
-    </form>
   </div>
-</body>
-</html>
+
+  <form method="POST" action="{{ route('admin.sociallinks.update', $link) }}">
+    @csrf
+    @method('PUT')
+
+    <label for="label">Label</label>
+    <input id="label" type="text" name="label" value="{{ old('label', $link->label) }}" class="input" style="padding:10px 12px; border-radius:8px; background:#0b1a21; color:#e5e7eb; border:1px solid rgba(148,163,184,.25)" required maxlength="120">
+
+    <label for="url">URL</label>
+    <input id="url" type="url" name="url" value="{{ old('url', $link->url) }}" class="input" style="padding:10px 12px; border-radius:8px; background:#0b1a21; color:#e5e7eb; border:1px solid rgba(148,163,184,.25)" required>
+
+    <label for="icon">Icon</label>
+    @php
+      $currentIcon = old('icon', $link->icon);
+      $iconInList = $iconOptions && $currentIcon !== '' && $currentIcon !== '_other' && array_key_exists($currentIcon, $iconOptions);
+    @endphp
+    <select id="icon" name="icon" class="input" style="padding:10px 12px; border-radius:8px; background:#0b1a21; color:#e5e7eb; border:1px solid rgba(148,163,184,.25); max-width:280px">
+      @foreach($iconOptions ?? [] as $value => $label)
+        <option value="{{ $value }}" {{ ($iconInList && $currentIcon === (string)$value) || (!$iconInList && $value === '_other') ? 'selected' : '' }}>{{ $label }}</option>
+      @endforeach
+    </select>
+    <div id="icon-custom-wrap" style="margin-top:8px; {{ $iconInList ? 'display:none' : '' }}">
+      <label for="icon_custom">Custom icon <span style="color:var(--muted)">(emoji or text)</span></label>
+      <input id="icon_custom" type="text" name="icon_custom" value="{{ old('icon_custom', $iconInList ? '' : $link->icon) }}" class="input" style="padding:10px 12px; border-radius:8px; background:#0b1a21; color:#e5e7eb; border:1px solid rgba(148,163,184,.25); max-width:120px" maxlength="20" placeholder="🔗">
+    </div>
+    <script>
+      (function(){
+        var sel = document.getElementById('icon');
+        var wrap = document.getElementById('icon-custom-wrap');
+        if (!sel || !wrap) return;
+        function toggle(){ wrap.style.display = (sel.value === '' || sel.value === '_other') ? 'block' : 'none'; }
+        sel.addEventListener('change', toggle);
+        toggle();
+      })();
+    </script>
+
+    <label for="sort_order">Order</label>
+    <input id="sort_order" type="number" min="0" name="sort_order" value="{{ old('sort_order', $link->sort_order) }}" class="input" style="padding:10px 12px; border-radius:8px; background:#0b1a21; color:#e5e7eb; border:1px solid rgba(148,163,184,.25); max-width:100px">
+
+    <label style="display:flex; gap:8px; align-items:center; margin-top:12px">
+      <input type="checkbox" name="is_visible" value="1" {{ old('is_visible', $link->is_visible) ? 'checked' : '' }}> Visible in footer
+    </label>
+
+    <div class="actions" style="margin-top:16px; display:flex; gap:8px">
+      <button class="btn" type="submit">Save</button>
+      <a class="btn" href="{{ route('admin.sociallinks.index') }}">Cancel</a>
+    </div>
+  </form>
+@endsection

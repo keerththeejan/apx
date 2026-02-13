@@ -117,6 +117,17 @@ class DailyActivityController extends Controller
     public function destroy(DailyActivity $activity)
     {
         $activity->delete();
+
+        // Renumber sort_order so remaining activities are 1, 2, 3, ...
+        $remaining = DailyActivity::orderByDesc('activity_date')
+            ->orderBy('sort_order')
+            ->orderByDesc('id')
+            ->get();
+        foreach ($remaining as $i => $item) {
+            $item->sort_order = $i + 1;
+            $item->save();
+        }
+
         return redirect()->route('admin.activities.index')->with('status', 'Activity deleted');
     }
 }

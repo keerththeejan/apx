@@ -33,7 +33,7 @@
       <tbody>
         @forelse($services as $s)
           <tr>
-            <td>{{ $s->id }}</td>
+            <td>{{ $loop->iteration }}</td>
             <td>{{ $s->icon }}</td>
             <td>{{ $s->title }}</td>
             <td style="max-width:420px">{{ \Illuminate\Support\Str::limit($s->description, 120) }}</td>

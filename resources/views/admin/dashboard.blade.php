@@ -44,6 +44,13 @@
     .table th, .table td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border); font-size:14px}
     .table th{font-size:12px; color:var(--muted); font-weight:700; background:var(--panel)}
     .table tr:last-child td{border-bottom:none}
+    .features-grid{display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:12px; margin-bottom:16px}
+    .features-grid .feature-card{background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.85)); border:1px solid var(--border); border-radius:12px; padding:14px; min-width:0}
+    .features-grid .feature-card .f-icon{width:40px; height:40px; border-radius:8px; object-fit:cover; border:1px solid var(--border); margin-bottom:8px}
+    .features-grid .feature-card .f-title{font-weight:700; font-size:14px; margin:0 0 6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+    .features-grid .feature-card .f-meta{font-size:12px; color:var(--muted); margin-bottom:10px}
+    .features-grid .feature-card .f-actions{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px}
+    .features-grid .feature-card .f-actions .logout{font-size:12px; padding:6px 10px}
     .sidebar{min-width:0}
     @media (max-width: 1200px){ .kpis{grid-template-columns: repeat(3, minmax(0,1fr))} }
     @media (max-width: 980px){
@@ -56,6 +63,8 @@
     @media (max-width: 820px){ .kpis{grid-template-columns: repeat(2, minmax(0,1fr))} }
     @media (max-width: 640px){ header{padding:10px 12px} .wrap{padding:10px} .content{padding:12px} .table{font-size:13px} .table th, .table td{padding:8px 10px} }
     @media (max-width: 520px){ .kpis{grid-template-columns: 1fr} .header-nav a{font-size:13px} .sidebar nav a{font-size:12px; padding:6px 10px} }
+    @media (max-width: 1000px){ .features-grid{grid-template-columns: repeat(2, minmax(0,1fr))} }
+    @media (max-width: 520px){ .features-grid{grid-template-columns: 1fr} }
     @media (prefers-reduced-motion: reduce){ .sidebar{transition:none} }
   </style>
 </head>
@@ -147,58 +156,37 @@
         @endif
         <h3 style="margin:18px 0 6px; font-size:16px">Features (latest)</h3>
         <div style="color:var(--muted); margin:0 0 10px">Total features: {{ isset($features) && method_exists($features,'total') ? $features->total() : (isset($features) ? $features->count() : 0) }}</div>
-        <div class="card" style="padding:0; overflow:auto; margin-bottom:16px">
-          <table class="table" aria-label="Features">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Icon</th>
-                <th>Title</th>
-                <th>Visible</th>
-                <th>Order</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse(($features ?? collect()) as $f)
-                <tr>
-                  <td>{{ $f->id }}</td>
-                  <td>
-                    @if(!empty($f->icon_image_url))
-                      <img src="{{ $toUrl($f->icon_image_url) }}" alt="Icon" style="width:28px; height:28px; border-radius:6px; object-fit:cover; border:1px solid rgba(148,163,184,.25)">
-                    @else
-                      {{ $f->icon ?? '•' }}
-                    @endif
-                  </td>
-                  <td>{{ $f->title }}</td>
-                  <td>
-                    @if($f->is_visible)
-                      <span style="background:#052; color:#c7f9cc; border:1px solid #0a4; padding:4px 8px; border-radius:8px">Visible</span>
-                    @else
-                      <span style="background: rgba(239,68,68,.15); color:#fecaca; border:1px solid rgba(239,68,68,.35); padding:4px 8px; border-radius:8px">Hidden</span>
-                    @endif
-                  </td>
-                  <td>{{ $f->sort_order }}</td>
-                  <td>
-                    <form method="POST" action="{{ route('admin.features.toggle', $f) }}" style="display:inline">
-                      @csrf
-                      @method('PATCH')
-                      <button class="logout" type="submit" style="background:#1e293b; border:1px solid rgba(148,163,184,.25); margin-right:6px">
-                        {{ $f->is_visible ? 'Hide' : 'Show' }}
-                      </button>
-                    </form>
-                    <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25); text-decoration:none" href="{{ route('admin.features.edit', $f) }}">Edit</a>
-                  </td>
-                </tr>
-              @empty
-                <tr><td colspan="6" style="color:#94a3b8">No features yet. <a href="{{ route('admin.features.create') }}" style="color:#fff">Create one</a>.</td></tr>
-              @endforelse
-            </tbody>
-          </table>
-          @if(method_exists(($features ?? null), 'links'))
-            <div style="padding:12px 14px">{!! $features->links() !!}</div>
-          @endif
+        <div class="features-grid" aria-label="Features">
+          @forelse(($features ?? collect()) as $f)
+            <div class="feature-card">
+              @if(!empty($f->icon_image_url))
+                <img class="f-icon" src="{{ $toUrl($f->icon_image_url) }}" alt="">
+              @else
+                <div class="f-icon" style="display:flex; align-items:center; justify-content:center; background:var(--accent); font-size:18px">{{ $f->icon ?? '•' }}</div>
+              @endif
+              <div class="f-title" title="{{ $f->title }}">{{ $f->title ?: 'Feature #'.$f->id }}</div>
+              <div class="f-meta">ID {{ $f->id }} · Order {{ $f->sort_order }} · @if($f->is_visible)<span style="color:#86efac">Visible</span>@else<span style="color:#fca5a5">Hidden</span>@endif</div>
+              <div class="f-actions">
+                <form method="POST" action="{{ route('admin.features.toggle', $f) }}" style="display:inline">
+                  @csrf
+                  @method('PATCH')
+                  <button class="logout" type="submit" style="background:#1e293b; border:1px solid rgba(148,163,184,.25)">{{ $f->is_visible ? 'Hide' : 'Show' }}</button>
+                </form>
+                <a class="logout" style="background:#1e293b; border:1px solid rgba(148,163,184,.25); text-decoration:none" href="{{ route('admin.features.edit', $f) }}">Edit</a>
+                <form method="POST" action="{{ route('admin.features.destroy', $f) }}" style="display:inline" onsubmit="return confirm('Delete this feature?');">
+                  @csrf
+                  @method('DELETE')
+                  <button class="logout" type="submit" style="background:rgba(239,68,68,.25); border:1px solid rgba(239,68,68,.4); color:#fca5a5">Delete</button>
+                </form>
+              </div>
+            </div>
+          @empty
+            <div style="grid-column:1/-1; padding:24px; text-align:center; background:linear-gradient(180deg, rgba(15,23,42,.9), rgba(2,6,23,.85)); border:1px solid var(--border); border-radius:12px; color:var(--muted)">No features yet. <a href="{{ route('admin.features.create') }}" style="color:#fff">Create one</a>.</div>
+          @endforelse
         </div>
+        @if(isset($features) && method_exists($features, 'links') && $features->hasPages())
+          <div style="padding:0 0 16px">{!! $features->links() !!}</div>
+        @endif
 
         <h3 style="margin:18px 0 10px; font-size:16px">Recent Quotes</h3>
         <div class="card" style="padding:0; overflow:auto">

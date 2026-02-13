@@ -4,6 +4,35 @@
 
 @section('brand', 'Admin')
 
+@push('styles')
+  <style>
+    .act-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px }
+    .act-header h2 { margin: 0; font-size: 1.5rem; font-weight: 800 }
+    .act-table-wrap { border-radius: 16px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,.15) }
+    .act-table { margin: 0 }
+    .act-table thead th { background: var(--panel); color: var(--muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; padding: 14px 16px; border-bottom: 1px solid var(--border) }
+    .act-table tbody td { padding: 12px 16px; vertical-align: middle; border-bottom: 1px solid var(--border) }
+    .act-table tbody tr { transition: background .2s ease }
+    .act-table tbody tr:hover { background: rgba(148,163,184,.06) }
+    .act-table tbody tr:last-child td { border-bottom: none }
+    .act-img { width: 44px; height: 32px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border) }
+    .act-btn-vis { min-width: 88px; padding: 6px 12px; font-size: 13px; border-radius: 10px }
+    .act-input-sort { max-width: 90px; padding: 8px 12px; border-radius: 10px; font-weight: 600 }
+    .act-actions { display: flex; flex-wrap: wrap; gap: 8px }
+    .act-pager { margin-top: 20px }
+    .act-empty { color: var(--muted); font-size: 14px; padding: 24px }
+    .act-input-sort { background: #0b1a21 !important; border-color: var(--border) !important; color: var(--text) !important }
+    .act-table-wrap .btn-outline-primary { border-color: rgba(59,130,246,.4); color: #93c5fd }
+    .act-table-wrap .btn-outline-primary:hover { background: rgba(59,130,246,.2); border-color: #3b82f6; color: #93c5fd }
+    .act-table-wrap .btn-outline-secondary { border-color: var(--border); color: var(--muted) }
+    .act-table-wrap .btn-outline-secondary:hover { background: rgba(148,163,184,.15); color: var(--text) }
+    .act-table-wrap .btn-success { background: #059669; border-color: #059669 }
+    .act-table-wrap .btn-success:hover { background: #047857; border-color: #047857 }
+    .act-table-wrap .btn-danger { background: var(--danger); border-color: var(--danger) }
+    .act-table-wrap .alert-success { background: rgba(16,185,129,.15); border-color: rgba(16,185,129,.3); color: #a7f3d0 }
+  </style>
+@endpush
+
 @section('content')
   @php
     $toUrl = function ($p) {
@@ -18,91 +47,93 @@
     };
   @endphp
   @if(session('status'))
-    <div class="status">{{ session('status') }}</div>
+    <div class="alert alert-success mb-4" role="alert">{{ session('status') }}</div>
   @endif
 
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
-    <div style="display:flex; gap:8px; align-items:center">
-      <a class="btn" href="{{ route('admin.dashboard') }}">Back</a>
-      <h2 style="margin:0">Daily Activities</h2>
+  <div class="act-header">
+    <div class="d-flex align-items-center gap-2">
+      <a class="btn btn-outline-secondary" href="{{ route('admin.dashboard') }}">Back</a>
+      <h2>Daily Activities</h2>
     </div>
-    <div>
-      <a class="btn" href="{{ route('admin.activities.create') }}">Add Activity</a>
-    </div>
+    <a class="btn btn-primary" href="{{ route('admin.activities.create') }}">Add Activity</a>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Image</th>
-        <th>Title</th>
-        <th>Date</th>
-        <th>Visible</th>
-        <th>Order</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @forelse($items as $it)
+  <div class="act-table-wrap">
+    <table class="act-table table">
+      <thead>
         <tr>
-          <td>{{ $it->id }}</td>
-          <td>
-            @if(!empty($it->image_url))
-              <img src="{{ $toUrl($it->image_url) }}" alt="Image" style="width:44px; height:32px; border-radius:8px; object-fit:cover; border:1px solid rgba(148,163,184,.25)">
-            @else
-              —
-            @endif
-          </td>
-          <td>{{ $it->title }}</td>
-          <td>{{ $it->activity_date ? $it->activity_date->format('Y-m-d') : '—' }}</td>
-          <td>
-            <button
-              type="button"
-              class="btn js-toggle-vis"
-              data-id="{{ $it->id }}"
-              data-url="{{ route('admin.activities.toggle', $it) }}"
-              style="padding:6px 10px"
-            >
-              <span class="js-vis-label">
-                @if($it->is_visible)
-                  Visible
-                @else
-                  Hidden
-                @endif
-              </span>
-            </button>
-          </td>
-          <td style="max-width:110px">
-            <input
-              class="js-sort-order"
-              type="number"
-              min="0"
-              step="1"
-              value="{{ (int)$it->sort_order }}"
-              data-id="{{ $it->id }}"
-              data-url="{{ route('admin.activities.sort', $it) }}"
-              style="padding:8px 10px"
-            >
-          </td>
-          <td>
-            <a class="btn" href="{{ route('admin.activities.edit', $it) }}">Edit</a>
-            <form method="POST" action="{{ route('admin.activities.destroy', $it) }}" onsubmit="return confirm('Delete this activity?')" style="display:inline">
-              @csrf
-              @method('DELETE')
-              <button class="btn danger" type="submit">Delete</button>
-            </form>
-          </td>
+          <th>#</th>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Visible</th>
+          <th>Order</th>
+          <th>Actions</th>
         </tr>
-      @empty
-        <tr><td colspan="7" style="color:#94a3b8">No activities yet. Click "Add Activity".</td></tr>
-      @endforelse
-    </tbody>
-  </table>
-
-  <div style="margin-top:10px">
-    {!! $items->links() !!}
+      </thead>
+      <tbody>
+        @forelse($items as $it)
+          <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>
+              @if(!empty($it->image_url))
+                <img src="{{ $toUrl($it->image_url) }}" alt="" class="act-img">
+              @else
+                —
+              @endif
+            </td>
+            <td>{{ $it->title }}</td>
+            <td>{{ $it->activity_date ? $it->activity_date->format('Y-m-d') : '—' }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-sm act-btn-vis js-toggle-vis {{ $it->is_visible ? 'btn-success' : 'btn-outline-secondary' }}"
+                data-id="{{ $it->id }}"
+                data-url="{{ route('admin.activities.toggle', $it) }}"
+              >
+                <span class="js-vis-label">
+                  @if($it->is_visible)
+                    Visible
+                  @else
+                    Hidden
+                  @endif
+                </span>
+              </button>
+            </td>
+            <td>
+              <input
+                class="form-control form-control-sm act-input-sort js-sort-order"
+                type="number"
+                min="0"
+                step="1"
+                value="{{ (int)$it->sort_order }}"
+                data-id="{{ $it->id }}"
+                data-url="{{ route('admin.activities.sort', $it) }}"
+              >
+            </td>
+            <td>
+              <div class="act-actions">
+                <a class="btn btn-sm btn-outline-primary" href="{{ route('admin.activities.edit', $it) }}">Edit</a>
+                <form method="POST" action="{{ route('admin.activities.destroy', $it) }}" onsubmit="return confirm('Delete this activity?')" class="d-inline">
+                  @csrf
+                  @method('DELETE')
+                  <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        @empty
+          <tr><td colspan="7" class="act-empty">No activities yet. Click "Add Activity".</td></tr>
+        @endforelse
+      </tbody>
+    </table>
   </div>
+
+  @if($items->hasPages())
+    <div class="act-pager">
+      {!! $items->links() !!}
+    </div>
+  @endif
 
   <script>
     (function(){
@@ -112,6 +143,8 @@
         const label = btn.querySelector('.js-vis-label');
         if (label) label.textContent = isVisible ? 'Visible' : 'Hidden';
         btn.style.opacity = '1';
+        btn.classList.remove('btn-success', 'btn-outline-secondary');
+        btn.classList.add(isVisible ? 'btn-success' : 'btn-outline-secondary');
       }
 
       async function patchJson(url, payload){

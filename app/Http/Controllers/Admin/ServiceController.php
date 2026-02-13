@@ -73,6 +73,14 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         $service->delete();
+
+        // Renumber sort_order so remaining services are 1, 2, 3, ...
+        $remaining = Service::orderBy('sort_order')->orderBy('id')->get();
+        foreach ($remaining as $i => $s) {
+            $s->sort_order = $i + 1;
+            $s->save();
+        }
+
         return redirect()->route('admin.services.index')->with('status','Service deleted');
     }
 

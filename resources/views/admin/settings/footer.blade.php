@@ -94,30 +94,39 @@
       </div>
 
       <div class="settings-card">
-        <h3>Footer Theme</h3>
-        <p class="settings-section-desc">Colors for the footer area.</p>
+        <h3>Footer color management</h3>
+        <p class="settings-section-desc">Background, text, link, and top border colors for the site footer.</p>
         <div class="row">
           <div>
-            <label for="footer_bg_color">Background Color</label>
+            <label for="footer_bg_color">Background</label>
             <div class="color-row">
-              <input id="footer_bg_color" type="text" name="footer_bg_color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220">
+              <input id="footer_bg_color" type="text" name="footer_bg_color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220 or #d83526">
               <input class="js-color" type="color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" data-target="#footer_bg_color" style="width:54px; height:44px; padding:0; border-radius:10px">
             </div>
           </div>
           <div>
-            <label for="footer_text_color">Text Color</label>
+            <label for="footer_text_color">Text color</label>
             <div class="color-row">
               <input id="footer_text_color" type="text" name="footer_text_color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
               <input class="js-color" type="color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" data-target="#footer_text_color" style="width:54px; height:44px; padding:0; border-radius:10px">
             </div>
           </div>
           <div>
-            <label for="footer_link_color">Link Color</label>
+            <label for="footer_link_color">Link color</label>
             <div class="color-row">
               <input id="footer_link_color" type="text" name="footer_link_color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" placeholder="#cbd5e1">
               <input class="js-color" type="color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" data-target="#footer_link_color" style="width:54px; height:44px; padding:0; border-radius:10px">
             </div>
           </div>
+        </div>
+        @php $fborder = old('footer_border_color', $settings['footer_border_color'] ?? ''); $fborderHex = (is_string($fborder) && preg_match('/^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', trim($fborder))) ? ('#'.ltrim(trim($fborder), '#')) : '#1e293b'; @endphp
+        <div style="margin-top:12px">
+          <label for="footer_border_color">Top border color</label>
+          <div class="color-row">
+            <input id="footer_border_color" type="text" name="footer_border_color" value="{{ old('footer_border_color', $settings['footer_border_color'] ?? '') }}" placeholder="#1e293b or rgba(0,0,0,.2)">
+            <input class="js-color" type="color" value="{{ $fborderHex }}" data-target="#footer_border_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+          </div>
+          <span class="help">Line above the footer. Hex or rgba. Empty = default.</span>
         </div>
       </div>
 
@@ -145,7 +154,7 @@
         });
       });
 
-      ['#footer_bg_color', '#footer_text_color', '#footer_link_color'].forEach((sel) => {
+      ['#footer_bg_color', '#footer_text_color', '#footer_link_color', '#footer_border_color'].forEach((sel) => {
         const input = document.querySelector(sel);
         if (!input) return;
         input.addEventListener('input', () => {

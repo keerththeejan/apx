@@ -42,7 +42,7 @@
     <input id="image_url" type="text" name="image_url" value="{{ old('image_url') }}" placeholder="https://...">
     <label for="image_file">Or upload an image (optional)</label>
     <input id="image_file" type="file" name="image_file" accept="image/*">
-    <small class="help">Image shown in the preview on the right of the services section.</small>
+    <small class="help">Image shown in the preview on the right of the services section. For best fit use a <strong>landscape</strong> image (e.g. 1200×600 or 800×400 px); it will be cropped to fit a fixed height (object-fit: cover).</small>
     <div id="image_preview_wrap" style="margin-top:8px;display:none">
       <img id="image_preview" src="" alt="Preview" style="width:260px; height:150px; object-fit:cover; border-radius:10px; border:1px solid rgba(148,163,184,.25)">
     </div>

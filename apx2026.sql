@@ -1,0 +1,655 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Feb 13, 2026 at 09:57 AM
+-- Server version: 8.4.7
+-- PHP Version: 8.3.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `apx`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_reviews`
+--
+
+DROP TABLE IF EXISTS `customer_reviews`;
+CREATE TABLE IF NOT EXISTS `customer_reviews` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role_or_company` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `review_text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rating` tinyint UNSIGNED DEFAULT NULL COMMENT '1-5 stars',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `daily_activities`
+--
+
+DROP TABLE IF EXISTS `daily_activities`;
+CREATE TABLE IF NOT EXISTS `daily_activities` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image_url` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `activity_date` date DEFAULT NULL,
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `daily_activities`
+--
+
+INSERT INTO `daily_activities` (`id`, `title`, `body`, `image_url`, `activity_date`, `sort_order`, `is_visible`, `created_at`, `updated_at`) VALUES
+(1, 'Add Daily Activity', 'Add Daily ActivityAdd Daily ActivityAdd Daily ActivityAdd Daily Activit\r\nAdd Daily ActivityAdd Daily ActivityAdd Daily Activity\r\nAdd Daily ActivityAdd Daily Activityy', '/public/uploads/activities/activity_20260102_082706_8941803f.jpeg', '2026-01-02', 5, 1, '2026-01-02 02:57:06', '2026-02-13 01:25:34'),
+(2, 'Add Daily Activity', 'Add Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity', '/public/uploads/activities/activity_20260102_084435_e0fbe06a.jpeg', '2026-01-02', 4, 1, '2026-01-02 03:14:35', '2026-02-13 01:25:34'),
+(3, 'Add Daily Activity', 'Add Daily ActiviAdd Daily Activity\r\nAdd Daily ActivityAdd Daily Activity\r\nAdd Daily ActivityAdd Daily Activity\r\ntyAdd Daily ActivityAdd Daily Activity', '/public/uploads/activities/activity_20260102_084454_d8375b8f.jpeg', '2026-01-02', 3, 1, '2026-01-02 03:14:54', '2026-02-13 01:25:34'),
+(4, 'Add Daily Activity', 'Add Daily Activity\r\n\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity', '/public/uploads/activities/activity_20260102_084509_c23abcbc.jpeg', NULL, 6, 1, '2026-01-02 03:15:03', '2026-02-13 01:25:34'),
+(5, 'Add Daily Activity', 'Add Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity', '/public/uploads/activities/activity_20260102_084535_526b4a90.jpeg', '2026-01-02', 2, 1, '2026-01-02 03:15:28', '2026-02-13 01:25:34'),
+(6, 'Add Daily Activity', 'Add Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity\r\nAdd Daily Activity', '/public/uploads/activities/activity_20260102_084553_18731409.jpeg', '2026-01-02', 1, 1, '2026-01-02 03:15:53', '2026-02-13 01:25:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dealers`
+--
+
+DROP TABLE IF EXISTS `dealers`;
+CREATE TABLE IF NOT EXISTS `dealers` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `code` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(120) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `discount_percent` decimal(5,2) NOT NULL DEFAULT '0.00',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `dealers_code_unique` (`code`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `dealers`
+--
+
+INSERT INTO `dealers` (`id`, `code`, `name`, `discount_percent`, `is_active`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 'dealer01', 'APX', 0.00, 1, 1, '2026-02-07 23:53:06', '2026-02-07 23:53:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `failed_jobs`
+--
+
+DROP TABLE IF EXISTS `failed_jobs`;
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `features`
+--
+
+DROP TABLE IF EXISTS `features`;
+CREATE TABLE IF NOT EXISTS `features` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `icon` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `icon_image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `features`
+--
+
+INSERT INTO `features` (`id`, `icon`, `icon_image_url`, `title`, `description`, `sort_order`, `is_visible`, `created_at`, `updated_at`) VALUES
+(5, '🚢', NULL, 'hp', NULL, 0, 1, '2026-02-13 00:27:46', '2026-02-13 00:27:46'),
+(6, '🛩️', NULL, 'ass', NULL, 0, 1, '2026-02-13 00:27:54', '2026-02-13 00:27:54'),
+(3, '✈️', NULL, 'dell', NULL, 0, 1, '2026-02-13 00:03:27', '2026-02-13 00:03:27'),
+(4, '🚆', NULL, 'aa', NULL, 0, 1, '2026-02-13 00:27:38', '2026-02-13 00:27:38'),
+(7, '🚚', NULL, 'kl', NULL, 0, 1, '2026-02-13 00:28:04', '2026-02-13 00:28:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `footer_links`
+--
+
+DROP TABLE IF EXISTS `footer_links`;
+CREATE TABLE IF NOT EXISTS `footer_links` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gallery_items`
+--
+
+DROP TABLE IF EXISTS `gallery_items`;
+CREATE TABLE IF NOT EXISTS `gallery_items` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_label` varchar(24) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `gallery_items`
+--
+
+INSERT INTO `gallery_items` (`id`, `image_url`, `label`, `date_label`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, '/uploads/services/service_20251231_085638_fa9db668.jpeg', 'Gallery Item', NULL, 0, '2025-12-31 03:26:46', '2025-12-31 03:26:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `help_items`
+--
+
+DROP TABLE IF EXISTS `help_items`;
+CREATE TABLE IF NOT EXISTS `help_items` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `icon` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `home_banners`
+--
+
+DROP TABLE IF EXISTS `home_banners`;
+CREATE TABLE IF NOT EXISTS `home_banners` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `eyebrow` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `eyebrow_color` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title_line1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title_line2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title_color` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title_line2_color` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subtitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subtitle_color` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `bg_image_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `bg_image_urls` json DEFAULT NULL,
+  `banner_height_px` int UNSIGNED DEFAULT NULL,
+  `bg_position` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `banner_content_max_width_px` int UNSIGNED DEFAULT NULL,
+  `bg_size` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `primary_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `primary_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `secondary_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `secondary_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `home_banners`
+--
+
+INSERT INTO `home_banners` (`id`, `sort_order`, `is_active`, `name`, `eyebrow`, `eyebrow_color`, `title_line1`, `title_line2`, `title_color`, `title_line2_color`, `subtitle`, `subtitle_color`, `bg_image_url`, `bg_image_urls`, `banner_height_px`, `bg_position`, `banner_content_max_width_px`, `bg_size`, `primary_text`, `primary_url`, `secondary_text`, `secondary_url`, `created_at`, `updated_at`) VALUES
+(5, 1, 1, 'Banner 1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'uploads/banners/banner_20260212_061953_f7b62023.jpg', '[]', 900, 'center', NULL, 'cover', NULL, NULL, NULL, NULL, '2026-02-12 00:49:53', '2026-02-12 01:01:58'),
+(7, 2, 1, 'Banner 2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'uploads/banners/banner_20260213_051146_f82874d0.jpg', '[]', NULL, 'center', NULL, 'cover', NULL, NULL, NULL, NULL, '2026-02-12 23:41:46', '2026-02-12 23:41:46');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+DROP TABLE IF EXISTS `migrations`;
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '2014_10_12_000000_create_users_table', 1),
+(2, '2014_10_12_100000_create_password_resets_table', 2),
+(3, '2019_08_19_000000_create_failed_jobs_table', 3),
+(4, '2019_12_14_000001_create_personal_access_tokens_table', 4),
+(5, '2025_12_19_000000_add_is_admin_to_users_table', 4),
+(6, '2025_12_19_000000_create_users_table', 4),
+(7, '2025_12_19_000001_add_is_admin_to_users_table', 4),
+(8, '2025_12_19_000100_create_features_table', 5),
+(9, '2025_12_19_000200_create_home_banners_table', 6),
+(10, '2025_12_19_000150_create_features_table', 7),
+(11, '2025_12_19_000180_create_services_table', 7),
+(12, '2025_12_19_000190_create_settings_table', 8),
+(13, '2025_12_19_000210_create_nav_links_table', 8),
+(14, '2025_12_19_000220_create_gallery_items_table', 8),
+(15, '2025_12_19_000230_create_help_items_table', 9),
+(16, '2025_12_31_000220_create_social_links_table', 10),
+(17, '2025_12_31_000230_add_icon_to_nav_links_table', 11),
+(18, '2025_12_31_075000_add_visibility_and_icon_image_to_features_table', 11),
+(19, '2025_12_31_075100_add_visibility_to_services_table', 12),
+(20, '2025_12_31_100000_create_quotes_table', 12),
+(21, '2025_12_31_110000_create_footer_links_table', 12),
+(22, '2025_12_31_120000_create_newsletter_subscriptions_table', 13),
+(23, '2026_01_02_000000_create_daily_activities_table', 14),
+(24, '2026_01_02_000300_add_display_settings_to_home_banners_table', 15),
+(25, '2026_01_02_000400_add_more_display_settings_to_home_banners_table', 16),
+(26, '2026_02_02_000100_add_bg_image_urls_to_home_banners_table', 17),
+(27, '2026_02_02_000200_create_tracking_links_table', 18),
+(28, '2026_02_02_000300_add_text_colors_to_home_banners_table', 19),
+(29, '2026_02_02_000400_add_title_line2_color_to_home_banners_table', 19),
+(30, '2026_02_02_000500_create_quotation_countries_table', 19),
+(31, '2026_02_02_000600_create_dealers_table', 19),
+(32, '2026_02_02_000700_create_quotation_rates_table', 20),
+(33, '2026_02_08_000100_create_quotation_rate_dealer_table', 21),
+(34, '2026_02_02_000800_create_customer_reviews_table', 22),
+(35, '2026_02_02_000500_add_name_and_sort_order_to_home_banners', 23),
+(36, '2026_02_02_000600_add_is_active_to_home_banners_table', 24);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `nav_links`
+--
+
+DROP TABLE IF EXISTS `nav_links`;
+CREATE TABLE IF NOT EXISTS `nav_links` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `sort_order` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `nav_links`
+--
+
+INSERT INTO `nav_links` (`id`, `label`, `icon`, `url`, `target`, `is_visible`, `sort_order`, `created_at`, `updated_at`) VALUES
+(4, 'Home', NULL, 'http://localhost/apx/site', '_self', 1, 0, '2026-02-12 02:04:38', '2026-02-12 02:04:38'),
+(2, 'Track', NULL, 'http://localhost/apx/track?track=', '_self', 1, 2, '2026-02-11 01:43:16', '2026-02-11 01:43:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `newsletter_subscriptions`
+--
+
+DROP TABLE IF EXISTS `newsletter_subscriptions`;
+CREATE TABLE IF NOT EXISTS `newsletter_subscriptions` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_resets`
+--
+
+DROP TABLE IF EXISTS `password_resets`;
+CREATE TABLE IF NOT EXISTS `password_resets` (
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personal_access_tokens`
+--
+
+DROP TABLE IF EXISTS `personal_access_tokens`;
+CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quotation_countries`
+--
+
+DROP TABLE IF EXISTS `quotation_countries`;
+CREATE TABLE IF NOT EXISTS `quotation_countries` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `rate_per_kg` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `base_fee` decimal(12,2) DEFAULT '0.00',
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quotation_rates`
+--
+
+DROP TABLE IF EXISTS `quotation_rates`;
+CREATE TABLE IF NOT EXISTS `quotation_rates` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `country` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `service` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `dealer_price` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `quotation_rates`
+--
+
+INSERT INTO `quotation_rates` (`id`, `country`, `service`, `customer_price`, `dealer_price`, `sort_order`, `created_at`, `updated_at`) VALUES
+(1, 'USA', 'DHL', 500.00, 400.00, 1, '2026-02-07 23:11:02', '2026-02-07 23:11:02'),
+(2, 'LK', 'UPS', 600.00, 400.00, 2, '2026-02-07 23:53:43', '2026-02-07 23:53:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quotation_rate_dealer`
+--
+
+DROP TABLE IF EXISTS `quotation_rate_dealer`;
+CREATE TABLE IF NOT EXISTS `quotation_rate_dealer` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `quotation_rate_id` bigint UNSIGNED NOT NULL,
+  `dealer_id` bigint UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `quotation_rate_dealer_quotation_rate_id_dealer_id_unique` (`quotation_rate_id`,`dealer_id`),
+  KEY `quotation_rate_dealer_dealer_id_foreign` (`dealer_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `quotation_rate_dealer`
+--
+
+INSERT INTO `quotation_rate_dealer` (`id`, `quotation_rate_id`, `dealer_id`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `quotes`
+--
+
+DROP TABLE IF EXISTS `quotes`;
+CREATE TABLE IF NOT EXISTS `quotes` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `service_id` bigint UNSIGNED DEFAULT NULL,
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'new',
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `quotes_service_id_foreign` (`service_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services`
+--
+
+DROP TABLE IF EXISTS `services`;
+CREATE TABLE IF NOT EXISTS `services` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `icon` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `checklist` json DEFAULT NULL,
+  `sort_order` int DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `services`
+--
+
+INSERT INTO `services` (`id`, `icon`, `title`, `description`, `image_url`, `checklist`, `sort_order`, `is_visible`, `created_at`, `updated_at`) VALUES
+(7, NULL, 'a', NULL, '/uploads/services/service_20260213_064907_9a8bc651.webp', '[]', 0, 1, '2026-02-13 01:19:08', '2026-02-13 01:19:08');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
+
+DROP TABLE IF EXISTS `settings`;
+CREATE TABLE IF NOT EXISTS `settings` (
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`key`, `value`) VALUES
+('site_name', ''),
+('contact_email', 'arur29082@gmail.com'),
+('contact_phone', '+94 77 506 4678'),
+('address', 'Near the courts, A9 road kilinochchi'),
+('default_theme', 'sky'),
+('logo_url', '/public/uploads/logos/logo_20260202_070622_9762b522.png'),
+('tagline', 'Safe Transportation & Logistics'),
+('logo_file', 'C:\\wamp64\\tmp\\php64C2.tmp'),
+('footer_logo_url', '/public/uploads/logos/footer_logo_20260208_062842_8df2d640.png'),
+('footer_text', 'All rights reserved.'),
+('footer_newsletter', 'Subscribe to get updates about new services and offers.'),
+('footer_hours', 'Mon-Sun (8.00am to 6.30pm)'),
+('footer_about_title', 'About'),
+('footer_about_text', 'Subscribe to get updates about new services and offers.\r\nSubscribe to get updates about new services and offers.'),
+('footer_about_link_label', NULL),
+('footer_about_link_url', NULL),
+('footer_show_social', '1'),
+('footer_bg_color', '#db5757'),
+('footer_text_color', '#ffffff'),
+('footer_link_color', '#ffffff'),
+('footer_logo_file', 'C:\\wamp64\\tmp\\phpDDC3.tmp'),
+('header_bg_color', '#f36d6d'),
+('header_border_color', '#8a8a8a'),
+('header_link_color', '#ffffff'),
+('header_text_color', '#ffffff'),
+('header_tagline_color', '#ffffff'),
+('header_brand_font_size', '96'),
+('header_brand_font_weight', '400'),
+('header_brand_font_style', 'normal'),
+('site_default_theme', 'dark'),
+('header_tagline_font_size', '40'),
+('banner_auto_rotate', '0'),
+('banner_rotate_interval_sec', '5'),
+('whatsapp_number', NULL),
+('meta_description', NULL),
+('meta_keywords', NULL),
+('og_image', NULL),
+('header_menu_font_size', '20'),
+('footer_border_color', NULL),
+('footer_ad_left_url', '/uploads/ads/footer_ad_left_20260213_072527_38a9822b.jpg'),
+('footer_ad_left_link', NULL),
+('footer_ad_right_url', '/uploads/ads/footer_ad_right_20260213_072527_c2400212.jpg'),
+('footer_ad_right_link', NULL),
+('footer_ad_left_file', 'C:\\wamp64\\tmp\\phpD9A0.tmp'),
+('footer_ad_right_file', 'C:\\wamp64\\tmp\\phpD9A1.tmp');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `social_links`
+--
+
+DROP TABLE IF EXISTS `social_links`;
+CREATE TABLE IF NOT EXISTS `social_links` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sort_order` int NOT NULL DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `social_links`
+--
+
+INSERT INTO `social_links` (`id`, `label`, `url`, `icon`, `sort_order`, `is_visible`, `created_at`, `updated_at`) VALUES
+(3, 'inst', 'https://www.facebook.com/?__tn__=*F', '📘', 2, 1, '2026-02-13 04:27:17', '2026-02-13 04:27:17'),
+(2, 'facebook', 'https://www.facebook.com/?__tn__=*F', '📷', 1, 1, '2026-02-13 04:27:00', '2026-02-13 04:27:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tracking_links`
+--
+
+DROP TABLE IF EXISTS `tracking_links`;
+CREATE TABLE IF NOT EXISTS `tracking_links` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url_template` varchar(2000) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Use {tracking_number} as placeholder',
+  `sort_order` int UNSIGNED NOT NULL DEFAULT '0',
+  `is_visible` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tracking_links`
+--
+
+INSERT INTO `tracking_links` (`id`, `name`, `url_template`, `sort_order`, `is_visible`, `created_at`, `updated_at`) VALUES
+(1, 'DHL', 'https://www.dhl.com/lk-en/home/tracking.html', 1, 1, '2026-02-13 02:40:29', '2026-02-13 02:40:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `is_admin`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Admin', 'admin@example.com', NULL, '$2y$10$8P/SYqieXykA3HFFbCVHvu9x47lBJ2DoxLQ2t1RnKLLfsofjkp2tK', 1, NULL, '2025-12-19 01:25:03', '2025-12-19 01:25:03');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

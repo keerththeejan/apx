@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title', 'Admin')</title>
+  @stack('head')
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
   <style>
     :root{--bg:#0b1220;--panel:#0f172a;--muted:#94a3b8;--text:#e2e8f0;--border:rgba(148,163,184,.12);--accent:#1e293b;--danger:#ef4444;--radius:14px;--shadow:0 8px 28px rgba(0,0,0,.25)}
     body[data-theme="dark"]{--bg:#0b1220;--panel:#0f172a;--muted:#94a3b8;--text:#e2e8f0;--border:rgba(148,163,184,.12);--accent:#1e293b;--danger:#ef4444}
@@ -83,6 +85,7 @@
       .logout{padding:6px 10px; font-size:13px}
     }
   </style>
+  @stack('styles')
 </head>
 <body>
   <header>
@@ -125,11 +128,18 @@
             <a href="{{ route('admin.sociallinks.index') }}">Social Links</a>
           </div>
           <a href="{{ route('admin.features.index') }}">Features</a>
+          <a href="{{ route('admin.customerreviews.index') }}">Customer Reviews</a>
           <a href="{{ route('admin.trackinglinks.index') }}">Parcel Tracking Links</a>
           <a href="{{ route('admin.activities.index') }}">Daily Activities</a>
           <a href="{{ route('admin.banner.index') }}">Banners</a>
           <a href="{{ route('admin.services.index') }}">Services</a>
+          <a href="{{ route('admin.gallery.index') }}">Gallery</a>
+          <a href="{{ route('admin.helpitems.index') }}">Help Items</a>
           <a href="{{ route('admin.quotationrates.index') }}">Quotation Rates</a>
+          <div class="navsec">Quote form (Get A Free Quote)</div>
+          <div class="navsub">
+            <a href="{{ route('admin.quotes.index') }}">Quote submissions</a>
+          </div>
           <a href="{{ route('admin.dealers.index') }}">Dealers (codes for dealer price)</a>
         </nav>
       </div>
@@ -139,6 +149,8 @@
     </div>
   </div>
 
+  @stack('scripts')
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script>
     (function(){
       var toggle = document.getElementById('admin-menu-toggle');

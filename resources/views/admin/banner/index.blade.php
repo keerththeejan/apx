@@ -114,7 +114,7 @@
                   : null;
                 $title = $b->name ?: \Illuminate\Support\Str::limit($b->title_line1 ?? 'Banner #'.$b->id, 50);
                 $desc = trim((string)($b->subtitle ?? ''));
-                $isFirst = $index === 0;
+                $isActive = $b->is_active ?? true;
               @endphp
               <tr>
                 <td class="col-num">{{ $index + 1 }}</td>
@@ -128,7 +128,7 @@
                 <td class="col-title">{{ $title }}</td>
                 <td class="col-desc">{{ $desc !== '' ? \Illuminate\Support\Str::limit($desc, 60) : '—' }}</td>
                 <td>
-                  <span class="status-badge {{ $isFirst ? 'status-active' : 'status-inactive' }}">{{ $isFirst ? 'Active' : 'Inactive' }}</span>
+                  <span class="status-badge {{ $isActive ? 'status-active' : 'status-inactive' }}" role="status" aria-label="{{ $isActive ? 'Active' : 'Inactive' }}">{{ $isActive ? 'Active' : 'Inactive' }}</span>
                 </td>
                 <td class="col-actions">
                   <a href="{{ route('admin.banner.edit', $b) }}" class="btn-icon btn-edit" title="Edit" aria-label="Edit">✎</a>
@@ -152,7 +152,7 @@
               : null;
             $title = $b->name ?: \Illuminate\Support\Str::limit($b->title_line1 ?? 'Banner #'.$b->id, 50);
             $desc = trim((string)($b->subtitle ?? ''));
-            $isFirst = $index === 0;
+            $isActive = $b->is_active ?? true;
           @endphp
           <div class="banner-card-row">
             <div class="thumb-wrap">
@@ -166,7 +166,7 @@
               <p class="card-title">{{ $title }}</p>
               <p class="card-meta">{{ $desc !== '' ? \Illuminate\Support\Str::limit($desc, 40) : '—' }}</p>
               <div class="card-footer">
-                <span class="status-badge {{ $isFirst ? 'status-active' : 'status-inactive' }}">{{ $isFirst ? 'Active' : 'Inactive' }}</span>
+                <span class="status-badge {{ $isActive ? 'status-active' : 'status-inactive' }}" role="status" aria-label="{{ $isActive ? 'Active' : 'Inactive' }}">{{ $isActive ? 'Active' : 'Inactive' }}</span>
                 <a href="{{ route('admin.banner.edit', $b) }}" class="btn-icon btn-edit" title="Edit" aria-label="Edit">✎</a>
                 <form method="POST" action="{{ route('admin.banner.destroy', $b) }}" style="display:inline" onsubmit="return confirm('Delete this banner?');">
                   @csrf

@@ -63,8 +63,8 @@ Route::get('/', function () {
         return redirect('/admin');
     }
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
-    $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $banner = HomeBanner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->first();
+    $services = Service::when(\Illuminate\Support\Facades\Schema::hasColumn('services', 'is_visible'), fn ($q) => $q->where('is_visible', true))->orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
         ->orderBy('sort_order')
@@ -87,8 +87,8 @@ Route::get('/home', function () {
         return redirect('/admin');
     }
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
-    $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $banner = HomeBanner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->first();
+    $services = Service::when(\Illuminate\Support\Facades\Schema::hasColumn('services', 'is_visible'), fn ($q) => $q->where('is_visible', true))->orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
         ->orderBy('sort_order')
@@ -108,8 +108,8 @@ Route::get('/home', function () {
 // Public home preview that never redirects admins
 Route::get('/site', function () {
     $features = Feature::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    $banner = HomeBanner::orderBy('sort_order')->orderBy('id')->first();
-    $services = Service::orderBy('sort_order')->orderBy('id')->take(5)->get();
+    $banner = HomeBanner::where('is_active', true)->orderBy('sort_order')->orderBy('id')->first();
+    $services = Service::when(\Illuminate\Support\Facades\Schema::hasColumn('services', 'is_visible'), fn ($q) => $q->where('is_visible', true))->orderBy('sort_order')->orderBy('id')->take(5)->get();
     $activities = DailyActivity::where('is_visible', true)
         ->orderByDesc('activity_date')
         ->orderBy('sort_order')
@@ -146,7 +146,9 @@ Route::get('/activities', [ActivityController::class, 'index'])->name('activitie
 // Track your parcel (separate page)
 Route::get('/track', function () {
     $trackingLinks = TrackingLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
-    return view('track', compact('trackingLinks'));
+    $navLinks = NavLink::where('is_visible', true)->orderBy('sort_order')->orderBy('id')->get();
+    $services = Service::when(\Illuminate\Support\Facades\Schema::hasColumn('services', 'is_visible'), fn ($q) => $q->where('is_visible', true))->orderBy('sort_order')->orderBy('id')->take(5)->get();
+    return view('track', compact('trackingLinks', 'navLinks', 'services'));
 })->name('track');
 
 Route::middleware('guest')->group(function() {

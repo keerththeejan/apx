@@ -46,6 +46,7 @@ class HomeBannerController extends Controller
         }
         $this->parseImageUrls($request, $data);
         $this->mergeOptionalFields($request, $data);
+        $data['is_active'] = $request->boolean('is_active');
 
         $maxOrder = HomeBanner::max('sort_order') ?? 0;
         $data['sort_order'] = $maxOrder + 1;
@@ -61,7 +62,9 @@ class HomeBannerController extends Controller
         $hasTitle1 = strlen(trim((string) ($banner->title_line1 ?? ''))) > 0;
         $hasTitle2 = strlen(trim((string) ($banner->title_line2 ?? ''))) > 0;
         $hasSubtitle = strlen(trim((string) ($banner->subtitle ?? ''))) > 0;
-        return view('admin.banner.edit', compact('banner', 'hasEyebrow', 'hasTitle1', 'hasTitle2', 'hasSubtitle'));
+        $urls = $banner->bg_image_urls_for_edit;
+        $bgImageUrlsForEdit = is_array($urls) ? implode("\n", array_map('trim', $urls)) : '';
+        return view('admin.banner.edit', compact('banner', 'hasEyebrow', 'hasTitle1', 'hasTitle2', 'hasSubtitle', 'bgImageUrlsForEdit'));
     }
 
     public function update(Request $request, HomeBanner $banner)
@@ -85,6 +88,7 @@ class HomeBannerController extends Controller
         }
         $this->parseImageUrls($request, $data);
         $this->mergeOptionalFields($request, $data);
+        $data['is_active'] = $request->boolean('is_active');
 
         $banner->fill($data);
         $banner->save();
@@ -130,6 +134,7 @@ class HomeBannerController extends Controller
             'title_color' => ['nullable', 'string', 'max:20'],
             'title_line2_color' => ['nullable', 'string', 'max:20'],
             'subtitle_color' => ['nullable', 'string', 'max:20'],
+            'is_active' => ['nullable', 'boolean'],
         ];
         $messages = [
             'bg_image_file.image' => 'The file must be an image (JPG, PNG or WebP).',
@@ -256,7 +261,7 @@ class HomeBannerController extends Controller
 
     private function mergeOptionalFields(Request $request, array &$data): void
     {
-        foreach (['eyebrow','eyebrow_color','title_line1','title_color','title_line2','title_line2_color','subtitle','subtitle_color'] as $key) {
+        foreach (['eyebrow','eyebrow_color','title_line1','title_color','title_line2','title_line2_color','subtitle','subtitle_color','is_active'] as $key) {
             $data[$key] = array_key_exists($key, $data) ? $data[$key] : $request->input($key);
         }
     }

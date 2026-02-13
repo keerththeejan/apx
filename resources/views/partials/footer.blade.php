@@ -15,6 +15,7 @@
     $ftBg = optional(\App\Models\Setting::where('key','footer_bg_color')->first())->value ?? '#0b1220';
     $ftText = optional(\App\Models\Setting::where('key','footer_text_color')->first())->value ?? '#94a3b8';
     $ftLink = optional(\App\Models\Setting::where('key','footer_link_color')->first())->value ?? '#cbd5e1';
+    $ftBorder = optional(\App\Models\Setting::where('key','footer_border_color')->first())->value;
     $footerLinks = collect();
     if (\Illuminate\Support\Facades\Schema::hasTable('footer_links')) {
       $footerLinks = \App\Models\FooterLink::where('is_visible',true)->orderBy('sort_order')->orderBy('id')->get();
@@ -27,10 +28,10 @@
     $footerBgEffective = $ftBg ?: ($cfgHeaderBg ?: '#0b1220');
     $footerTextEffective = $ftText ?: '#94a3b8';
     $footerLinkEffective = $ftLink ?: '#cbd5e1';
-    $footerBorderEffective = $cfgHeaderBorder ?: 'rgba(148,163,184,.12)';
+    $footerBorderEffective = ($ftBorder !== null && trim((string)$ftBorder) !== '') ? trim($ftBorder) : ($cfgHeaderBorder ?: 'rgba(148,163,184,.12)');
   @endphp
 
-  <div style="width:100%; margin:0; padding:0; background: {{ $footerBgEffective }}; color: {{ $footerTextEffective }}; border-top:1px solid {{ $footerBorderEffective }}">
+  <div class="footer-bg" style="width:100%; margin:0; padding:0; background: {{ $footerBgEffective }}; color: {{ $footerTextEffective }}; border-top:1px solid {{ $footerBorderEffective }}">
     <div class="footer-inner">
       <div class="footer-grid">
         <div class="footer-col">
@@ -103,7 +104,7 @@
       </div>
 
       <div class="footer-bottom" style="color: {{ $footerTextEffective }}">
-        <span>© <span id="year"></span> {{ $cfgName ?? 'Parcel Transport' }}. {{ $aboutText }}</span>
+        <span>vkitnet © 2026. All rights reserved.</span>
       </div>
     </div>
   </div>

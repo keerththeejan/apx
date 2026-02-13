@@ -80,6 +80,14 @@ class FeatureController extends Controller
     public function destroy(Feature $feature)
     {
         $feature->delete();
+
+        // Renumber sort_order so remaining features are 1, 2, 3, ...
+        $remaining = Feature::orderBy('sort_order')->orderBy('id')->get();
+        foreach ($remaining as $i => $f) {
+            $f->sort_order = $i + 1;
+            $f->save();
+        }
+
         return redirect()->route('admin.features.index')->with('status','Feature deleted');
     }
 

@@ -35,10 +35,23 @@
       <tbody>
         @forelse($features as $f)
           <tr>
-            <td>{{ $f->id }}</td>
+            <td>{{ $loop->iteration }}</td>
             <td>
-              @if(!empty($f->icon_image_url))
-                <img src="{{ $f->icon_image_url }}" alt="Icon" style="width:28px; height:28px; border-radius:6px; object-fit:cover; border:1px solid rgba(148,163,184,.25)">
+              @php
+                $iconSrc = null;
+                if (!empty($f->icon_image_url)) {
+                  $u = trim((string) $f->icon_image_url);
+                  if (\Illuminate\Support\Str::startsWith($u, ['http://', 'https://', 'data:'])) {
+                    $iconSrc = $u;
+                  } else {
+                    $base = request()->getSchemeAndHttpHost() . request()->getBasePath();
+                    $iconSrc = rtrim($base, '/') . '/' . ltrim($u, '/');
+                  }
+                }
+              @endphp
+              @if($iconSrc)
+                <img src="{{ $iconSrc }}" alt="Icon" style="width:28px; height:28px; border-radius:6px; object-fit:cover; border:1px solid rgba(148,163,184,.25)" onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='inline');">
+                <span style="display:none; color:var(--muted); font-size:12px;">{{ $f->icon ?? 'Icon' }}</span>
               @else
                 {{ $f->icon ?? '•' }}
               @endif

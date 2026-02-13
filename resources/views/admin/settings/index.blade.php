@@ -87,6 +87,7 @@
         <a href="{{ route('admin.settings.index') }}?section=banner#banner">Banner</a>
         <a href="{{ route('admin.settings.index') }}?section=logo#logo">Logo</a>
         <a href="{{ route('admin.settings.index') }}?section=footer#footer">Footer</a>
+        <a href="{{ route('admin.settings.index') }}?section=footer-colors#footer-colors">Footer colors</a>
         <a href="{{ route('admin.settings.index') }}?section=footer-about#footer-about">About</a>
         <a href="#settings-actions">Save</a>
       </nav>
@@ -283,6 +284,47 @@
           </label>
       </div>
 
+      <div class="settings-card" id="footer-colors">
+          <h3>Footer color management</h3>
+          <p class="settings-section-desc">Control the site footer background, text, links, and top border. Use hex (e.g. #d83526) or leave default.</p>
+          <div class="row">
+            <div>
+              <label for="footer_bg_color">Background</label>
+              <div class="color-row">
+                <input id="footer_bg_color" type="text" name="footer_bg_color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" placeholder="#0b1220 or #d83526">
+                <input class="js-color" type="color" value="{{ old('footer_bg_color', $settings['footer_bg_color'] ?? '#0b1220') }}" data-target="#footer_bg_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+              </div>
+            </div>
+            <div>
+              <label for="footer_text_color">Text color</label>
+              <div class="color-row">
+                <input id="footer_text_color" type="text" name="footer_text_color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" placeholder="#94a3b8">
+                <input class="js-color" type="color" value="{{ old('footer_text_color', $settings['footer_text_color'] ?? '#94a3b8') }}" data-target="#footer_text_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+              </div>
+            </div>
+            <div>
+              <label for="footer_link_color">Link color</label>
+              <div class="color-row">
+                <input id="footer_link_color" type="text" name="footer_link_color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" placeholder="#cbd5e1">
+                <input class="js-color" type="color" value="{{ old('footer_link_color', $settings['footer_link_color'] ?? '#cbd5e1') }}" data-target="#footer_link_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+              </div>
+            </div>
+          </div>
+          @php
+            $fborder = old('footer_border_color', $settings['footer_border_color'] ?? '');
+            $fborderHex = (is_string($fborder) && preg_match('/^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', trim($fborder))) ? ('#'.ltrim(trim($fborder), '#')) : '#1e293b';
+          @endphp
+          <div style="margin-top:12px">
+            <label for="footer_border_color">Top border color</label>
+            <div class="color-row">
+              <input id="footer_border_color" type="text" name="footer_border_color" value="{{ old('footer_border_color', $settings['footer_border_color'] ?? '') }}" placeholder="e.g. #1e293b or rgba(0,0,0,.2)">
+              <input class="js-color" type="color" value="{{ $fborderHex }}" data-target="#footer_border_color" style="width:54px; height:44px; padding:0; border-radius:10px">
+            </div>
+            <span class="help">Optional. Line above the footer. Hex or rgba. Empty = subtle default.</span>
+          </div>
+          <p style="margin-top:14px; margin-bottom:0"><a href="{{ route('admin.settings.footer') }}" class="btn">Full Footer Settings →</a></p>
+      </div>
+
       <div class="settings-card">
           <h3>Admin Theme</h3>
           <p class="settings-section-desc">Default theme for this admin panel.</p>
@@ -331,7 +373,7 @@
         });
       });
 
-      ['#header_text_color', '#header_tagline_color'].forEach((sel) => {
+      ['#header_text_color', '#header_tagline_color', '#footer_bg_color', '#footer_text_color', '#footer_link_color', '#footer_border_color'].forEach((sel) => {
         const input = document.querySelector(sel);
         if (!input) return;
         input.addEventListener('input', () => {
@@ -357,7 +399,7 @@
       var hash = window.location.hash.replace('#', '');
       var search = window.location.search || '';
       var section = (search.match(/section=([^&]+)/) || [])[1] || hash;
-      var ids = ['company', 'seo', 'header', 'banner', 'logo', 'footer', 'footer-about', 'settings-actions'];
+      var ids = ['company', 'seo', 'header', 'banner', 'logo', 'footer', 'footer-colors', 'footer-about', 'settings-actions'];
       if (section && ids.indexOf(section) !== -1) {
         var el = document.getElementById(section);
         if (el) {

@@ -54,6 +54,14 @@
     <label for="name">Banner name (for admin list)</label>
     <input id="name" type="text" name="name" value="{{ old('name', $banner->name) }}" placeholder="e.g. Home Hero">
 
+    <div class="field-group" role="group" aria-label="Banner status" style="margin-top:16px; margin-bottom:20px">
+      <label class="use-toggle" style="margin-bottom:0">
+        <input type="checkbox" name="is_active" value="1" id="is_active" {{ old('is_active', $banner->is_active ?? true) ? 'checked' : '' }} aria-describedby="status_help" aria-label="Active – show this banner on the home page">
+        <span>Active – show this banner on the home page</span>
+      </label>
+      <small id="status_help" class="help" style="display:block; margin-top:8px; margin-left:0">When unchecked, the banner is Inactive and hidden from the home page. You can still edit it from the banner list.</small>
+    </div>
+
     <div class="field-group" id="fg-eyebrow" data-field="eyebrow">
       <label class="use-toggle">
         <input type="checkbox" name="use_eyebrow" value="1" {{ $hasEyebrow ? 'checked' : '' }} aria-controls="fg-eyebrow-inner" class="banner-use-cb">
@@ -128,24 +136,33 @@
     <small class="help">JPG, PNG or WEBP. Max 20 MB. Image is compressed automatically after upload.</small>
 
     <label for="bg_image_urls">Additional background images for auto-rotate (one URL per line)</label>
-    <textarea id="bg_image_urls" name="bg_image_urls" rows="4" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg">{{ old('bg_image_urls', ($banner && is_array($banner->bg_image_urls)) ? implode("\n", $banner->bg_image_urls) : '') }}</textarea>
+    <textarea id="bg_image_urls" name="bg_image_urls" rows="4" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg">{{ e(old('bg_image_urls', $bgImageUrlsForEdit ?? '')) }}</textarea>
     <small class="help">Add more image URLs to rotate with the main image. Enable "Auto-rotate banner" in Settings.</small>
 
     @php
       $previewSrc = null;
       if (!empty(optional($banner)->bg_image_url)) {
-        $u = trim((string) $banner->bg_image_url, '/');
-        if (\Illuminate\Support\Str::startsWith($u, 'http://') || \Illuminate\Support\Str::startsWith($u, 'https://')) {
+        $u = trim((string) $banner->bg_image_url);
+        if (\Illuminate\Support\Str::startsWith($u, ['http://', 'https://', 'data:'])) {
           $previewSrc = $u;
         } else {
-          $previewSrc = asset($u);
+          $path = ltrim($u, '/');
+          if (\Illuminate\Support\Str::startsWith($path, 'uploads/')) {
+            $path = 'public/' . $path;
+          }
+          $previewSrc = asset($path);
         }
       }
     @endphp
-    <div id="banner-preview-wrap" class="banner-preview-wrap" style="margin-top:14px; margin-bottom:20px; {{ $previewSrc ? '' : 'display:none' }}">
+    <style>.banner-preview-placeholder-hidden { display: none !important; }</style>
+    <div id="banner-preview-wrap" class="banner-preview-wrap" style="margin-top:14px; margin-bottom:20px;">
       <div style="color:#94a3b8; font-weight:700; font-size:12px; margin-bottom:8px">Preview (original image fit)</div>
       <div class="banner-preview-box" style="width:100%; max-width:900px; max-height:420px; min-height:180px; background:var(--card, #0f172a); border-radius:12px; border:1px solid rgba(148,163,184,.25); display:flex; align-items:center; justify-content:center; padding:12px; box-sizing:border-box">
-        <img id="banner-preview-img" src="{{ $previewSrc ?? '' }}" alt="Banner preview" style="max-width:100%; max-height:380px; width:auto; height:auto; object-fit:contain; border-radius:8px">
+        <img id="banner-preview-img" src="{{ $previewSrc ?? '' }}" alt="Banner preview" style="max-width:100%; max-height:380px; width:auto; height:auto; object-fit:contain; border-radius:8px; {{ $previewSrc ? '' : 'display:none;' }}" onerror="this.style.display='none'; var pl=document.getElementById('banner-preview-placeholder'); if(pl){ pl.classList.remove('banner-preview-placeholder-hidden'); pl.querySelector('span').textContent='Image failed to load — check URL or upload a file'; }">
+        <div id="banner-preview-placeholder" class="banner-preview-placeholder {{ $previewSrc ? 'banner-preview-placeholder-hidden' : '' }}" style="display:flex; align-items:center; justify-content:center; gap:10px; color:var(--muted,#94a3b8); font-size:14px;">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span>{{ $previewSrc ? 'Banner preview' : 'No image — set URL or upload below' }}</span>
+        </div>
       </div>
     </div>
 
@@ -245,10 +262,32 @@
         if (cb) cb.addEventListener('change', function() { toggleFieldGroup(fg); });
       });
 
-      // Live preview: new file selection
+      // Live preview: URL input and file selection
+      var urlInput = document.getElementById('bg_image_url');
       var fileInput = document.getElementById('bg_image_file');
       var previewWrap = document.getElementById('banner-preview-wrap');
       var previewImg = document.getElementById('banner-preview-img');
+      var previewPlaceholder = document.getElementById('banner-preview-placeholder');
+      function showPreview(src) {
+        if (!previewImg) return;
+        if (src && (src.indexOf('http') === 0 || src.indexOf('data:') === 0)) {
+          previewImg.src = src;
+          previewImg.style.display = '';
+          if (previewPlaceholder) previewPlaceholder.classList.add('banner-preview-placeholder-hidden');
+        } else {
+          previewImg.src = '';
+          previewImg.style.display = 'none';
+          if (previewPlaceholder) {
+            previewPlaceholder.classList.remove('banner-preview-placeholder-hidden');
+            var span = previewPlaceholder.querySelector('span');
+            if (span) span.textContent = 'No image — set URL or upload below';
+          }
+        }
+      }
+      if (urlInput && previewImg) {
+        urlInput.addEventListener('input', function() { showPreview(this.value.trim()); });
+        urlInput.addEventListener('change', function() { showPreview(this.value.trim()); });
+      }
       if (fileInput && previewWrap && previewImg) {
         fileInput.addEventListener('change', function() {
           var file = this.files && this.files[0];
@@ -256,7 +295,8 @@
             var reader = new FileReader();
             reader.onload = function(e) {
               previewImg.src = e.target.result;
-              previewWrap.style.display = 'block';
+              previewImg.style.display = '';
+              if (previewPlaceholder) previewPlaceholder.classList.add('banner-preview-placeholder-hidden');
             };
             reader.readAsDataURL(file);
           }
