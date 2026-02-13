@@ -19,6 +19,8 @@
     .content-below-header { display: flex; flex-direction: column; min-height: 100vh; width: 100%; max-width: 100vw; overflow-x: hidden; background: var(--bg); }
     main { flex: 1 0 auto; background: var(--bg); }
     .header-spacer { display: block; width: 100%; height: 100px; min-height: 100px; flex-shrink: 0; background: transparent; }
+    @media (max-width: 1920px) { .header-spacer { height: 90px; min-height: 90px; } }
+    @media (max-width: 1680px) { .header-spacer { height: 85px; min-height: 85px; } }
     @media (max-width: 900px) { .header-spacer { height: 90px; min-height: 90px; } }
     @media (max-width: 720px) { .header-spacer { height: 72px; min-height: 72px; } }
     @media (max-width: 400px) { .header-spacer { height: 64px; min-height: 64px; } }
@@ -63,6 +65,10 @@
     .lang-switcher { display: flex; align-items: center; flex-shrink: 0; font-size: 14px; font-weight: 600; position: relative; }
     .lang-switcher-mobile { display: none; }
     .lang-in-header-mobile { display: none; flex-shrink: 0; }
+    /* Auto-responsive: 24" / smaller desktop */
+    @media (max-width: 2000px) { .nav { padding: 12px 3in 12px 2in; gap: 12px; } .brand img { width: 160px; max-height: 1.35in; } .header-contact-link { font-size: 18px; } .header-tracking { max-width: 300px; } .links { gap: 16px; } }
+    @media (max-width: 1680px) { .nav { padding: 12px 2in 12px 1.5in; gap: 10px; } .brand img { width: 150px; max-height: 1.25in; } .brand span { font-size: 16px; } .header-tagline { font-size: 13px; white-space: normal; max-width: 160px; } .header-contact-link { font-size: 17px; } .header-track-input { font-size: 18px; min-width: 160px; } .header-track-btn { font-size: 18px; padding: 8px 14px; } .header-tracking { max-width: 280px; } .links { gap: 14px; } .links a { font-size: 13px; } }
+    @media (max-width: 1440px) { .nav { padding: 12px 1.5in 12px 1in; gap: 8px; } .brand img { width: 140px; max-height: 1.2in; } .brand span { font-size: 15px; } .header-tagline { font-size: 12px; white-space: normal; max-width: 140px; } .header-contact-link { font-size: 16px; } .header-track-input { font-size: 16px; min-width: 140px; } .header-track-btn { font-size: 16px; } .header-tracking { max-width: 260px; } .links { gap: 12px; } .links a { font-size: 13px; } }
     @media (max-width: 900px) { .nav { padding: 10px 2in 10px 1.5in } .brand img { width: 140px } .header-tracking { max-width: 280px } .header-contact-link { font-size: 18px } }
     @media (max-width: 720px) {
       .nav { padding: 10px 16px; flex-wrap: nowrap; justify-content: space-between; }
