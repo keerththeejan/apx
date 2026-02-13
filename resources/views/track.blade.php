@@ -59,7 +59,7 @@
         <div class="track-select-wrap">
           <label for="track_carrier">Select parcel company</label>
           <select id="track_carrier" class="track-select" aria-label="Select parcel company">
-            <option value="">— Select carrier —</option>
+            <option value="">— Select company —</option>
             @foreach($trackingLinksList as $link)
               <option value="{{ e($link->url_template) }}">{{ $link->name }}</option>
             @endforeach
@@ -73,8 +73,6 @@
             @foreach($trackingLinksList as $link)
               <button type="button" class="btn track-provider" data-url-template="{{ e($link->url_template) }}" title="Opens in new tab">{{ $link->name }}</button>
             @endforeach
-          @else
-            <span class="track-empty">Add tracking links in Admin (Parcel Tracking Links) to enable 3rd party tracking.</span>
           @endif
         </div>
       </div>
