@@ -28,13 +28,16 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        // When app runs in a subfolder (e.g. /apx), ensure route() and url() use that base
-        // so admin and public links work without relying on APP_URL being set correctly.
+        // Always derive root URL from the actual request so links use the real domain
+        // (apx.lk, not localhost). Fixes redirects to localhost when APP_URL is wrong.
         if (!$this->app->runningInConsole() && $this->app->bound('request')) {
             try {
                 $request = $this->app->make(Request::class);
-                if ($request && $request->getBasePath()) {
-                    URL::forceRootUrl($request->getSchemeAndHttpHost() . $request->getBasePath());
+                if ($request) {
+                    $root = $request->getSchemeAndHttpHost() . $request->getBasePath();
+                    if ($root) {
+                        URL::forceRootUrl(rtrim($root, '/'));
+                    }
                 }
             } catch (\Illuminate\Contracts\Container\BindingResolutionException $e) {
                 // No request in this context

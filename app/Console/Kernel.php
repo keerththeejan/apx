@@ -15,7 +15,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Automatically clean all caches daily at 3:00 AM
+        $schedule->command('config:clear')->dailyAt('03:00');
+        $schedule->command('cache:clear')->dailyAt('03:00');
+        $schedule->command('view:clear')->dailyAt('03:00');
+        $schedule->command('route:clear')->dailyAt('03:00');
     }
 
     /**

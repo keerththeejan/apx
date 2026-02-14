@@ -54,7 +54,16 @@
             <p style="color: {{ $footerTextEffective }}">{{ $aboutText }}</p>
           @endif
           @if(!empty($aboutLinkLabel) && !empty($aboutLinkUrl))
-            <p style="margin-top:10px"><a href="{{ $aboutLinkUrl }}" style="color: {{ $footerLinkEffective }}">{{ $aboutLinkLabel }} →</a></p>
+            @php
+              $aboutLinkUrlFinal = $aboutLinkUrl;
+              if (str_starts_with($aboutLinkUrl, 'http')) {
+                $p = parse_url($aboutLinkUrl);
+                if (isset($p['host']) && in_array(strtolower($p['host']), ['localhost', '127.0.0.1'], true)) {
+                  $aboutLinkUrlFinal = url($p['path'] ?? '/');
+                }
+              }
+            @endphp
+            <p style="margin-top:10px"><a href="{{ $aboutLinkUrlFinal }}" style="color: {{ $footerLinkEffective }}">{{ $aboutLinkLabel }} →</a></p>
           @endif
           @if($showSocial)
             <div class="footer-social">
@@ -84,7 +93,16 @@
           <h4 style="color: {{ $footerTextEffective }}">{{ __('site.quick_links') }}</h4>
           <ul style="color: {{ $footerTextEffective }}">
             @forelse($footerLinks as $fl)
-              <li><a href="{{ $fl->url }}" style="color: {{ $footerLinkEffective }}">{{ $fl->label }}</a></li>
+              @php
+                $flUrl = $fl->url ?? '#';
+                if (str_starts_with($flUrl, 'http')) {
+                  $p = parse_url($flUrl);
+                  if (isset($p['host']) && in_array(strtolower($p['host']), ['localhost', '127.0.0.1'], true)) {
+                    $flUrl = url($p['path'] ?? '/');
+                  }
+                }
+              @endphp
+              <li><a href="{{ $flUrl }}" style="color: {{ $footerLinkEffective }}">{{ $fl->label }}</a></li>
             @empty
               <li><a href="#" style="color: {{ $footerLinkEffective }}">Privacy Policy</a></li>
               <li><a href="#" style="color: {{ $footerLinkEffective }}">Terms of Service</a></li>

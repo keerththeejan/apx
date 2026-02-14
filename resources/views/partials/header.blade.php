@@ -39,6 +39,15 @@
                   $linkUrl = trim((string) $linkUrl);
                   if (!\Illuminate\Support\Str::startsWith($linkUrl, ['http://', 'https://', 'mailto:', 'tel:', '#'])) {
                     $linkUrl = url($linkUrl);
+                  } else {
+                    $parsed = parse_url($linkUrl);
+                    $host = strtolower($parsed['host'] ?? '');
+                    if (in_array($host, ['localhost', '127.0.0.1'], true)) {
+                      $path = $parsed['path'] ?? '/';
+                      $path = preg_replace('#^/apx(/|$)#', '$1', $path) ?: '/';
+                      $query = isset($parsed['query']) ? '?' . $parsed['query'] : '';
+                      $linkUrl = url($path) . $query;
+                    }
                   }
                 }
                 $path = $linkUrl ? trim((string) parse_url($linkUrl, PHP_URL_PATH), '/') : '';

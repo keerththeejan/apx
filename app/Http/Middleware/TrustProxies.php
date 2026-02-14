@@ -9,10 +9,11 @@ class TrustProxies extends Middleware
 {
     /**
      * The trusted proxies for this application.
+     * Use '*' on cPanel/shared hosting so HTTPS and forwarded headers work.
      *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
